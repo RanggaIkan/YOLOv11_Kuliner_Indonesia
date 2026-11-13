@@ -1,5 +1,5 @@
 # Dataset Kuliner Umum Indonesia — Format YOLOv11
-# Sumber gambar: Foto real Wikimedia Commons (resolusi tinggi 640px+)
+# Sumber gambar: Multi-sumber terverifikasi (Wikimedia Commons, Wikipedia REST, Openverse)
 path: ./dataset
 train: train/images
 val: valid/images

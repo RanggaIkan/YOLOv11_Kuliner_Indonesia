@@ -1,23 +1,136 @@
 {
-  "generated_at": "2026-11-13T11:36:44.245Z",
+  "generated_at": "2026-11-13T23:19:50.801Z",
   "stats": {
-    "total": 72,
-    "train": 48,
-    "valid": 12,
-    "test": 12,
+    "total": 600,
+    "train": 420,
+    "valid": 120,
+    "test": 60,
+    "uniqueOriginals": 494,
+    "trainOriginals": 314,
+    "trainAugmented": 106,
     "perClass": {
-      "Nasi Goreng": 6,
-      "Bakso": 6,
-      "Sate Ayam": 6,
-      "Rendang": 6,
-      "Soto Ayam": 6,
-      "Ayam Goreng": 6,
-      "Mie Goreng": 6,
-      "Tempe Goreng": 6,
-      "Tahu Goreng": 6,
-      "Gado-Gado": 6,
-      "Pempek": 6,
-      "Telur Balado": 6
+      "Nasi Goreng": 50,
+      "Bakso": 50,
+      "Sate Ayam": 50,
+      "Rendang": 50,
+      "Soto Ayam": 50,
+      "Ayam Goreng": 50,
+      "Mie Goreng": 50,
+      "Tempe Goreng": 50,
+      "Tahu Goreng": 50,
+      "Gado-Gado": 50,
+      "Pempek": 50,
+      "Telur Balado": 50
+    },
+    "perClassBreakdown": {
+      "Nasi Goreng": {
+        "uniqueOriginals": 50,
+        "trainOriginals": 35,
+        "trainAugmented": 0,
+        "trainTotal": 35,
+        "validTotal": 10,
+        "testTotal": 5,
+        "total": 50
+      },
+      "Bakso": {
+        "uniqueOriginals": 50,
+        "trainOriginals": 35,
+        "trainAugmented": 0,
+        "trainTotal": 35,
+        "validTotal": 10,
+        "testTotal": 5,
+        "total": 50
+      },
+      "Sate Ayam": {
+        "uniqueOriginals": 50,
+        "trainOriginals": 35,
+        "trainAugmented": 0,
+        "trainTotal": 35,
+        "validTotal": 10,
+        "testTotal": 5,
+        "total": 50
+      },
+      "Rendang": {
+        "uniqueOriginals": 37,
+        "trainOriginals": 22,
+        "trainAugmented": 13,
+        "trainTotal": 35,
+        "validTotal": 10,
+        "testTotal": 5,
+        "total": 50
+      },
+      "Soto Ayam": {
+        "uniqueOriginals": 50,
+        "trainOriginals": 35,
+        "trainAugmented": 0,
+        "trainTotal": 35,
+        "validTotal": 10,
+        "testTotal": 5,
+        "total": 50
+      },
+      "Ayam Goreng": {
+        "uniqueOriginals": 50,
+        "trainOriginals": 35,
+        "trainAugmented": 0,
+        "trainTotal": 35,
+        "validTotal": 10,
+        "testTotal": 5,
+        "total": 50
+      },
+      "Mie Goreng": {
+        "uniqueOriginals": 31,
+        "trainOriginals": 16,
+        "trainAugmented": 19,
+        "trainTotal": 35,
+        "validTotal": 10,
+        "testTotal": 5,
+        "total": 50
+      },
+      "Tempe Goreng": {
+        "uniqueOriginals": 48,
+        "trainOriginals": 33,
+        "trainAugmented": 2,
+        "trainTotal": 35,
+        "validTotal": 10,
+        "testTotal": 5,
+        "total": 50
+      },
+      "Tahu Goreng": {
+        "uniqueOriginals": 35,
+        "trainOriginals": 20,
+        "trainAugmented": 15,
+        "trainTotal": 35,
+        "validTotal": 10,
+        "testTotal": 5,
+        "total": 50
+      },
+      "Gado-Gado": {
+        "uniqueOriginals": 33,
+        "trainOriginals": 18,
+        "trainAugmented": 17,
+        "trainTotal": 35,
+        "validTotal": 10,
+        "testTotal": 5,
+        "total": 50
+      },
+      "Pempek": {
+        "uniqueOriginals": 39,
+        "trainOriginals": 24,
+        "trainAugmented": 11,
+        "trainTotal": 35,
+        "validTotal": 10,
+        "testTotal": 5,
+        "total": 50
+      },
+      "Telur Balado": {
+        "uniqueOriginals": 21,
+        "trainOriginals": 6,
+        "trainAugmented": 29,
+        "trainTotal": 35,
+        "validTotal": 10,
+        "testTotal": 5,
+        "total": 50
+      }
     }
   },
   "samples": [
@@ -26,84 +139,810 @@
       "name": "Nasi Goreng",
       "slug": "nasi_goreng",
       "sampleFile": "nasi_goreng_real.jpg",
-      "bytes": 178801
+      "bytes": 370648,
+      "width": 1280,
+      "height": 960,
+      "aspectRatio": 1.3333,
+      "bbox_yolo": [
+        0.465625,
+        0.4375,
+        0.77625,
+        0.661667
+      ],
+      "bbox_xyxy": [
+        99,
+        102,
+        1093,
+        738
+      ],
+      "sharpnessGrad": 33.3,
+      "centerGrad": 42.1,
+      "meanLuminance": 126.2,
+      "md5": "c541a1894615d8728befc175a67cb633",
+      "dhash": "c89c165a1a1ad464",
+      "source": "wikipedia:en:Nasi_goreng",
+      "sourceTitle": "Nasi Goreng Trafasie.JPG",
+      "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Nasi_Goreng_Trafasie.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "license": "CC BY 3.0"
     },
     {
       "classId": 1,
       "name": "Bakso",
       "slug": "bakso",
       "sampleFile": "bakso_real.jpg",
-      "bytes": 81434
+      "bytes": 234811,
+      "width": 1280,
+      "height": 960,
+      "aspectRatio": 1.3333,
+      "bbox_yolo": [
+        0.50625,
+        0.5,
+        0.4825,
+        0.586667
+      ],
+      "bbox_xyxy": [
+        339,
+        198,
+        957,
+        762
+      ],
+      "sharpnessGrad": 15.8,
+      "centerGrad": 35.1,
+      "meanLuminance": 193.4,
+      "md5": "38cc94f62473141da1d2803b34d76d64",
+      "dhash": "021c1c24040c0200",
+      "source": "wikimedia:Category:Bakso",
+      "sourceTitle": "Bakso Spesial Urat.jpg",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/05/Bakso_Spesial_Urat.jpg/1280px-Bakso_Spesial_Urat.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 4.0"
     },
     {
       "classId": 2,
       "name": "Sate Ayam",
       "slug": "sate_ayam",
       "sampleFile": "sate_ayam_real.jpg",
-      "bytes": 156330
+      "bytes": 195821,
+      "width": 1152,
+      "height": 864,
+      "aspectRatio": 1.3333,
+      "bbox_yolo": [
+        0.503125,
+        0.4625,
+        0.62625,
+        0.661667
+      ],
+      "bbox_xyxy": [
+        219,
+        114,
+        940,
+        685
+      ],
+      "sharpnessGrad": 21.8,
+      "centerGrad": 30.4,
+      "meanLuminance": 113.5,
+      "md5": "5557730e1b64d72c49bd168ca52b346a",
+      "dhash": "1e0e0e5a3a1e160e",
+      "source": "wikimedia:Category:Chicken_satay",
+      "sourceTitle": "Sate Ayam Ponorogo6.jpg",
+      "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Sate_Ayam_Ponorogo6.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "license": "CC BY-SA 4.0"
     },
     {
       "classId": 3,
       "name": "Rendang",
       "slug": "rendang",
       "sampleFile": "rendang_real.jpg",
-      "bytes": 157799
+      "bytes": 423460,
+      "width": 1280,
+      "height": 853,
+      "aspectRatio": 1.5006,
+      "bbox_yolo": [
+        0.503125,
+        0.5,
+        0.65125,
+        0.703333
+      ],
+      "bbox_xyxy": [
+        227,
+        127,
+        1061,
+        726
+      ],
+      "sharpnessGrad": 26.1,
+      "centerGrad": 43.2,
+      "meanLuminance": 154.9,
+      "md5": "811ef8c6da16961d79397c72b7de9945",
+      "dhash": "1c0e0e26161e1e1c",
+      "source": "wikimedia:Category:Rendang",
+      "sourceTitle": "D2D 9945 wikimedia2020 deni dahniel randang.jpg",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/66/D2D_9945_wikimedia2020_deni_dahniel_randang.jpg/1280px-D2D_9945_wikimedia2020_deni_dahniel_randang.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 4.0"
     },
     {
       "classId": 4,
       "name": "Soto Ayam",
       "slug": "soto_ayam",
       "sampleFile": "soto_ayam_real.jpg",
-      "bytes": 166824
+      "bytes": 390173,
+      "width": 1280,
+      "height": 997,
+      "aspectRatio": 1.2839,
+      "bbox_yolo": [
+        0.5125,
+        0.529167,
+        0.57,
+        0.528333
+      ],
+      "bbox_xyxy": [
+        291,
+        264,
+        1021,
+        791
+      ],
+      "sharpnessGrad": 13.3,
+      "centerGrad": 26,
+      "meanLuminance": 175,
+      "md5": "196653ba8143ed411230d796e48123c4",
+      "dhash": "c29c1e1e0e8ee0e4",
+      "source": "wikipedia:en:Soto_(food)",
+      "sourceTitle": "Soto Banjar.JPG",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Soto_Banjar.JPG/1280px-Soto_Banjar.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
     },
     {
       "classId": 5,
       "name": "Ayam Goreng",
       "slug": "ayam_goreng",
       "sampleFile": "ayam_goreng_real.jpg",
-      "bytes": 158392
+      "bytes": 348601,
+      "width": 1280,
+      "height": 853,
+      "aspectRatio": 1.5006,
+      "bbox_yolo": [
+        0.45,
+        0.566667,
+        0.8325,
+        0.736667
+      ],
+      "bbox_xyxy": [
+        43,
+        169,
+        1109,
+        798
+      ],
+      "sharpnessGrad": 30.3,
+      "centerGrad": 36.4,
+      "meanLuminance": 148.7,
+      "md5": "3ff8435f432c138b79c8d86e0cba48c5",
+      "dhash": "464242181e189898",
+      "source": "wikipedia:en:Ayam_goreng",
+      "sourceTitle": "Ayam goreng lado hijau.JPG",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/Ayam_goreng_lado_hijau.JPG/1280px-Ayam_goreng_lado_hijau.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
     },
     {
       "classId": 6,
       "name": "Mie Goreng",
       "slug": "mie_goreng",
       "sampleFile": "mie_goreng_real.jpg",
-      "bytes": 156523
+      "bytes": 462730,
+      "width": 1280,
+      "height": 960,
+      "aspectRatio": 1.3333,
+      "bbox_yolo": [
+        0.475,
+        0.483333,
+        0.6825,
+        0.703333
+      ],
+      "bbox_xyxy": [
+        171,
+        126,
+        1045,
+        802
+      ],
+      "sharpnessGrad": 30.6,
+      "centerGrad": 49.8,
+      "meanLuminance": 146.9,
+      "md5": "8d05a5072976d2b7d8b597672bf38e1c",
+      "dhash": "869602430206c4e0",
+      "source": "wikipedia:en:Mie_goreng",
+      "sourceTitle": "Mi goreng.JPG",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/Mi_goreng.JPG/1280px-Mi_goreng.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
     },
     {
       "classId": 7,
       "name": "Tempe Goreng",
       "slug": "tempe_goreng",
       "sampleFile": "tempe_goreng_real.jpg",
-      "bytes": 160259
+      "bytes": 402829,
+      "width": 1280,
+      "height": 960,
+      "aspectRatio": 1.3333,
+      "bbox_yolo": [
+        0.509375,
+        0.504167,
+        0.66375,
+        0.645
+      ],
+      "bbox_xyxy": [
+        227,
+        174,
+        1077,
+        794
+      ],
+      "sharpnessGrad": 21.2,
+      "centerGrad": 31.1,
+      "meanLuminance": 100.8,
+      "md5": "1f52a48d72370fbfc96376bd68ef4beb",
+      "dhash": "3ac2f0e0d47e3e1e",
+      "source": "wikipedia:en:Tempeh",
+      "sourceTitle": "Sambal tempe penyet kemangi.JPG",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Sambal_tempe_penyet_kemangi.JPG/1280px-Sambal_tempe_penyet_kemangi.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
     },
     {
       "classId": 8,
       "name": "Tahu Goreng",
       "slug": "tahu_goreng",
       "sampleFile": "tahu_goreng_real.jpg",
-      "bytes": 197808
+      "bytes": 513201,
+      "width": 1280,
+      "height": 1280,
+      "aspectRatio": 1,
+      "bbox_yolo": [
+        0.5125,
+        0.39,
+        0.8075,
+        0.74
+      ],
+      "bbox_xyxy": [
+        139,
+        26,
+        1173,
+        973
+      ],
+      "sharpnessGrad": 23.2,
+      "centerGrad": 23.9,
+      "meanLuminance": 124.1,
+      "md5": "7f5c51e3839f10efc57d5fb3133e289a",
+      "dhash": "a2b0721ad4709296",
+      "source": "wikipedia:en:Tahu_goreng",
+      "sourceTitle": "Indonesia Tahu goreng.JPG",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Indonesia_Tahu_goreng.JPG/1280px-Indonesia_Tahu_goreng.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
     },
     {
       "classId": 9,
       "name": "Gado-Gado",
       "slug": "gado_gado",
       "sampleFile": "gado_gado_real.jpg",
-      "bytes": 188404
+      "bytes": 171181,
+      "width": 1055,
+      "height": 633,
+      "aspectRatio": 1.6667,
+      "bbox_yolo": [
+        0.509375,
+        0.516667,
+        0.70125,
+        0.786667
+      ],
+      "bbox_xyxy": [
+        167,
+        78,
+        907,
+        576
+      ],
+      "sharpnessGrad": 23.8,
+      "centerGrad": 31,
+      "meanLuminance": 137.3,
+      "md5": "65f97f96023da2fc6535a2925557ae31",
+      "dhash": "528a860c6e0c9ccc",
+      "source": "wikipedia:en:Gado-gado",
+      "sourceTitle": "Gado gado jakarta.jpg",
+      "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/2/26/Gado_gado_jakarta.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "license": "CC BY-SA 4.0"
     },
     {
       "classId": 10,
       "name": "Pempek",
       "slug": "pempek",
       "sampleFile": "pempek_real.jpg",
-      "bytes": 67441
+      "bytes": 741422,
+      "width": 1280,
+      "height": 1163,
+      "aspectRatio": 1.1006,
+      "bbox_yolo": [
+        0.49375,
+        0.583333,
+        0.67,
+        0.57
+      ],
+      "bbox_xyxy": [
+        203,
+        347,
+        1061,
+        1010
+      ],
+      "sharpnessGrad": 20.6,
+      "centerGrad": 28.4,
+      "meanLuminance": 107.8,
+      "md5": "4e81ce681dc3d0ffaeafa4b3dec3fc6e",
+      "dhash": "7070a8a8e06068d8",
+      "source": "wikipedia:en:Pempek",
+      "sourceTitle": "Pempek Kuah Cuko.jpg",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Pempek_Kuah_Cuko.jpg/1280px-Pempek_Kuah_Cuko.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
     },
     {
       "classId": 11,
       "name": "Telur Balado",
       "slug": "telur_balado",
       "sampleFile": "telur_balado_real.jpg",
-      "bytes": 233919
+      "bytes": 442590,
+      "width": 1280,
+      "height": 955,
+      "aspectRatio": 1.3403,
+      "bbox_yolo": [
+        0.471875,
+        0.504167,
+        0.77625,
+        0.745
+      ],
+      "bbox_xyxy": [
+        107,
+        126,
+        1101,
+        837
+      ],
+      "sharpnessGrad": 29.4,
+      "centerGrad": 35.4,
+      "meanLuminance": 118.9,
+      "md5": "3c4aea2c879e1d1da8628efce90b6ff4",
+      "dhash": "10324460400a0c0c",
+      "source": "wikimedia:Category:Telur_balado",
+      "sourceTitle": "Talua balado.JPG",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Talua_balado.JPG/1280px-Talua_balado.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
+    }
+  ],
+  "prasmanan_hero": {
+    "id": "prasmanan_kuliner",
+    "classId": null,
+    "name": "Prasmanan Kuliner Nusantara",
+    "slug": "prasmanan_kuliner",
+    "sampleFile": "prasmanan_kuliner_real.jpg",
+    "bytes": 514673,
+    "width": 1280,
+    "height": 996,
+    "aspectRatio": 1.2851,
+    "bbox_yolo": [
+      0.515625,
+      0.545833,
+      0.87625,
+      0.645
+    ],
+    "bbox_xyxy": [
+      99,
+      222,
+      1221,
+      865
+    ],
+    "sharpnessGrad": 37.8,
+    "centerGrad": 48.6,
+    "meanLuminance": 121.7,
+    "md5": "a04284a3773038dd094bee98721a9003",
+    "dhash": "a2a4a4e8a4783cfc",
+    "source": "wikipedia:en:Nasi_padang",
+    "sourceTitle": "Nasi Padang Pak Nurdin.jpg",
+    "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Nasi_Padang_Pak_Nurdin.jpg/1280px-Nasi_Padang_Pak_Nurdin.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "license": "CC BY-SA 4.0"
+  },
+  "all_heroes": [
+    {
+      "classId": 0,
+      "name": "Nasi Goreng",
+      "slug": "nasi_goreng",
+      "sampleFile": "nasi_goreng_real.jpg",
+      "bytes": 370648,
+      "width": 1280,
+      "height": 960,
+      "aspectRatio": 1.3333,
+      "bbox_yolo": [
+        0.465625,
+        0.4375,
+        0.77625,
+        0.661667
+      ],
+      "bbox_xyxy": [
+        99,
+        102,
+        1093,
+        738
+      ],
+      "sharpnessGrad": 33.3,
+      "centerGrad": 42.1,
+      "meanLuminance": 126.2,
+      "md5": "c541a1894615d8728befc175a67cb633",
+      "dhash": "c89c165a1a1ad464",
+      "source": "wikipedia:en:Nasi_goreng",
+      "sourceTitle": "Nasi Goreng Trafasie.JPG",
+      "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Nasi_Goreng_Trafasie.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "license": "CC BY 3.0"
+    },
+    {
+      "classId": 1,
+      "name": "Bakso",
+      "slug": "bakso",
+      "sampleFile": "bakso_real.jpg",
+      "bytes": 234811,
+      "width": 1280,
+      "height": 960,
+      "aspectRatio": 1.3333,
+      "bbox_yolo": [
+        0.50625,
+        0.5,
+        0.4825,
+        0.586667
+      ],
+      "bbox_xyxy": [
+        339,
+        198,
+        957,
+        762
+      ],
+      "sharpnessGrad": 15.8,
+      "centerGrad": 35.1,
+      "meanLuminance": 193.4,
+      "md5": "38cc94f62473141da1d2803b34d76d64",
+      "dhash": "021c1c24040c0200",
+      "source": "wikimedia:Category:Bakso",
+      "sourceTitle": "Bakso Spesial Urat.jpg",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/05/Bakso_Spesial_Urat.jpg/1280px-Bakso_Spesial_Urat.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 4.0"
+    },
+    {
+      "classId": 2,
+      "name": "Sate Ayam",
+      "slug": "sate_ayam",
+      "sampleFile": "sate_ayam_real.jpg",
+      "bytes": 195821,
+      "width": 1152,
+      "height": 864,
+      "aspectRatio": 1.3333,
+      "bbox_yolo": [
+        0.503125,
+        0.4625,
+        0.62625,
+        0.661667
+      ],
+      "bbox_xyxy": [
+        219,
+        114,
+        940,
+        685
+      ],
+      "sharpnessGrad": 21.8,
+      "centerGrad": 30.4,
+      "meanLuminance": 113.5,
+      "md5": "5557730e1b64d72c49bd168ca52b346a",
+      "dhash": "1e0e0e5a3a1e160e",
+      "source": "wikimedia:Category:Chicken_satay",
+      "sourceTitle": "Sate Ayam Ponorogo6.jpg",
+      "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Sate_Ayam_Ponorogo6.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "license": "CC BY-SA 4.0"
+    },
+    {
+      "classId": 3,
+      "name": "Rendang",
+      "slug": "rendang",
+      "sampleFile": "rendang_real.jpg",
+      "bytes": 423460,
+      "width": 1280,
+      "height": 853,
+      "aspectRatio": 1.5006,
+      "bbox_yolo": [
+        0.503125,
+        0.5,
+        0.65125,
+        0.703333
+      ],
+      "bbox_xyxy": [
+        227,
+        127,
+        1061,
+        726
+      ],
+      "sharpnessGrad": 26.1,
+      "centerGrad": 43.2,
+      "meanLuminance": 154.9,
+      "md5": "811ef8c6da16961d79397c72b7de9945",
+      "dhash": "1c0e0e26161e1e1c",
+      "source": "wikimedia:Category:Rendang",
+      "sourceTitle": "D2D 9945 wikimedia2020 deni dahniel randang.jpg",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/66/D2D_9945_wikimedia2020_deni_dahniel_randang.jpg/1280px-D2D_9945_wikimedia2020_deni_dahniel_randang.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 4.0"
+    },
+    {
+      "classId": 4,
+      "name": "Soto Ayam",
+      "slug": "soto_ayam",
+      "sampleFile": "soto_ayam_real.jpg",
+      "bytes": 390173,
+      "width": 1280,
+      "height": 997,
+      "aspectRatio": 1.2839,
+      "bbox_yolo": [
+        0.5125,
+        0.529167,
+        0.57,
+        0.528333
+      ],
+      "bbox_xyxy": [
+        291,
+        264,
+        1021,
+        791
+      ],
+      "sharpnessGrad": 13.3,
+      "centerGrad": 26,
+      "meanLuminance": 175,
+      "md5": "196653ba8143ed411230d796e48123c4",
+      "dhash": "c29c1e1e0e8ee0e4",
+      "source": "wikipedia:en:Soto_(food)",
+      "sourceTitle": "Soto Banjar.JPG",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Soto_Banjar.JPG/1280px-Soto_Banjar.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
+    },
+    {
+      "classId": 5,
+      "name": "Ayam Goreng",
+      "slug": "ayam_goreng",
+      "sampleFile": "ayam_goreng_real.jpg",
+      "bytes": 348601,
+      "width": 1280,
+      "height": 853,
+      "aspectRatio": 1.5006,
+      "bbox_yolo": [
+        0.45,
+        0.566667,
+        0.8325,
+        0.736667
+      ],
+      "bbox_xyxy": [
+        43,
+        169,
+        1109,
+        798
+      ],
+      "sharpnessGrad": 30.3,
+      "centerGrad": 36.4,
+      "meanLuminance": 148.7,
+      "md5": "3ff8435f432c138b79c8d86e0cba48c5",
+      "dhash": "464242181e189898",
+      "source": "wikipedia:en:Ayam_goreng",
+      "sourceTitle": "Ayam goreng lado hijau.JPG",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/Ayam_goreng_lado_hijau.JPG/1280px-Ayam_goreng_lado_hijau.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
+    },
+    {
+      "classId": 6,
+      "name": "Mie Goreng",
+      "slug": "mie_goreng",
+      "sampleFile": "mie_goreng_real.jpg",
+      "bytes": 462730,
+      "width": 1280,
+      "height": 960,
+      "aspectRatio": 1.3333,
+      "bbox_yolo": [
+        0.475,
+        0.483333,
+        0.6825,
+        0.703333
+      ],
+      "bbox_xyxy": [
+        171,
+        126,
+        1045,
+        802
+      ],
+      "sharpnessGrad": 30.6,
+      "centerGrad": 49.8,
+      "meanLuminance": 146.9,
+      "md5": "8d05a5072976d2b7d8b597672bf38e1c",
+      "dhash": "869602430206c4e0",
+      "source": "wikipedia:en:Mie_goreng",
+      "sourceTitle": "Mi goreng.JPG",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/Mi_goreng.JPG/1280px-Mi_goreng.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
+    },
+    {
+      "classId": 7,
+      "name": "Tempe Goreng",
+      "slug": "tempe_goreng",
+      "sampleFile": "tempe_goreng_real.jpg",
+      "bytes": 402829,
+      "width": 1280,
+      "height": 960,
+      "aspectRatio": 1.3333,
+      "bbox_yolo": [
+        0.509375,
+        0.504167,
+        0.66375,
+        0.645
+      ],
+      "bbox_xyxy": [
+        227,
+        174,
+        1077,
+        794
+      ],
+      "sharpnessGrad": 21.2,
+      "centerGrad": 31.1,
+      "meanLuminance": 100.8,
+      "md5": "1f52a48d72370fbfc96376bd68ef4beb",
+      "dhash": "3ac2f0e0d47e3e1e",
+      "source": "wikipedia:en:Tempeh",
+      "sourceTitle": "Sambal tempe penyet kemangi.JPG",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Sambal_tempe_penyet_kemangi.JPG/1280px-Sambal_tempe_penyet_kemangi.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
+    },
+    {
+      "classId": 8,
+      "name": "Tahu Goreng",
+      "slug": "tahu_goreng",
+      "sampleFile": "tahu_goreng_real.jpg",
+      "bytes": 513201,
+      "width": 1280,
+      "height": 1280,
+      "aspectRatio": 1,
+      "bbox_yolo": [
+        0.5125,
+        0.39,
+        0.8075,
+        0.74
+      ],
+      "bbox_xyxy": [
+        139,
+        26,
+        1173,
+        973
+      ],
+      "sharpnessGrad": 23.2,
+      "centerGrad": 23.9,
+      "meanLuminance": 124.1,
+      "md5": "7f5c51e3839f10efc57d5fb3133e289a",
+      "dhash": "a2b0721ad4709296",
+      "source": "wikipedia:en:Tahu_goreng",
+      "sourceTitle": "Indonesia Tahu goreng.JPG",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Indonesia_Tahu_goreng.JPG/1280px-Indonesia_Tahu_goreng.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
+    },
+    {
+      "classId": 9,
+      "name": "Gado-Gado",
+      "slug": "gado_gado",
+      "sampleFile": "gado_gado_real.jpg",
+      "bytes": 171181,
+      "width": 1055,
+      "height": 633,
+      "aspectRatio": 1.6667,
+      "bbox_yolo": [
+        0.509375,
+        0.516667,
+        0.70125,
+        0.786667
+      ],
+      "bbox_xyxy": [
+        167,
+        78,
+        907,
+        576
+      ],
+      "sharpnessGrad": 23.8,
+      "centerGrad": 31,
+      "meanLuminance": 137.3,
+      "md5": "65f97f96023da2fc6535a2925557ae31",
+      "dhash": "528a860c6e0c9ccc",
+      "source": "wikipedia:en:Gado-gado",
+      "sourceTitle": "Gado gado jakarta.jpg",
+      "sourceUrl": "https://upload.wikimedia.org/wikipedia/commons/2/26/Gado_gado_jakarta.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "license": "CC BY-SA 4.0"
+    },
+    {
+      "classId": 10,
+      "name": "Pempek",
+      "slug": "pempek",
+      "sampleFile": "pempek_real.jpg",
+      "bytes": 741422,
+      "width": 1280,
+      "height": 1163,
+      "aspectRatio": 1.1006,
+      "bbox_yolo": [
+        0.49375,
+        0.583333,
+        0.67,
+        0.57
+      ],
+      "bbox_xyxy": [
+        203,
+        347,
+        1061,
+        1010
+      ],
+      "sharpnessGrad": 20.6,
+      "centerGrad": 28.4,
+      "meanLuminance": 107.8,
+      "md5": "4e81ce681dc3d0ffaeafa4b3dec3fc6e",
+      "dhash": "7070a8a8e06068d8",
+      "source": "wikipedia:en:Pempek",
+      "sourceTitle": "Pempek Kuah Cuko.jpg",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Pempek_Kuah_Cuko.jpg/1280px-Pempek_Kuah_Cuko.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
+    },
+    {
+      "classId": 11,
+      "name": "Telur Balado",
+      "slug": "telur_balado",
+      "sampleFile": "telur_balado_real.jpg",
+      "bytes": 442590,
+      "width": 1280,
+      "height": 955,
+      "aspectRatio": 1.3403,
+      "bbox_yolo": [
+        0.471875,
+        0.504167,
+        0.77625,
+        0.745
+      ],
+      "bbox_xyxy": [
+        107,
+        126,
+        1101,
+        837
+      ],
+      "sharpnessGrad": 29.4,
+      "centerGrad": 35.4,
+      "meanLuminance": 118.9,
+      "md5": "3c4aea2c879e1d1da8628efce90b6ff4",
+      "dhash": "10324460400a0c0c",
+      "source": "wikimedia:Category:Telur_balado",
+      "sourceTitle": "Talua balado.JPG",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Talua_balado.JPG/1280px-Talua_balado.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 3.0"
+    },
+    {
+      "id": "prasmanan_kuliner",
+      "classId": null,
+      "name": "Prasmanan Kuliner Nusantara",
+      "slug": "prasmanan_kuliner",
+      "sampleFile": "prasmanan_kuliner_real.jpg",
+      "bytes": 514673,
+      "width": 1280,
+      "height": 996,
+      "aspectRatio": 1.2851,
+      "bbox_yolo": [
+        0.515625,
+        0.545833,
+        0.87625,
+        0.645
+      ],
+      "bbox_xyxy": [
+        99,
+        222,
+        1221,
+        865
+      ],
+      "sharpnessGrad": 37.8,
+      "centerGrad": 48.6,
+      "meanLuminance": 121.7,
+      "md5": "a04284a3773038dd094bee98721a9003",
+      "dhash": "a2a4a4e8a4783cfc",
+      "source": "wikipedia:en:Nasi_padang",
+      "sourceTitle": "Nasi Padang Pak Nurdin.jpg",
+      "sourceUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Nasi_Padang_Pak_Nurdin.jpg/1280px-Nasi_Padang_Pak_Nurdin.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "license": "CC BY-SA 4.0"
     }
   ]
 }
