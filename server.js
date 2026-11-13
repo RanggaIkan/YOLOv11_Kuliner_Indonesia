@@ -392,11 +392,19 @@ function hashSeed(text) {
   return hash >>> 0;
 }
 
+const SAMPLE_ID_ALIASES = {
+  nasgor_malam: "nasi_goreng_spesial",
+  sate_madura: "sate_ayam_madura",
+  padang_rendang: "nasi_padang_rendang",
+  gado_gado: "gado_gado_tahu_tempe",
+};
+
 function findCatalogSample(sampleId, filename) {
   const catalog = readJsonSafe(SAMPLE_CATALOG_PATH);
   if (!catalog || !Array.isArray(catalog.images)) return null;
-  const target = (sampleId || filename || "").toLowerCase().replace(/\.[a-z0-9]+$/i, "");
-  if (!target) return catalog.images[0] || null;
+  const rawTarget = (sampleId || filename || "").toLowerCase().replace(/\.[a-z0-9]+$/i, "");
+  if (!rawTarget) return catalog.images[0] || null;
+  const target = SAMPLE_ID_ALIASES[rawTarget] || rawTarget;
   return (
     catalog.images.find(
       (img) =>
@@ -406,25 +414,50 @@ function findCatalogSample(sampleId, filename) {
   );
 }
 
+function findPrimaryClassFromText(text) {
+  const norm = String(text || "").toLowerCase().replace(/[_-]+/g, " ");
+  if (!norm) return null;
+  return (
+    DEFAULT_CLASSES.find(
+      (cls) => norm.includes(cls.name.toLowerCase()) || norm.includes(cls.slug.replace(/-/g, " "))
+    ) || null
+  );
+}
+
 function buildFallbackDetections(seedName) {
   const seed = hashSeed(seedName || "kuliner_nusantara.jpg");
-  const count = 3 + (seed % 3);
-  const layouts = [
-    [130, 115, 290, 260],
-    [325, 110, 495, 255],
-    [165, 265, 320, 405],
-    [350, 265, 510, 405],
-    [60, 165, 175, 295],
-  ];
+  const matchedPrimary = findPrimaryClassFromText(seedName);
+  const count = matchedPrimary ? 3 : 3 + (seed % 3);
+  const layouts = matchedPrimary
+    ? [
+        [155, 105, 485, 390],
+        [455, 130, 585, 270],
+        [75, 250, 210, 390],
+      ]
+    : [
+        [130, 115, 290, 260],
+        [325, 110, 495, 255],
+        [165, 265, 320, 405],
+        [350, 265, 510, 405],
+        [60, 165, 175, 295],
+      ];
   const detections = [];
   for (let i = 0; i < count; i += 1) {
-    const cls = DEFAULT_CLASSES[(seed + i * 3) % DEFAULT_CLASSES.length];
+    let cls;
+    if (i === 0 && matchedPrimary) {
+      cls = matchedPrimary;
+    } else {
+      cls = DEFAULT_CLASSES[(seed + i * 3) % DEFAULT_CLASSES.length];
+      if (matchedPrimary && cls.id === matchedPrimary.id) {
+        cls = DEFAULT_CLASSES[(cls.id + i) % DEFAULT_CLASSES.length];
+      }
+    }
     const bbox = layouts[i % layouts.length];
     detections.push({
       class_id: cls.id - 1,
       class_name: cls.name,
       bbox_xyxy: bbox,
-      confidence_gt: Number((0.84 + ((seed + i * 7) % 12) * 0.01).toFixed(3)),
+      confidence_gt: i === 0 && matchedPrimary ? 0.935 : Number((0.84 + ((seed + i * 7) % 12) * 0.01).toFixed(3)),
     });
   }
   return {
