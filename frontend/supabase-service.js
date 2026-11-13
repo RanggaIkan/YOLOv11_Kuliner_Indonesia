@@ -644,6 +644,7 @@
 
   let _dbPromise = null;
   let _memoryDb = null;
+  let _lastRemoteSuccess = null;
 
   async function ensureLocalDb() {
     if (_memoryDb) return _memoryDb;
@@ -688,6 +689,14 @@
   function getConfig() {
     const windowCfg = globalScope.SUPABASE_CONFIG || {};
     const storedCfg = readStorageJson(CONFIG_STORAGE_KEY) || {};
+    if (storedCfg.offline === true) {
+      return {
+        url: "",
+        anonKey: "",
+        configured: false,
+        offlineForced: true,
+      };
+    }
     const url = String(storedCfg.url || windowCfg.url || DEFAULT_SUPABASE_URL).trim().replace(/\/+$/, "");
     const anonKey = String(
       storedCfg.anonKey ||
@@ -700,24 +709,26 @@
       url,
       anonKey,
       configured: isValidConfig(url, anonKey),
+      offlineForced: false,
     };
   }
 
   function setConfig(cfg) {
     const url = String((cfg && cfg.url) || "").trim().replace(/\/+$/, "");
     const anonKey = String((cfg && (cfg.anonKey || cfg.publishableKey)) || "").trim();
-    writeStorageJson(CONFIG_STORAGE_KEY, { url, anonKey });
+    if (!url || !anonKey) {
+      _lastRemoteSuccess = false;
+      writeStorageJson(CONFIG_STORAGE_KEY, { offline: true });
+      return getConfig();
+    }
+    _lastRemoteSuccess = null;
+    writeStorageJson(CONFIG_STORAGE_KEY, { url, anonKey, offline: false });
     return getConfig();
   }
 
   function clearConfig() {
-    if (hasStorage()) {
-      try {
-        globalScope.localStorage.removeItem(CONFIG_STORAGE_KEY);
-      } catch (_) {
-        // ignore
-      }
-    }
+    _lastRemoteSuccess = false;
+    writeStorageJson(CONFIG_STORAGE_KEY, { offline: true });
     return getConfig();
   }
 
@@ -738,17 +749,33 @@
       authHeaders.Authorization = "Bearer " + cfg.anonKey;
     }
     const headers = Object.assign(authHeaders, opts.headers || {});
-    const resp = await globalScope.fetch(cfg.url + "/rest/v1/" + path, {
-      method: opts.method || "GET",
-      headers,
-      body: opts.body ? JSON.stringify(opts.body) : undefined,
-    });
-    if (!resp.ok) {
-      const errText = await resp.text().catch(() => resp.statusText);
-      throw new Error("Supabase HTTP " + resp.status + ": " + errText);
+    let timer = null;
+    let signal = opts.signal;
+    if (!signal && typeof AbortController === "function") {
+      const ctrl = new AbortController();
+      signal = ctrl.signal;
+      timer = setTimeout(() => ctrl.abort(), 6500);
     }
-    if (resp.status === 204) return null;
-    return resp.json();
+    try {
+      const resp = await globalScope.fetch(cfg.url + "/rest/v1/" + path, {
+        method: opts.method || "GET",
+        headers,
+        body: opts.body ? JSON.stringify(opts.body) : undefined,
+        signal,
+      });
+      if (!resp.ok) {
+        const errText = await resp.text().catch(() => resp.statusText);
+        throw new Error("Supabase HTTP " + resp.status + ": " + errText);
+      }
+      _lastRemoteSuccess = true;
+      if (resp.status === 204) return null;
+      return resp.json();
+    } catch (err) {
+      _lastRemoteSuccess = false;
+      throw err;
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
   }
 
   async function testConnection() {
@@ -780,9 +807,11 @@
 
   function getStatus() {
     const cfg = getConfig();
+    const isLive = cfg.configured && _lastRemoteSuccess !== false;
     return {
-      mode: cfg.configured ? "supabase" : "local",
+      mode: isLive ? "supabase" : "local",
       configured: cfg.configured,
+      reachable: _lastRemoteSuccess,
       url: cfg.url || null,
       storageKey: DATA_STORAGE_KEY,
     };

@@ -10,19 +10,23 @@
 
   // 12 Indonesian Culinary Classes (Total = 600 images: 420 train, 120 valid, 60 test)
   const CULINARY_CLASSES = [
-    { id: 1, name: "Nasi Goreng", slug: "nasi-goreng", region_origin: "Jawa & Nusantara", category: "Makanan Utama", avg_calories: 450, dataset_count: 65, color: "#38bdf8", description: "Nasi tumis bumbu kecap manis, bawang, dan pelengkap telur/ayam." },
-    { id: 2, name: "Bakso", slug: "bakso", region_origin: "Jawa Tengah & Timur", category: "Berkuah", avg_calories: 320, dataset_count: 55, color: "#10b981", description: "Bola daging sapi kenyal dalam kuah kaldu gurih dengan mie dan sawi." },
-    { id: 3, name: "Sate Ayam", slug: "sate-ayam", region_origin: "Madura, Jawa Timur", category: "Bakaran", avg_calories: 380, dataset_count: 55, color: "#f59e0b", description: "Daging ayam panggang tusuk bambu dengan saus kacang dan kecap." },
-    { id: 4, name: "Rendang", slug: "rendang", region_origin: "Sumatera Barat", category: "Lauk Utama", avg_calories: 470, dataset_count: 50, color: "#f43f5e", description: "Daging sapi dimasak santan dan rempah Minangkabau hingga pekat." },
-    { id: 5, name: "Soto Ayam", slug: "soto-ayam", region_origin: "Lamongan & Nusantara", category: "Berkuah", avg_calories: 310, dataset_count: 50, color: "#a78bfa", description: "Sup ayam kuah kuning kunyit dengan soun, kol, dan koya." },
-    { id: 6, name: "Ayam Goreng", slug: "ayam-goreng", region_origin: "Jawa & Sunda", category: "Lauk Utama", avg_calories: 390, dataset_count: 50, color: "#fb923c", description: "Ayam ungkep rempah lengkuas dan kunyit digoreng renyah keemasan." },
-    { id: 7, name: "Mie Goreng", slug: "mie-goreng", region_origin: "Nusantara", category: "Makanan Utama", avg_calories: 430, dataset_count: 50, color: "#2dd4bf", description: "Mie kuning tumis kecap manis bersama sawi, bakso, dan telur." },
-    { id: 8, name: "Tempe Goreng", slug: "tempe-goreng", region_origin: "Jawa", category: "Lauk Pendamping", avg_calories: 195, dataset_count: 45, color: "#facc15", description: "Irisan kedelai fermentasi berbumbu ketumbar digoreng garing." },
-    { id: 9, name: "Tahu Goreng", slug: "tahu-goreng", region_origin: "Jawa Barat & Tengah", category: "Lauk Pendamping", avg_calories: 165, dataset_count: 45, color: "#e879f9", description: "Tahu putih atau kuning digoreng berkulit keemasan gurih." },
-    { id: 10, name: "Gado-Gado", slug: "gado-gado", region_origin: "DKI Jakarta / Betawi", category: "Sayuran", avg_calories: 340, dataset_count: 45, color: "#4ade80", description: "Salad sayur rebus, lontong, dan tahu disiram saus kacang." },
-    { id: 11, name: "Pempek", slug: "pempek", region_origin: "Palembang, Sumsel", category: "Kudapan", avg_calories: 360, dataset_count: 45, color: "#60a5fa", description: "Olahan ikan tenggiri dan sagu disajikan dengan kuah cuko asam pedas." },
-    { id: 12, name: "Telur Balado", slug: "telur-balado", region_origin: "Sumatera Barat", category: "Lauk Utama", avg_calories: 230, dataset_count: 45, color: "#fb7185", description: "Telur rebus goreng bersalut sambal cabai merah Minang." }
+    { id: 1, name: "Nasi Goreng", slug: "nasi-goreng", region_origin: "Jawa & Nusantara", category: "Makanan Utama", avg_calories: 450, dataset_count: 65, color: "#B93815", description: "Nasi tumis bumbu kecap manis, bawang, dan pelengkap telur/ayam." },
+    { id: 2, name: "Bakso", slug: "bakso", region_origin: "Jawa Tengah & Timur", category: "Berkuah", avg_calories: 320, dataset_count: 55, color: "#15803D", description: "Bola daging sapi kenyal dalam kuah kaldu gurih dengan mie dan sawi." },
+    { id: 3, name: "Sate Ayam", slug: "sate-ayam", region_origin: "Madura, Jawa Timur", category: "Bakaran", avg_calories: 380, dataset_count: 55, color: "#B45309", description: "Daging ayam panggang tusuk bambu dengan saus kacang dan kecap." },
+    { id: 4, name: "Rendang", slug: "rendang", region_origin: "Sumatera Barat", category: "Lauk Utama", avg_calories: 470, dataset_count: 50, color: "#991B1B", description: "Daging sapi dimasak santan dan rempah Minangkabau hingga pekat." },
+    { id: 5, name: "Soto Ayam", slug: "soto-ayam", region_origin: "Lamongan & Nusantara", category: "Berkuah", avg_calories: 310, dataset_count: 50, color: "#7C2D12", description: "Sup ayam kuah kuning kunyit dengan soun, kol, dan koya." },
+    { id: 6, name: "Ayam Goreng", slug: "ayam-goreng", region_origin: "Jawa & Sunda", category: "Lauk Utama", avg_calories: 390, dataset_count: 50, color: "#C2410C", description: "Ayam ungkep rempah lengkuas dan kunyit digoreng renyah keemasan." },
+    { id: 7, name: "Mie Goreng", slug: "mie-goreng", region_origin: "Nusantara", category: "Makanan Utama", avg_calories: 430, dataset_count: 50, color: "#0F766E", description: "Mie kuning tumis kecap manis bersama sawi, bakso, dan telur." },
+    { id: 8, name: "Tempe Goreng", slug: "tempe-goreng", region_origin: "Jawa", category: "Lauk Pendamping", avg_calories: 195, dataset_count: 45, color: "#A16207", description: "Irisan kedelai fermentasi berbumbu ketumbar digoreng garing." },
+    { id: 9, name: "Tahu Goreng", slug: "tahu-goreng", region_origin: "Jawa Barat & Tengah", category: "Lauk Pendamping", avg_calories: 165, dataset_count: 45, color: "#6D28D9", description: "Tahu putih atau kuning digoreng berkulit keemasan gurih." },
+    { id: 10, name: "Gado-Gado", slug: "gado-gado", region_origin: "DKI Jakarta / Betawi", category: "Sayuran", avg_calories: 340, dataset_count: 45, color: "#166534", description: "Salad sayur rebus, lontong, dan tahu disiram saus kacang." },
+    { id: 11, name: "Pempek", slug: "pempek", region_origin: "Palembang, Sumsel", category: "Kudapan", avg_calories: 360, dataset_count: 45, color: "#1D4ED8", description: "Olahan ikan tenggiri dan sagu disajikan dengan kuah cuko asam pedas." },
+    { id: 12, name: "Telur Balado", slug: "telur-balado", region_origin: "Sumatera Barat", category: "Lauk Utama", avg_calories: 230, dataset_count: 45, color: "#BE123C", description: "Telur rebus goreng bersalut sambal cabai merah Minang." }
   ];
+
+  const ICON_PLAY = '<svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"/></svg>';
+  const ICON_PAUSE = '<svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+  const ICON_CHECK = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
 
   const CLASS_COLOR_MAP = Object.fromEntries(CULINARY_CLASSES.map((c) => [c.name, c.color]));
 
@@ -65,31 +69,63 @@
   }
 
   const REAL_SAMPLE_MAP = {
-    nasgor_malam: { file: "samples/images/nasi_goreng_real.jpg", primaryClass: "Nasi Goreng", secondaryClass: "Telur Balado" },
-    bakso_komplit: { file: "samples/images/bakso_real.jpg", primaryClass: "Bakso", secondaryClass: "Tahu Goreng" },
-    sate_madura: { file: "samples/images/sate_ayam_real.jpg", primaryClass: "Sate Ayam", secondaryClass: "Gado-Gado" },
-    padang_rendang: { file: "samples/images/rendang_real.jpg", primaryClass: "Rendang", secondaryClass: "Telur Balado" },
-    soto_ayam: { file: "samples/images/soto_ayam_real.jpg", primaryClass: "Soto Ayam", secondaryClass: "Ayam Goreng" },
-    ayam_goreng: { file: "samples/images/ayam_goreng_real.jpg", primaryClass: "Ayam Goreng", secondaryClass: "Tempe Goreng" },
-    mie_goreng: { file: "samples/images/mie_goreng_real.jpg", primaryClass: "Mie Goreng", secondaryClass: "Telur Balado" },
-    tempe_goreng: { file: "samples/images/tempe_goreng_real.jpg", primaryClass: "Tempe Goreng", secondaryClass: "Tahu Goreng" },
-    tahu_goreng: { file: "samples/images/tahu_goreng_real.jpg", primaryClass: "Tahu Goreng", secondaryClass: "Tempe Goreng" },
-    gado_gado: { file: "samples/images/gado_gado_real.jpg", primaryClass: "Gado-Gado", secondaryClass: "Tahu Goreng" },
-    pempek: { file: "samples/images/pempek_real.jpg", primaryClass: "Pempek", secondaryClass: "Telur Balado" },
-    telur_balado: { file: "samples/images/telur_balado_real.jpg", primaryClass: "Telur Balado", secondaryClass: "Rendang" }
+    nasgor_malam: { file: "samples/images/nasi_goreng_real.jpg", aliases: ["nasi_goreng_real", "nasi_goreng", "nasgor_malam"], primaryClass: "Nasi Goreng", secondaryClass: "Telur Balado" },
+    bakso_komplit: { file: "samples/images/bakso_real.jpg", aliases: ["bakso_real", "bakso", "bakso_komplit"], primaryClass: "Bakso", secondaryClass: "Tahu Goreng" },
+    sate_madura: { file: "samples/images/sate_ayam_real.jpg", aliases: ["sate_ayam_real", "sate_ayam", "sate_madura"], primaryClass: "Sate Ayam", secondaryClass: "Gado-Gado" },
+    padang_rendang: { file: "samples/images/rendang_real.jpg", aliases: ["rendang_real", "rendang", "padang_rendang"], primaryClass: "Rendang", secondaryClass: "Telur Balado" },
+    soto_ayam: { file: "samples/images/soto_ayam_real.jpg", aliases: ["soto_ayam_real", "soto_ayam"], primaryClass: "Soto Ayam", secondaryClass: "Ayam Goreng" },
+    ayam_goreng: { file: "samples/images/ayam_goreng_real.jpg", aliases: ["ayam_goreng_real", "ayam_goreng"], primaryClass: "Ayam Goreng", secondaryClass: "Tempe Goreng" },
+    mie_goreng: { file: "samples/images/mie_goreng_real.jpg", aliases: ["mie_goreng_real", "mie_goreng"], primaryClass: "Mie Goreng", secondaryClass: "Telur Balado" },
+    tempe_goreng: { file: "samples/images/tempe_goreng_real.jpg", aliases: ["tempe_goreng_real", "tempe_goreng"], primaryClass: "Tempe Goreng", secondaryClass: "Tahu Goreng" },
+    tahu_goreng: { file: "samples/images/tahu_goreng_real.jpg", aliases: ["tahu_goreng_real", "tahu_goreng"], primaryClass: "Tahu Goreng", secondaryClass: "Tempe Goreng" },
+    gado_gado: { file: "samples/images/gado_gado_real.jpg", aliases: ["gado_gado_real", "gado_gado"], primaryClass: "Gado-Gado", secondaryClass: "Tahu Goreng" },
+    pempek: { file: "samples/images/pempek_real.jpg", aliases: ["pempek_real", "pempek"], primaryClass: "Pempek", secondaryClass: "Telur Balado" },
+    telur_balado: { file: "samples/images/telur_balado_real.jpg", aliases: ["telur_balado_real", "telur_balado"], primaryClass: "Telur Balado", secondaryClass: "Rendang" },
+    prasmanan_kuliner: { file: "samples/images/prasmanan_kuliner_real.jpg", aliases: ["prasmanan_kuliner_real", "prasmanan_kuliner"], primaryClass: "Nasi Goreng", secondaryClass: "Rendang" }
+  };
+
+  const VIDEO_SAMPLE_CONFIG = {
+    video_prasmanan: {
+      catalogId: "prasmanan_tracking_demo",
+      framesDir: "samples/videos/frames/prasmanan_tracking_demo",
+      totalFrames: 16,
+      fps: 6,
+      width: 320,
+      height: 240,
+      defaultRoiNorm: [105 / 320, 35 / 240, 120 / 320, 170 / 240]
+    },
+    video_kasir: {
+      catalogId: "antrean_kantin_demo",
+      framesDir: "samples/videos/frames/antrean_kantin_demo",
+      totalFrames: 16,
+      fps: 6,
+      width: 320,
+      height: 240,
+      defaultRoiNorm: [135 / 320, 30 / 240, 160 / 320, 180 / 240]
+    }
   };
 
   const realImageCache = new Map();
+  const videoFrameCache = new Map();
+  const catalogState = {
+    loaded: false,
+    imagesByKey: {},
+    videosByKey: {}
+  };
 
   function getOrLoadRealSampleImage(sceneKey) {
     const entry = REAL_SAMPLE_MAP[sceneKey];
-    if (!entry) return null;
+    const catalogImg = catalogState.imagesByKey[sceneKey];
+    const targetFile = (catalogImg && catalogImg.path) || (entry && entry.file);
+    if (!targetFile) return null;
     if (realImageCache.has(sceneKey)) {
       const cached = realImageCache.get(sceneKey);
-      return cached.loaded ? cached.img : null;
+      if (cached.srcPath === targetFile) {
+        return cached.loaded && !cached.failed ? cached.img : null;
+      }
     }
     const img = new Image();
-    const record = { img, loaded: false };
+    const record = { img, loaded: false, failed: false, srcPath: targetFile };
     realImageCache.set(sceneKey, record);
     img.onload = () => {
       record.loaded = true;
@@ -100,8 +136,55 @@
         renderFiveCardComparison();
       }
     };
-    img.src = resolveAssetUrl(entry.file);
+    img.onerror = () => {
+      record.failed = true;
+    };
+    img.src = resolveAssetUrl(targetFile);
     return null;
+  }
+
+  function getOrLoadVideoFrame(sceneKey, frameIdx) {
+    const vCfg = VIDEO_SAMPLE_CONFIG[sceneKey];
+    const catVid = catalogState.videosByKey[sceneKey];
+    if (!vCfg && !catVid) return { img: null, failed: true };
+
+    const totalFrames = (catVid && catVid.total_frames) || vCfg.totalFrames || 16;
+    const safeIdx = ((frameIdx % totalFrames) + totalFrames) % totalFrames;
+    const ann = catVid && Array.isArray(catVid.frame_annotations) ? catVid.frame_annotations[safeIdx] : null;
+    const frameFile = (ann && ann.frame_file) || `${vCfg.framesDir}/frame_${String(safeIdx + 1).padStart(3, "0")}.png`;
+
+    if (!videoFrameCache.has(sceneKey)) {
+      videoFrameCache.set(sceneKey, new Map());
+    }
+    const cache = videoFrameCache.get(sceneKey);
+    if (cache.has(safeIdx)) {
+      const rec = cache.get(safeIdx);
+      return { img: rec.loaded && !rec.failed ? rec.img : null, failed: rec.failed };
+    }
+
+    const img = new Image();
+    const rec = { img, loaded: false, failed: false };
+    cache.set(safeIdx, rec);
+    img.onload = () => {
+      rec.loaded = true;
+      if (state.sampleKey === sceneKey && state.activeTab === "tab-detect") {
+        renderDetectFrame();
+      }
+    };
+    img.onerror = () => {
+      rec.failed = true;
+    };
+    img.src = resolveAssetUrl(frameFile);
+    return { img: null, failed: false };
+  }
+
+  function preloadVideoFrames(sceneKey) {
+    const vCfg = VIDEO_SAMPLE_CONFIG[sceneKey];
+    const catVid = catalogState.videosByKey[sceneKey];
+    const total = (catVid && catVid.total_frames) || (vCfg && vCfg.totalFrames) || 16;
+    for (let i = 0; i < total; i++) {
+      getOrLoadVideoFrame(sceneKey, i);
+    }
   }
 
   function buildSupabaseHeaders(key, extra) {
@@ -117,7 +200,7 @@
     activeTab: "tab-detect",
     sampleKey: "nasgor_malam",
     mediaType: "image", // 'image' | 'video' | 'sim_video'
-    mediaName: "Nasi Goreng Spesial (Low-Light Warung)",
+    mediaName: "Foto Real: Nasi Goreng Spesial",
     uploadedImage: null,
     uploadedVideoReady: false,
     isPlaying: true,
@@ -130,13 +213,14 @@
     gamma: 1.15,
     splitCompare: false,
     splitRatio: 0.5,
-    lowLightSim: true,
+    lowLightSim: false,
 
     detectMode: "counting", // 'counting' | 'tracking'
     roiActive: true,
     roiPreset: "piring",
     roi: { x: 180, y: 80, w: 600, h: 380 },
     dragState: null, // { mode: 'move'|'nw'|'ne'|'sw'|'se'|'split', startX, startY, origRoi }
+    lastPlacement: { dx: 0, dy: 0, dw: CANVAS_W, dh: CANVAS_H },
 
     backendConnected: false,
     backendUrl: "",
@@ -173,6 +257,7 @@
 
   function init() {
     cacheDom();
+    if (dom.toggleLowLightSim) dom.toggleLowLightSim.checked = state.lowLightSim;
     bindNavigation();
     bindMediaControls();
     bindEnhancementControls();
@@ -189,6 +274,7 @@
     renderEvalTable();
     drawDatasetChart();
     refreshDatabasePanel();
+    loadSampleCatalog();
     probeBackendQuietly();
     startAnimationLoop();
   }
@@ -214,8 +300,8 @@
       "evalSearchInput", "evalMethodFilter", "evalTableBody", "datasetChartCanvas",
       "dbPanelStatus", "dbSessionCount", "dbComparisonCount", "dbClassCount",
       "btnRefreshSupabase", "btnResetLocalDb", "dbActiveSourceTag", "dbTableContainer",
-      "inputGroupName", "inputMembers", "inputYoutubeUrl", "inputGithubUrl",
-      "linkOpenYoutube", "linkOpenGithub", "btnSaveGroupInfo",
+      "inputGroupName", "inputMembers", "inputYoutubeUrl", "inputGithubUrl", "inputColabUrl",
+      "linkOpenYoutube", "linkOpenGithub", "linkOpenColab", "btnSaveGroupInfo",
       "checklistKetentuan", "checklistPenilaian", "supabaseModal",
       "btnCloseSupabaseModal", "inputSupabaseUrl", "inputSupabaseKey",
       "btnClearSupabaseConfig", "btnTestSupabase", "btnSaveSupabaseConfig",
@@ -224,6 +310,114 @@
     ids.forEach((id) => { dom[id] = document.getElementById(id); });
     dom.mainCtx = dom.mainCanvas.getContext("2d");
     dom.histCtx = dom.histogramCanvas.getContext("2d");
+  }
+
+  function matchSampleKeyFromCatalogImage(imgEntry) {
+    const idStr = String(imgEntry.id || "").toLowerCase();
+    const pathStr = String(imgEntry.path || imgEntry.filename || "").toLowerCase();
+    // Skip legacy synthetic PNG cartoon images
+    if (pathStr.endsWith(".png") && !pathStr.includes("_real")) return null;
+    for (const [sampleKey, meta] of Object.entries(REAL_SAMPLE_MAP)) {
+      const targetFile = meta.file.toLowerCase();
+      if (pathStr.endsWith(targetFile) || pathStr.includes(sampleKey) || (meta.aliases && meta.aliases.some((a) => idStr.includes(a) || pathStr.includes(a)))) {
+        return sampleKey;
+      }
+    }
+    return null;
+  }
+
+  function syncDefaultRoiForCurrentScene() {
+    if (state.mediaType === "sim_video") {
+      const catVid = catalogState.videosByKey[state.sampleKey];
+      const vCfg = VIDEO_SAMPLE_CONFIG[state.sampleKey];
+      const w = (catVid && catVid.width) || (vCfg && vCfg.width) || 320;
+      const h = (catVid && catVid.height) || (vCfg && vCfg.height) || 240;
+      const place = computeFitPlacement(w, h);
+      let norm = vCfg && vCfg.defaultRoiNorm;
+      if (catVid && Array.isArray(catVid.default_roi) && catVid.default_roi.length >= 3) {
+        const xs = catVid.default_roi.map((p) => p[0]);
+        const ys = catVid.default_roi.map((p) => p[1]);
+        const minX = Math.min(...xs), maxX = Math.max(...xs);
+        const minY = Math.min(...ys), maxY = Math.max(...ys);
+        norm = [minX / w, minY / h, (maxX - minX) / w, (maxY - minY) / h];
+      }
+      if (norm) {
+        state.roi = {
+          x: Math.round(place.dx + norm[0] * place.dw),
+          y: Math.round(place.dy + norm[1] * place.dh),
+          w: Math.max(80, Math.round(norm[2] * place.dw)),
+          h: Math.max(80, Math.round(norm[3] * place.dh))
+        };
+        updateRoiCoordsLabel();
+      }
+      return;
+    }
+
+    const catImg = catalogState.imagesByKey[state.sampleKey];
+    if (catImg) {
+      const iw = catImg.width || 640;
+      const ih = catImg.height || 480;
+      const place = computeFitPlacement(iw, ih);
+      let norm = Array.isArray(catImg.default_roi_norm) ? catImg.default_roi_norm : null;
+      if (!norm && Array.isArray(catImg.default_roi) && catImg.default_roi.length >= 3) {
+        const xs = catImg.default_roi.map((p) => p[0]);
+        const ys = catImg.default_roi.map((p) => p[1]);
+        const minX = Math.min(...xs), maxX = Math.max(...xs);
+        const minY = Math.min(...ys), maxY = Math.max(...ys);
+        norm = [minX / iw, minY / ih, (maxX - minX) / iw, (maxY - minY) / ih];
+      }
+      if (norm && norm.length === 4) {
+        state.roi = {
+          x: Math.round(place.dx + norm[0] * place.dw),
+          y: Math.round(place.dy + norm[1] * place.dh),
+          w: Math.max(80, Math.round(norm[2] * place.dw)),
+          h: Math.max(80, Math.round(norm[3] * place.dh))
+        };
+        updateRoiCoordsLabel();
+      }
+    }
+  }
+
+  async function loadSampleCatalog() {
+    if (location.protocol === "file:") return;
+    let catalog = null;
+    for (const url of [resolveAssetUrl("samples/sample_catalog.json"), "/api/samples"]) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && (Array.isArray(data.images) || Array.isArray(data.videos))) {
+            catalog = data;
+            break;
+          }
+        }
+      } catch (_) {}
+    }
+    if (!catalog) return;
+
+    catalogState.loaded = true;
+    if (Array.isArray(catalog.images)) {
+      catalog.images.forEach((imgEntry) => {
+        const key = matchSampleKeyFromCatalogImage(imgEntry);
+        if (key) catalogState.imagesByKey[key] = imgEntry;
+      });
+    }
+    if (Array.isArray(catalog.videos)) {
+      catalog.videos.forEach((vidEntry) => {
+        const vidId = String(vidEntry.id || "").toLowerCase();
+        for (const [sampleKey, vCfg] of Object.entries(VIDEO_SAMPLE_CONFIG)) {
+          if (vidId === vCfg.catalogId || vidId === sampleKey) {
+            catalogState.videosByKey[sampleKey] = vidEntry;
+          }
+        }
+      });
+    }
+
+    if (catalogState.imagesByKey[state.sampleKey] || catalogState.videosByKey[state.sampleKey]) {
+      syncDefaultRoiForCurrentScene();
+      if (state.activeTab === "tab-detect") renderDetectFrame();
+      if (state.activeTab === "tab-eval") renderFiveCardComparison();
+    }
   }
 
   /* ========================================================================
@@ -266,6 +460,10 @@
   /* ========================================================================
      2. MEDIA INPUT & BUILT-IN INDONESIAN FOOD SAMPLES
      ======================================================================== */
+  function setPlayPauseButton(playing) {
+    dom.btnPlayPause.innerHTML = `${playing ? ICON_PAUSE : ICON_PLAY}<span>${playing ? "Pause" : "Play"}</span>`;
+  }
+
   function bindMediaControls() {
     dom.sampleSceneSelect.addEventListener("change", (e) => {
       loadSampleScene(e.target.value);
@@ -313,7 +511,7 @@
         dom.mediaModeTag.textContent = "UPLOAD VIDEO";
         dom.currentSceneTitle.textContent = file.name;
         dom.videoTransportBar.classList.remove("hidden");
-        dom.btnPlayPause.textContent = "⏸ Pause";
+        setPlayPauseButton(true);
         showToast(`Video "${file.name}" siap diputar & dideteksi.`, "info");
       };
     });
@@ -324,7 +522,7 @@
         if (state.isPlaying) dom.hiddenVideo.play().catch(() => {});
         else dom.hiddenVideo.pause();
       }
-      dom.btnPlayPause.textContent = state.isPlaying ? "⏸ Pause" : "▶ Play";
+      setPlayPauseButton(state.isPlaying);
     });
 
     dom.btnRestartVideo.addEventListener("click", () => {
@@ -336,7 +534,9 @@
         dom.hiddenVideo.play().catch(() => {});
       }
       state.isPlaying = true;
-      dom.btnPlayPause.textContent = "⏸ Pause";
+      setPlayPauseButton(true);
+      updateVideoTimeLabel();
+      renderDetectFrame();
     });
 
     dom.btnDownloadSnapshot.addEventListener("click", () => {
@@ -355,6 +555,21 @@
     state.uploadedVideoReady = false;
   }
 
+  function updateVideoTimeLabel() {
+    if (state.mediaType === "sim_video") {
+      const vCfg = VIDEO_SAMPLE_CONFIG[state.sampleKey];
+      const catVid = catalogState.videosByKey[state.sampleKey];
+      const total = (catVid && catVid.total_frames) || (vCfg && vCfg.totalFrames) || 16;
+      const fps = (catVid && catVid.fps) || (vCfg && vCfg.fps) || 6;
+      const frameIdx = ((state.simFrame % total) + total) % total;
+      dom.videoTimeLabel.textContent = `Frame ${String(frameIdx + 1).padStart(2, "0")}/${String(total).padStart(2, "0")} · ${fps} fps`;
+    } else if (state.uploadedVideoReady) {
+      const cur = Math.floor(dom.hiddenVideo.currentTime || 0);
+      const dur = Math.floor(dom.hiddenVideo.duration || 0);
+      dom.videoTimeLabel.textContent = `${fmtSec(cur)} / ${fmtSec(dur)}`;
+    }
+  }
+
   function loadSampleScene(key) {
     stopVideoElement();
     state.sampleKey = key;
@@ -364,17 +579,20 @@
     state.uniqueTrackIds.clear();
 
     const opt = dom.sampleSceneSelect.querySelector(`option[value="${key}"]`);
-    state.mediaName = opt ? opt.textContent.replace("▶ ", "") : key;
+    state.mediaName = opt ? opt.textContent.trim() : key;
     dom.currentSceneTitle.textContent = state.mediaName;
 
     if (key.startsWith("video_")) {
       state.mediaType = "sim_video";
       state.isPlaying = true;
-      dom.mediaModeTag.textContent = "VIDEO SIM";
+      dom.mediaModeTag.textContent = "FRAME SEQUENCE";
       dom.videoTransportBar.classList.remove("hidden");
-      dom.btnPlayPause.textContent = "⏸ Pause";
+      setPlayPauseButton(true);
+      preloadVideoFrames(key);
       if (key === "video_kasir") applyRoiPreset("kasir", false);
       else applyRoiPreset("tengah", false);
+      syncDefaultRoiForCurrentScene();
+      updateVideoTimeLabel();
       if (state.detectMode !== "tracking") {
         setDetectMode("tracking");
       }
@@ -383,6 +601,7 @@
       dom.mediaModeTag.textContent = "SAMPLE IMAGE";
       dom.videoTransportBar.classList.add("hidden");
       applyRoiPreset("piring", false);
+      syncDefaultRoiForCurrentScene();
     }
     renderDetectFrame();
   }
@@ -391,18 +610,25 @@
     let lastTick = 0;
     function tick(ts) {
       if (state.activeTab === "tab-detect" && (state.mediaType === "sim_video" || state.mediaType === "video")) {
-        if (state.isPlaying && ts - lastTick > 33) {
+        const vCfg = VIDEO_SAMPLE_CONFIG[state.sampleKey];
+        const catVid = catalogState.videosByKey[state.sampleKey];
+        const targetFps = state.mediaType === "sim_video" ? ((catVid && catVid.fps) || (vCfg && vCfg.fps) || 6) : 30;
+        const intervalMs = Math.max(33, Math.round(1000 / targetFps));
+
+        if (state.isPlaying && ts - lastTick >= intervalMs) {
           lastTick = ts;
-          state.simFrame += 1;
-          renderDetectFrame();
           if (state.mediaType === "sim_video") {
-            const sec = Math.floor(state.simFrame / 30);
-            dom.videoTimeLabel.textContent = `${String(Math.floor(sec / 60)).padStart(2, "0")}:${String(sec % 60).padStart(2, "0")} / Simulasi 30fps`;
-          } else if (state.uploadedVideoReady) {
-            const cur = Math.floor(dom.hiddenVideo.currentTime || 0);
-            const dur = Math.floor(dom.hiddenVideo.duration || 0);
-            dom.videoTimeLabel.textContent = `${fmtSec(cur)} / ${fmtSec(dur)}`;
+            const total = (catVid && catVid.total_frames) || (vCfg && vCfg.totalFrames) || 16;
+            const nextFrame = (state.simFrame + 1) % total;
+            if (nextFrame === 0) {
+              state.trailHistory.clear();
+            }
+            state.simFrame = nextFrame;
+          } else {
+            state.simFrame += 1;
           }
+          renderDetectFrame();
+          updateVideoTimeLabel();
         }
       }
       requestAnimationFrame(tick);
@@ -468,24 +694,34 @@
 
   /**
    * Applies real pixel-level image enhancement on an ImageData buffer.
-   * Returns { beforeHist, afterHist, metrics }
+   * When activeRect is passed, skips pillarbox margins so metrics reflect food pixels only.
    */
-  function applyEnhancementToImageData(imgData, method, opts) {
+  function applyEnhancementToImageData(imgData, method, opts, activeRect) {
     const data = imgData.data;
     const width = imgData.width;
     const height = imgData.height;
-    const totalPixels = width * height;
+
+    const ax0 = activeRect ? Math.max(0, Math.floor(activeRect.dx)) : 0;
+    const ay0 = activeRect ? Math.max(0, Math.floor(activeRect.dy)) : 0;
+    const ax1 = activeRect ? Math.min(width, Math.ceil(activeRect.dx + activeRect.dw)) : width;
+    const ay1 = activeRect ? Math.min(height, Math.ceil(activeRect.dy + activeRect.dh)) : height;
+    const activeW = Math.max(1, ax1 - ax0);
+    const activeH = Math.max(1, ay1 - ay0);
+    const totalPixels = activeW * activeH;
 
     const beforeHist = new Uint32Array(256);
-    const lumArr = new Uint8Array(totalPixels);
+    const lumArr = new Uint8Array(width * height);
 
-    let sumBefore = 0;
-    for (let i = 0, p = 0; i < data.length; i += 4, p++) {
-      const y = (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]) | 0;
-      const clampedY = y < 0 ? 0 : y > 255 ? 255 : y;
-      lumArr[p] = clampedY;
-      beforeHist[clampedY]++;
-      sumBefore += clampedY;
+    for (let py = ay0; py < ay1; py++) {
+      const rowOff = py * width;
+      for (let px = ax0; px < ax1; px++) {
+        const p = rowOff + px;
+        const i = p * 4;
+        const y = (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]) | 0;
+        const clampedY = y < 0 ? 0 : y > 255 ? 255 : y;
+        lumArr[p] = clampedY;
+        beforeHist[clampedY]++;
+      }
     }
 
     const afterHist = new Uint32Array(256);
@@ -495,44 +731,52 @@
 
     if (method === "original") {
       for (let i = 0; i < 256; i++) afterHist[i] = beforeHist[i];
-      for (let p = 0; p < totalPixels; p++) {
-        const y = lumArr[p];
-        sumAfter += y;
-        sumAfterSq += y * y;
+      for (let py = ay0; py < ay1; py++) {
+        const rowOff = py * width;
+        for (let px = ax0; px < ax1; px++) {
+          const y = lumArr[rowOff + px];
+          sumAfter += y;
+          sumAfterSq += y * y;
+        }
       }
     } else if (method === "he") {
       const lut = buildCdfLut(beforeHist, totalPixels);
-      for (let i = 0, p = 0; i < data.length; i += 4, p++) {
-        const oldY = lumArr[p];
-        const newY = lut[oldY];
-        const scale = oldY > 2 ? newY / oldY : 1 + newY / 64;
-        const nr = clamp255(data[i] * scale + (oldY <= 2 ? newY * 0.2 : 0));
-        const ng = clamp255(data[i + 1] * scale + (oldY <= 2 ? newY * 0.2 : 0));
-        const nb = clamp255(data[i + 2] * scale + (oldY <= 2 ? newY * 0.2 : 0));
-        data[i] = nr;
-        data[i + 1] = ng;
-        data[i + 2] = nb;
-        const ay = (0.299 * nr + 0.587 * ng + 0.114 * nb) | 0;
-        afterHist[ay]++;
-        sumAfter += ay;
-        sumAfterSq += ay * ay;
-        const diff = ay - oldY;
-        mseSum += diff * diff;
+      for (let py = ay0; py < ay1; py++) {
+        const rowOff = py * width;
+        for (let px = ax0; px < ax1; px++) {
+          const p = rowOff + px;
+          const i = p * 4;
+          const oldY = lumArr[p];
+          const newY = lut[oldY];
+          const scale = oldY > 2 ? newY / oldY : 1 + newY / 64;
+          const nr = clamp255(data[i] * scale + (oldY <= 2 ? newY * 0.2 : 0));
+          const ng = clamp255(data[i + 1] * scale + (oldY <= 2 ? newY * 0.2 : 0));
+          const nb = clamp255(data[i + 2] * scale + (oldY <= 2 ? newY * 0.2 : 0));
+          data[i] = nr;
+          data[i + 1] = ng;
+          data[i + 2] = nb;
+          const ay = (0.299 * nr + 0.587 * ng + 0.114 * nb) | 0;
+          afterHist[ay]++;
+          sumAfter += ay;
+          sumAfterSq += ay * ay;
+          const diff = ay - oldY;
+          mseSum += diff * diff;
+        }
       }
     } else if (method === "clahe") {
       const gridX = 8;
       const gridY = 6;
-      const tileW = width / gridX;
-      const tileH = height / gridY;
+      const tileW = activeW / gridX;
+      const tileH = activeH / gridY;
       const clipLimit = opts.clipLimit || 2.5;
       const tileLuts = [];
 
       for (let ty = 0; ty < gridY; ty++) {
-        const y0 = Math.floor(ty * tileH);
-        const y1 = Math.min(height, Math.floor((ty + 1) * tileH));
+        const y0 = ay0 + Math.floor(ty * tileH);
+        const y1 = Math.min(ay1, ay0 + Math.floor((ty + 1) * tileH));
         for (let tx = 0; tx < gridX; tx++) {
-          const x0 = Math.floor(tx * tileW);
-          const x1 = Math.min(width, Math.floor((tx + 1) * tileW));
+          const x0 = ax0 + Math.floor(tx * tileW);
+          const x1 = Math.min(ax1, ax0 + Math.floor((tx + 1) * tileW));
           const hist = new Uint32Array(256);
           let count = 0;
           for (let py = y0; py < y1; py++) {
@@ -556,22 +800,25 @@
           for (let b = 0; b < 256; b++) {
             hist[b] += redist + (b < rem ? 1 : 0);
           }
-          tileLuts.push(buildCdfLut(hist, count));
+          tileLuts.push(buildCdfLut(hist, Math.max(1, count)));
         }
       }
 
-      for (let py = 0, p = 0, i = 0; py < height; py++) {
-        const fy = (py + 0.5) / tileH - 0.5;
+      for (let py = ay0; py < ay1; py++) {
+        const fy = (py - ay0 + 0.5) / tileH - 0.5;
         const ty0 = Math.max(0, Math.min(gridY - 1, Math.floor(fy)));
         const ty1 = Math.max(0, Math.min(gridY - 1, ty0 + 1));
         const wy = Math.max(0, Math.min(1, fy - ty0));
+        const rowOff = py * width;
 
-        for (let px = 0; px < width; px++, p++, i += 4) {
-          const fx = (px + 0.5) / tileW - 0.5;
+        for (let px = ax0; px < ax1; px++) {
+          const fx = (px - ax0 + 0.5) / tileW - 0.5;
           const tx0 = Math.max(0, Math.min(gridX - 1, Math.floor(fx)));
           const tx1 = Math.max(0, Math.min(gridX - 1, tx0 + 1));
           const wx = Math.max(0, Math.min(1, fx - tx0));
 
+          const p = rowOff + px;
+          const i = p * 4;
           const oldY = lumArr[p];
           const v00 = tileLuts[ty0 * gridX + tx0][oldY];
           const v10 = tileLuts[ty0 * gridX + tx1][oldY];
@@ -596,7 +843,6 @@
         }
       }
     } else if (method === "cs") {
-      // 2nd to 98th percentile contrast stretching
       let p2 = 0;
       let p98 = 255;
       let acc = 0;
@@ -613,22 +859,27 @@
         lut[b] = clamp255(((b - p2) * 255) / span);
       }
 
-      for (let i = 0, p = 0; i < data.length; i += 4, p++) {
-        const oldY = lumArr[p];
-        const newY = lut[oldY];
-        const scale = oldY > 2 ? newY / oldY : 1;
-        const nr = clamp255(data[i] * scale);
-        const ng = clamp255(data[i + 1] * scale);
-        const nb = clamp255(data[i + 2] * scale);
-        data[i] = nr;
-        data[i + 1] = ng;
-        data[i + 2] = nb;
-        const ay = (0.299 * nr + 0.587 * ng + 0.114 * nb) | 0;
-        afterHist[ay]++;
-        sumAfter += ay;
-        sumAfterSq += ay * ay;
-        const diff = ay - oldY;
-        mseSum += diff * diff;
+      for (let py = ay0; py < ay1; py++) {
+        const rowOff = py * width;
+        for (let px = ax0; px < ax1; px++) {
+          const p = rowOff + px;
+          const i = p * 4;
+          const oldY = lumArr[p];
+          const newY = lut[oldY];
+          const scale = oldY > 2 ? newY / oldY : 1;
+          const nr = clamp255(data[i] * scale);
+          const ng = clamp255(data[i + 1] * scale);
+          const nb = clamp255(data[i + 2] * scale);
+          data[i] = nr;
+          data[i + 1] = ng;
+          data[i + 2] = nb;
+          const ay = (0.299 * nr + 0.587 * ng + 0.114 * nb) | 0;
+          afterHist[ay]++;
+          sumAfter += ay;
+          sumAfterSq += ay * ay;
+          const diff = ay - oldY;
+          mseSum += diff * diff;
+        }
       }
     } else if (method === "brightness") {
       const alpha = opts.contrast || 1.25;
@@ -640,20 +891,25 @@
         const linear = clamp255(alpha * (v - 128) + 128 + beta);
         lut[v] = clamp255(255 * Math.pow(linear / 255, invGamma));
       }
-      for (let i = 0, p = 0; i < data.length; i += 4, p++) {
-        const oldY = lumArr[p];
-        const nr = lut[data[i]];
-        const ng = lut[data[i + 1]];
-        const nb = lut[data[i + 2]];
-        data[i] = nr;
-        data[i + 1] = ng;
-        data[i + 2] = nb;
-        const ay = (0.299 * nr + 0.587 * ng + 0.114 * nb) | 0;
-        afterHist[ay]++;
-        sumAfter += ay;
-        sumAfterSq += ay * ay;
-        const diff = ay - oldY;
-        mseSum += diff * diff;
+      for (let py = ay0; py < ay1; py++) {
+        const rowOff = py * width;
+        for (let px = ax0; px < ax1; px++) {
+          const p = rowOff + px;
+          const i = p * 4;
+          const oldY = lumArr[p];
+          const nr = lut[data[i]];
+          const ng = lut[data[i + 1]];
+          const nb = lut[data[i + 2]];
+          data[i] = nr;
+          data[i + 1] = ng;
+          data[i + 2] = nb;
+          const ay = (0.299 * nr + 0.587 * ng + 0.114 * nb) | 0;
+          afterHist[ay]++;
+          sumAfter += ay;
+          sumAfterSq += ay * ay;
+          const diff = ay - oldY;
+          mseSum += diff * diff;
+        }
       }
     }
 
@@ -709,11 +965,11 @@
     const w = dom.histogramCanvas.width;
     const h = dom.histogramCanvas.height;
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#060a14";
+    ctx.fillStyle = "#FAF8F4";
     ctx.fillRect(0, 0, w, h);
 
-    // Subtle grid
-    ctx.strokeStyle = "rgba(148, 163, 184, 0.12)";
+    // Subtle editorial grid
+    ctx.strokeStyle = "rgba(28, 25, 23, 0.08)";
     ctx.lineWidth = 1;
     for (let g = 1; g < 4; g++) {
       const y = (h / 4) * g;
@@ -746,35 +1002,42 @@
       ctx.stroke();
     };
 
-    drawCurve(beforeHist, "rgba(245, 158, 11, 0.85)", "rgba(245, 158, 11, 0.18)");
-    drawCurve(afterHist, "rgba(56, 189, 248, 0.95)", "rgba(56, 189, 248, 0.22)");
+    drawCurve(beforeHist, "rgba(180, 83, 9, 0.90)", "rgba(180, 83, 9, 0.16)");
+    drawCurve(afterHist, "rgba(21, 128, 61, 0.92)", "rgba(21, 128, 61, 0.20)");
   }
 
   /* ========================================================================
-     4. PROCEDURAL HD CULINARY SCENE RENDERER & DETECTION ENGINE
+     4. REAL SAMPLE MEDIA, FRAME SEQUENCE & DETECTION ENGINE
      ======================================================================== */
   function renderDetectFrame() {
     const t0 = performance.now();
-    let groundTruthBoxes = [];
+    const sceneResult = {
+      boxes: [],
+      placement: { dx: 0, dy: 0, dw: CANVAS_W, dh: CANVAS_H }
+    };
 
     if (state.mediaType === "image" && state.uploadedImage) {
-      drawUploadedMediaToCtx(rawCtx, state.uploadedImage);
-      groundTruthBoxes = generateHeuristicUploadDetections(rawCtx);
+      sceneResult.placement = drawUploadedMediaToCtx(rawCtx, state.uploadedImage);
+      sceneResult.boxes = generateHeuristicUploadDetections(rawCtx, 0, null, sceneResult.placement);
     } else if (state.mediaType === "video" && state.uploadedVideoReady) {
-      drawUploadedMediaToCtx(rawCtx, dom.hiddenVideo);
-      groundTruthBoxes = generateHeuristicUploadDetections(rawCtx, state.simFrame);
+      sceneResult.placement = drawUploadedMediaToCtx(rawCtx, dom.hiddenVideo);
+      sceneResult.boxes = generateHeuristicUploadDetections(rawCtx, state.simFrame, null, sceneResult.placement);
     } else {
-      groundTruthBoxes = drawCulinaryScene(rawCtx, state.sampleKey, state.simFrame, state.lowLightSim);
+      const drawn = drawCulinaryScene(rawCtx, state.sampleKey, state.simFrame, state.lowLightSim);
+      sceneResult.boxes = drawn.boxes;
+      sceneResult.placement = drawn.placement;
     }
 
-    // Copy rawCanvas -> enhancedCanvas and run real pixel enhancement
+    state.lastPlacement = sceneResult.placement;
+
+    // Copy rawCanvas -> enhancedCanvas and run real pixel enhancement inside active image bounds
     const imgData = rawCtx.getImageData(0, 0, CANVAS_W, CANVAS_H);
     const enhResult = applyEnhancementToImageData(imgData, state.enhanceMethod, {
       clipLimit: state.clipLimit,
       brightness: state.brightness,
       contrast: state.contrast,
       gamma: state.gamma
-    });
+    }, sceneResult.placement);
     enhancedCtx.putImageData(imgData, 0, 0);
 
     // Update histogram & image metrics
@@ -786,7 +1049,7 @@
     dom.metricPsnr.textContent = enhResult.metrics.psnr;
 
     // Evaluate detections based on actual pixel contrast/luminance in enhanced image
-    const detections = evaluateDetections(groundTruthBoxes, imgData, state.enhanceMethod);
+    const detections = evaluateDetections(sceneResult.boxes, imgData, state.enhanceMethod, state.lowLightSim);
     state.detections = detections;
 
     // Update ByteTrack trail history
@@ -830,39 +1093,50 @@
     updateTelemetryUi(summary);
   }
 
+  function computeFitPlacement(mw, mh) {
+    const srcW = mw || CANVAS_W;
+    const srcH = mh || CANVAS_H;
+    const scale = Math.min(CANVAS_W / srcW, CANVAS_H / srcH);
+    const dw = Math.round(srcW * scale);
+    const dh = Math.round(srcH * scale);
+    const dx = Math.round((CANVAS_W - dw) / 2);
+    const dy = Math.round((CANVAS_H - dh) / 2);
+    return { dx, dy, dw, dh, scale, srcW, srcH };
+  }
+
   function drawUploadedMediaToCtx(ctx, mediaEl) {
-    ctx.fillStyle = "#080d1a";
+    ctx.fillStyle = "#23201D";
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
     const mw = mediaEl.videoWidth || mediaEl.naturalWidth || CANVAS_W;
     const mh = mediaEl.videoHeight || mediaEl.naturalHeight || CANVAS_H;
-    const scale = Math.min(CANVAS_W / mw, CANVAS_H / mh);
-    const dw = mw * scale;
-    const dh = mh * scale;
-    const dx = (CANVAS_W - dw) / 2;
-    const dy = (CANVAS_H - dh) / 2;
-    ctx.drawImage(mediaEl, dx, dy, dw, dh);
+    const place = computeFitPlacement(mw, mh);
+    ctx.drawImage(mediaEl, place.dx, place.dy, place.dw, place.dh);
+    return place;
   }
 
   /**
-   * For user-uploaded arbitrary photos/videos when running fully offline (no backend),
-   * extracts warm food-saliency clusters across a grid so ROI & Enhancement work live.
+   * For user-uploaded arbitrary photos/videos or sample photos without catalog boxes yet,
+   * extracts warm food-saliency clusters within the active image bounds so ROI & Enhancement work live.
    */
-  function generateHeuristicUploadDetections(ctx, frame = 0, labelHint = null) {
+  function generateHeuristicUploadDetections(ctx, frame = 0, labelHint = null, activeRect = null, secondaryHint = null) {
+    const rect = activeRect || { dx: 0, dy: 0, dw: CANVAS_W, dh: CANVAS_H };
     const data = ctx.getImageData(0, 0, CANVAS_W, CANVAS_H).data;
     const cols = 8;
     const rows = 5;
-    const cw = CANVAS_W / cols;
-    const ch = CANVAS_H / rows;
+    const cw = rect.dw / cols;
+    const ch = rect.dh / rows;
     const activeGrid = Array.from({ length: rows }, () => Array(cols).fill(false));
 
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         let warmScore = 0;
         let samples = 0;
-        const x0 = Math.floor(c * cw + 10);
-        const y0 = Math.floor(r * ch + 10);
-        for (let py = y0; py < y0 + ch - 20; py += 10) {
-          for (let px = x0; px < x0 + cw - 20; px += 10) {
+        const x0 = Math.max(0, Math.floor(rect.dx + c * cw + 8));
+        const y0 = Math.max(0, Math.floor(rect.dy + r * ch + 8));
+        const xEnd = Math.min(CANVAS_W, Math.floor(rect.dx + (c + 1) * cw - 8));
+        const yEnd = Math.min(CANVAS_H, Math.floor(rect.dy + (r + 1) * ch - 8));
+        for (let py = y0; py < yEnd; py += 10) {
+          for (let px = x0; px < xEnd; px += 10) {
             const idx = (py * CANVAS_W + px) * 4;
             const red = data[idx];
             const grn = data[idx + 1];
@@ -908,11 +1182,11 @@
           }
         }
         if (area >= 2 || boxes.length === 0) {
-          const jitter = Math.sin(frame * 0.08 + minC) * 3;
-          const bx = Math.max(24, Math.round(minC * cw + 12 + jitter));
-          const by = Math.max(24, Math.round(minR * ch + 12));
-          const bw = Math.min(CANVAS_W - bx - 24, Math.round((maxC - minC + 1) * cw - 24));
-          const bh = Math.min(CANVAS_H - by - 24, Math.round((maxR - minR + 1) * ch - 24));
+          const jitter = Math.sin(frame * 0.08 + minC) * 2;
+          const bx = Math.max(rect.dx + 12, Math.round(rect.dx + minC * cw + 10 + jitter));
+          const by = Math.max(rect.dy + 12, Math.round(rect.dy + minR * ch + 10));
+          const bw = Math.min(rect.dx + rect.dw - bx - 12, Math.round((maxC - minC + 1) * cw - 20));
+          const bh = Math.min(rect.dy + rect.dh - by - 12, Math.round((maxR - minR + 1) * ch - 20));
           if (bw >= 70 && bh >= 70) {
             boxes.push({ bx, by, bw, bh, area });
           }
@@ -927,12 +1201,22 @@
 
     if (boxes.length === 0) {
       return [
-        { trackId: 1, label: primaryLabel, x: 200, y: 95, w: 540, h: 350, baseConf: 0.91 }
+        {
+          trackId: 1,
+          label: primaryLabel,
+          x: Math.round(rect.dx + rect.dw * 0.16),
+          y: Math.round(rect.dy + rect.dh * 0.14),
+          w: Math.round(rect.dw * 0.68),
+          h: Math.round(rect.dh * 0.72),
+          baseConf: 0.91
+        }
       ];
     }
 
     return boxes.slice(0, 5).map((b, idx) => {
-      const fallbackCls = CULINARY_CLASSES[(idx * 3 + Math.round(b.bx)) % CULINARY_CLASSES.length].name;
+      const fallbackCls = idx === 1 && secondaryHint
+        ? secondaryHint
+        : CULINARY_CLASSES[(idx * 3 + Math.round(b.bx)) % CULINARY_CLASSES.length].name;
       return {
         trackId: idx + 1,
         label: idx === 0 ? primaryLabel : fallbackCls,
@@ -945,20 +1229,117 @@
     });
   }
 
+  function applyLowLightDim(ctx, place) {
+    const ax0 = place ? Math.max(0, Math.floor(place.dx)) : 0;
+    const ay0 = place ? Math.max(0, Math.floor(place.dy)) : 0;
+    const aw = place ? Math.min(CANVAS_W - ax0, Math.ceil(place.dw)) : CANVAS_W;
+    const ah = place ? Math.min(CANVAS_H - ay0, Math.ceil(place.dh)) : CANVAS_H;
+    if (aw <= 0 || ah <= 0) return;
+    const raw = ctx.getImageData(ax0, ay0, aw, ah);
+    const d = raw.data;
+    // -35% luminance reduction while preserving slight warm ambient bias
+    for (let i = 0; i < d.length; i += 4) {
+      d[i] = clamp255(d[i] * 0.62 + 8);
+      d[i + 1] = clamp255(d[i + 1] * 0.60 + 6);
+      d[i + 2] = clamp255(d[i + 2] * 0.63 + 10);
+    }
+    ctx.putImageData(raw, ax0, ay0);
+  }
+
+  function mapCatalogBoxesToCanvas(boxes, srcW, srcH, place) {
+    const w = srcW || CANVAS_W;
+    const h = srcH || CANVAS_H;
+    return boxes.map((gt, idx) => {
+      let x = 0, y = 0, bw = 80, bh = 80;
+      if (Array.isArray(gt.bbox_xyxy) && gt.bbox_xyxy.length === 4) {
+        const [x1, y1, x2, y2] = gt.bbox_xyxy;
+        x = Math.round(place.dx + (x1 / w) * place.dw);
+        y = Math.round(place.dy + (y1 / h) * place.dh);
+        bw = Math.max(24, Math.round(((x2 - x1) / w) * place.dw));
+        bh = Math.max(24, Math.round(((y2 - y1) / h) * place.dh));
+      } else if (Array.isArray(gt.bbox_yolo) && gt.bbox_yolo.length === 4) {
+        const [cx, cy, nw, nh] = gt.bbox_yolo;
+        bw = Math.max(24, Math.round(nw * place.dw));
+        bh = Math.max(24, Math.round(nh * place.dh));
+        x = Math.round(place.dx + (cx - nw / 2) * place.dw);
+        y = Math.round(place.dy + (cy - nh / 2) * place.dh);
+      }
+      return {
+        trackId: gt.track_id || idx + 1,
+        label: gt.class_name || gt.label || "Nasi Goreng",
+        x,
+        y,
+        w: bw,
+        h: bh,
+        baseConf: Number(gt.confidence || 0.90)
+      };
+    });
+  }
+
   /**
-   * Draws rich procedural Indonesian culinary scenes onto ctx (960x540).
+   * Draws real photograph / real PNG frame sequence onto ctx (960x540),
+   * falling back cleanly to procedural culinary scenes when offline/unloaded.
+   * Returns { boxes, placement }.
    */
   function drawCulinaryScene(ctx, sceneKey, frame, lowLight) {
-    // Wooden warung tabletop background
+    // 1. Video Frame Sequence (real frames in samples/videos/frames/<id>/frame_001..016.png)
+    if (sceneKey === "video_prasmanan" || sceneKey === "video_kasir") {
+      const catVid = catalogState.videosByKey[sceneKey];
+      const vCfg = VIDEO_SAMPLE_CONFIG[sceneKey];
+      const totalFrames = (catVid && catVid.total_frames) || (vCfg && vCfg.totalFrames) || 16;
+      const safeIdx = ((frame % totalFrames) + totalFrames) % totalFrames;
+      const frameRec = getOrLoadVideoFrame(sceneKey, safeIdx);
+
+      if (frameRec.img) {
+        const place = drawUploadedMediaToCtx(ctx, frameRec.img);
+        const ann = catVid && Array.isArray(catVid.frame_annotations) ? catVid.frame_annotations[safeIdx] : null;
+        let objects = [];
+        if (ann && Array.isArray(ann.objects) && ann.objects.length > 0) {
+          const vw = catVid.width || (vCfg && vCfg.width) || frameRec.img.naturalWidth || 320;
+          const vh = catVid.height || (vCfg && vCfg.height) || frameRec.img.naturalHeight || 240;
+          objects = mapCatalogBoxesToCanvas(ann.objects, vw, vh, place);
+        } else {
+          objects = generateHeuristicUploadDetections(
+            ctx,
+            safeIdx,
+            sceneKey === "video_kasir" ? "Ayam Goreng" : "Nasi Goreng",
+            place,
+            sceneKey === "video_kasir" ? "Telur Balado" : "Bakso"
+          );
+        }
+        if (lowLight) applyLowLightDim(ctx, place);
+        return { boxes: objects, placement: place };
+      }
+    }
+
+    // 2. Real photograph samples (samples/images/*_real.jpg)
+    const realMeta = REAL_SAMPLE_MAP[sceneKey];
+    const realImg = realMeta ? getOrLoadRealSampleImage(sceneKey) : null;
+    if (realImg) {
+      const place = drawUploadedMediaToCtx(ctx, realImg);
+      const catImg = catalogState.imagesByKey[sceneKey];
+      let objects = [];
+      if (catImg && Array.isArray(catImg.ground_truth) && catImg.ground_truth.length > 0) {
+        const iw = catImg.width || realImg.naturalWidth || 640;
+        const ih = catImg.height || realImg.naturalHeight || 480;
+        objects = mapCatalogBoxesToCanvas(catImg.ground_truth, iw, ih, place);
+      } else {
+        objects = generateHeuristicUploadDetections(ctx, frame, realMeta.primaryClass, place, realMeta.secondaryClass);
+      }
+      if (lowLight) applyLowLightDim(ctx, place);
+      return { boxes: objects, placement: place };
+    }
+
+    // 3. Procedural wooden tabletop fallback while real asset loads or if offline/missing
+    const fullPlace = { dx: 0, dy: 0, dw: CANVAS_W, dh: CANVAS_H };
     const woodGrad = ctx.createLinearGradient(0, 0, CANVAS_W, CANVAS_H);
-    woodGrad.addColorStop(0, "#3b2314");
-    woodGrad.addColorStop(0.5, "#4c2f1c");
-    woodGrad.addColorStop(1, "#2a170c");
+    woodGrad.addColorStop(0, "#462A18");
+    woodGrad.addColorStop(0.5, "#593620");
+    woodGrad.addColorStop(1, "#321D10");
     ctx.fillStyle = woodGrad;
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
 
-    // Subtle wood planks
-    ctx.strokeStyle = "rgba(15, 8, 4, 0.35)";
+    ctx.strokeStyle = "rgba(28, 25, 23, 0.28)";
     ctx.lineWidth = 2;
     for (let y = 60; y < CANVAS_H; y += 72) {
       ctx.beginPath();
@@ -968,25 +1349,6 @@
     }
 
     let objects = [];
-
-    // Use real downloaded high-resolution photograph if available for this culinary scene
-    const realMeta = REAL_SAMPLE_MAP[sceneKey];
-    const realImg = realMeta ? getOrLoadRealSampleImage(sceneKey) : null;
-    if (realImg) {
-      drawUploadedMediaToCtx(ctx, realImg);
-      objects = generateHeuristicUploadDetections(ctx, frame, realMeta.primaryClass);
-      if (lowLight) {
-        const raw = ctx.getImageData(0, 0, CANVAS_W, CANVAS_H);
-        const d = raw.data;
-        for (let i = 0; i < d.length; i += 4) {
-          d[i] = clamp255(d[i] * 0.44 + 14);
-          d[i + 1] = clamp255(d[i + 1] * 0.42 + 12);
-          d[i + 2] = clamp255(d[i + 2] * 0.46 + 18);
-        }
-        ctx.putImageData(raw, 0, 0);
-      }
-      return objects;
-    }
 
     if (sceneKey === "nasgor_malam") {
       // Main white ceramic plate
@@ -1072,6 +1434,28 @@
         { trackId: 4, label: "Tempe Goreng", x: 605, y: 305, w: 92, h: 82, baseConf: 0.83 },
         { trackId: 5, label: "Tahu Goreng", x: 168, y: 138, w: 88, h: 78, baseConf: 0.84 }
       ];
+    } else if (sceneKey === "prasmanan_kuliner") {
+      // Procedural Prasmanan Kuliner buffet platter fallback
+      ctx.fillStyle = "#1f5e34";
+      roundRect(ctx, 110, 70, 740, 400, 32);
+      ctx.fill();
+      drawPlate(ctx, 275, 210, 110);
+      drawRiceMound(ctx, 275, 210, 72, "#c27d38", "#9a541a");
+      drawPlate(ctx, 495, 195, 105);
+      drawRendang(ctx, 495, 195);
+      drawPlate(ctx, 705, 220, 100);
+      drawAyamGoreng(ctx, 705, 220, 46);
+      drawPlate(ctx, 360, 365, 95);
+      drawGadoGado(ctx, 360, 365);
+      drawTelurBalado(ctx, 600, 365, 36);
+
+      objects = [
+        { trackId: 1, label: "Nasi Goreng", x: 185, y: 120, w: 180, h: 180, baseConf: 0.91 },
+        { trackId: 2, label: "Rendang", x: 405, y: 105, w: 180, h: 170, baseConf: 0.89 },
+        { trackId: 3, label: "Ayam Goreng", x: 615, y: 130, w: 170, h: 165, baseConf: 0.88 },
+        { trackId: 4, label: "Gado-Gado", x: 270, y: 275, w: 180, h: 165, baseConf: 0.86 },
+        { trackId: 5, label: "Telur Balado", x: 550, y: 315, w: 100, h: 95, baseConf: 0.87 }
+      ];
     } else if (realMeta) {
       drawPlate(ctx, 480, 270, 195);
       drawRiceMound(ctx, 480, 270, 122, "#d97706", "#92400e");
@@ -1143,26 +1527,19 @@
       ];
     }
 
-    // Apply realistic low-light / low-contrast simulation to RAW source when enabled
+    // Apply realistic low-light (-35%) simulation to procedural source when enabled
     if (lowLight) {
-      const raw = ctx.getImageData(0, 0, CANVAS_W, CANVAS_H);
-      const d = raw.data;
-      for (let i = 0; i < d.length; i += 4) {
-        d[i] = clamp255(d[i] * 0.44 + 14);
-        d[i + 1] = clamp255(d[i + 1] * 0.42 + 12);
-        d[i + 2] = clamp255(d[i + 2] * 0.46 + 18);
-      }
-      ctx.putImageData(raw, 0, 0);
+      applyLowLightDim(ctx, fullPlace);
     }
 
-    return objects;
+    return { boxes: objects, placement: fullPlace };
   }
 
   /**
    * Adjusts each ground-truth detection's confidence & visibility dynamically
-   * based on the actual enhanced pixel luminance & local contrast inside its bbox!
+   * based on the actual enhanced pixel luminance & local contrast inside its bbox.
    */
-  function evaluateDetections(candidates, enhancedImgData, method) {
+  function evaluateDetections(candidates, enhancedImgData, method, isLowLight = state.lowLightSim) {
     const d = enhancedImgData.data;
     const methodBonus = {
       original: -0.22,
@@ -1195,13 +1572,12 @@
       const mean = n > 0 ? sum / n : 100;
       const std = n > 0 ? Math.sqrt(Math.max(0, sumSq / n - mean * mean)) : 30;
 
-      // Low-contrast / dark objects have lower confidence (and may drop out below 0.50 in Original)
+      // Low-contrast / dark objects have lower confidence (and may drop out below 0.50 in Original under low-light)
       const contrastFactor = Math.min(1.0, std / 38);
       const lightFactor = mean < 55 ? mean / 75 : 1.0;
-      let conf = obj.baseConf * (0.58 + 0.42 * contrastFactor * lightFactor) + (state.lowLightSim ? methodBonus : 0.02);
+      let conf = obj.baseConf * (0.58 + 0.42 * contrastFactor * lightFactor) + (isLowLight ? methodBonus : 0.02);
       conf = Math.max(0.32, Math.min(0.98, conf));
 
-      // Threshold 0.50: dark low-contrast items missed in Original get recovered after CLAHE/HE/Brightness
       if (conf >= 0.50) {
         results.push({ ...obj, confidence: conf });
       }
@@ -1360,45 +1736,45 @@
 
   function drawSplitLabels(ctx, splitX) {
     ctx.save();
-    ctx.strokeStyle = "#38bdf8";
+    ctx.strokeStyle = "#FFFFFF";
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(splitX, 0);
     ctx.lineTo(splitX, CANVAS_H);
     ctx.stroke();
 
-    ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
-    roundRect(ctx, 14, 14, 150, 28, 6);
+    ctx.fillStyle = "rgba(28, 25, 23, 0.86)";
+    roundRect(ctx, 14, 14, 152, 28, 6);
     ctx.fill();
-    ctx.fillStyle = "#fbbf24";
-    ctx.font = "bold 12px Segoe UI, sans-serif";
+    ctx.fillStyle = "#FDE68A";
+    ctx.font = "bold 12px 'Plus Jakarta Sans', 'Segoe UI', sans-serif";
     ctx.fillText("BEFORE (Original)", 24, 32);
 
-    ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
+    ctx.fillStyle = "rgba(28, 25, 23, 0.86)";
     roundRect(ctx, CANVAS_W - 196, 14, 182, 28, 6);
     ctx.fill();
-    ctx.fillStyle = "#34d399";
+    ctx.fillStyle = "#86EFAC";
     ctx.fillText(`AFTER (${METHOD_LABELS[state.enhanceMethod].split(" ")[0]})`, CANVAS_W - 184, 32);
     ctx.restore();
   }
 
   function drawRoiOverlay(ctx, r) {
     ctx.save();
-    ctx.fillStyle = "rgba(16, 185, 129, 0.10)";
+    ctx.fillStyle = "rgba(21, 128, 61, 0.09)";
     ctx.fillRect(r.x, r.y, r.w, r.h);
 
-    ctx.strokeStyle = "#10b981";
+    ctx.strokeStyle = "#15803D";
     ctx.lineWidth = 2.5;
     ctx.setLineDash([8, 5]);
     ctx.strokeRect(r.x, r.y, r.w, r.h);
     ctx.setLineDash([]);
 
     // Label pill
-    ctx.fillStyle = "#10b981";
+    ctx.fillStyle = "#15803D";
     roundRect(ctx, r.x + 8, Math.max(6, r.y - 24), 165, 22, 5);
     ctx.fill();
-    ctx.fillStyle = "#04130d";
-    ctx.font = "bold 12px Segoe UI, sans-serif";
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = "bold 12px 'Plus Jakarta Sans', 'Segoe UI', sans-serif";
     ctx.fillText("Object Region #1 (ROI)", r.x + 16, Math.max(21, r.y - 9));
 
     // Corner handles
@@ -1408,8 +1784,8 @@
       [r.x, r.y + r.h],
       [r.x + r.w, r.y + r.h]
     ];
-    ctx.fillStyle = "#ecfdf5";
-    ctx.strokeStyle = "#059669";
+    ctx.fillStyle = "#FFFFFF";
+    ctx.strokeStyle = "#15803D";
     ctx.lineWidth = 2;
     for (const [cx, cy] of corners) {
       ctx.beginPath();
@@ -1424,17 +1800,31 @@
     ctx.save();
     for (const [trackId, pts] of state.trailHistory.entries()) {
       if (pts.length < 2) continue;
-      ctx.strokeStyle = "rgba(56, 189, 248, 0.72)";
-      ctx.lineWidth = 2.5;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.72)";
+      ctx.lineWidth = 4;
       ctx.beginPath();
       ctx.moveTo(pts[0].x, pts[0].y);
       for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
       ctx.stroke();
-      const last = pts[pts.length - 1];
-      ctx.fillStyle = "#38bdf8";
+
+      ctx.strokeStyle = "rgba(185, 56, 21, 0.90)";
+      ctx.lineWidth = 2.2;
       ctx.beginPath();
-      ctx.arc(last.x, last.y, 4, 0, Math.PI * 2);
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+      ctx.stroke();
+
+      const last = pts[pts.length - 1];
+      ctx.fillStyle = "#B93815";
+      ctx.strokeStyle = "#FFFFFF";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(last.x, last.y, 4.5, 0, Math.PI * 2);
       ctx.fill();
+      ctx.stroke();
       void trackId;
     }
     ctx.restore();
@@ -1469,29 +1859,32 @@
       if (inRoi) perClass[det.label].inside++;
       else perClass[det.label].outside++;
 
-      const boxColor = CLASS_COLOR_MAP[det.label] || "#38bdf8";
+      const boxColor = CLASS_COLOR_MAP[det.label] || "#B93815";
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.65)";
+      ctx.lineWidth = 3.6;
+      ctx.strokeRect(det.x, det.y, det.w, det.h);
       ctx.strokeStyle = boxColor;
-      ctx.lineWidth = 2.4;
+      ctx.lineWidth = 2.2;
       ctx.strokeRect(det.x, det.y, det.w, det.h);
 
       // Label Tag
       const prefix = state.detectMode === "tracking" ? `ID #${det.trackId} • ` : "";
       const tagText = `${prefix}${det.label} ${(det.confidence * 100).toFixed(0)}%`;
-      ctx.font = "bold 12px Segoe UI, sans-serif";
+      ctx.font = "bold 12px 'Plus Jakarta Sans', 'Segoe UI', sans-serif";
       const tw = ctx.measureText(tagText).width + 14;
       const ty = Math.max(0, det.y - 22);
       ctx.fillStyle = boxColor;
       roundRect(ctx, det.x, ty, tw, 22, 4);
       ctx.fill();
-      ctx.fillStyle = "#06121f";
+      ctx.fillStyle = "#FFFFFF";
       ctx.fillText(tagText, det.x + 7, ty + 15);
 
       // Centroid indicator for Region Counter #1
-      ctx.fillStyle = inRoi ? "#10b981" : "#f59e0b";
+      ctx.fillStyle = inRoi ? "#15803D" : "#B45309";
       ctx.beginPath();
       ctx.arc(cx, cy, 4.5, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = "#06121f";
+      ctx.strokeStyle = "#FFFFFF";
       ctx.lineWidth = 1.5;
       ctx.stroke();
     }
@@ -1526,7 +1919,7 @@
     dom.classBreakdownGrid.innerHTML = entries
       .map(([clsName, info]) => {
         const avg = ((info.confSum / info.total) * 100).toFixed(1);
-        const dotColor = CLASS_COLOR_MAP[clsName] || "#38bdf8";
+        const dotColor = CLASS_COLOR_MAP[clsName] || "#B93815";
         return `
           <div class="class-chip">
             <div class="class-chip-top">
@@ -1590,10 +1983,12 @@
     off.width = CANVAS_W;
     off.height = CANVAS_H;
     const octx = off.getContext("2d", { willReadFrequently: true });
-    const baseObjects = drawCulinaryScene(octx, sceneKey, 0, true);
+    const drawn = drawCulinaryScene(octx, sceneKey, 0, true);
+    const baseObjects = drawn.boxes || [];
+    const activeRect = drawn.placement;
     const rawSnapshot = octx.getImageData(0, 0, CANVAS_W, CANVAS_H);
 
-    // Compute results for all 5 methods
+    // Compute results for all 5 methods under simulated low-light stress test (-35%)
     const cardResults = methods.map((m) => {
       const copy = new ImageData(new Uint8ClampedArray(rawSnapshot.data), CANVAS_W, CANVAS_H);
       const res = applyEnhancementToImageData(copy, m.key, {
@@ -1601,8 +1996,8 @@
         brightness: 22,
         contrast: 1.28,
         gamma: 1.18
-      });
-      const dets = evaluateDetections(baseObjects, copy, m.key);
+      }, activeRect);
+      const dets = evaluateDetections(baseObjects, copy, m.key, true);
       const avgConf = dets.length ? (dets.reduce((a, b) => a + b.confidence, 0) / dets.length) * 100 : 0;
       return { ...m, imgData: copy, metrics: res.metrics, dets, avgConf };
     });
@@ -1629,7 +2024,7 @@
       const sx = cv.width / CANVAS_W;
       const sy = cv.height / CANVAS_H;
       cr.dets.forEach((d) => {
-        cctx.strokeStyle = CLASS_COLOR_MAP[d.label] || "#38bdf8";
+        cctx.strokeStyle = CLASS_COLOR_MAP[d.label] || "#B93815";
         cctx.lineWidth = 2;
         cctx.strokeRect(d.x * sx, d.y * sy, d.w * sx, d.h * sy);
       });
@@ -2224,7 +2619,7 @@
     const w = cv.width;
     const h = cv.height;
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#080e1c";
+    ctx.fillStyle = "#FAF8F4";
     ctx.fillRect(0, 0, w, h);
 
     const padL = 44;
@@ -2236,9 +2631,9 @@
     const maxCount = 70;
 
     // Horizontal grid lines
-    ctx.strokeStyle = "rgba(148, 163, 184, 0.14)";
-    ctx.fillStyle = "#64748b";
-    ctx.font = "11px Segoe UI, sans-serif";
+    ctx.strokeStyle = "rgba(28, 25, 23, 0.09)";
+    ctx.fillStyle = "#57534E";
+    ctx.font = "11px 'Plus Jakarta Sans', 'Segoe UI', sans-serif";
     ctx.textAlign = "right";
     for (let v = 0; v <= maxCount; v += 10) {
       const y = padT + plotH - (v / maxCount) * plotH;
@@ -2264,25 +2659,25 @@
       const hTest = (test / maxCount) * plotH;
       const baseY = padT + plotH;
 
-      ctx.fillStyle = "#38bdf8";
+      ctx.fillStyle = "#B93815";
       ctx.fillRect(cx - barW / 2, baseY - hTrain, barW, hTrain);
-      ctx.fillStyle = "#10b981";
+      ctx.fillStyle = "#15803D";
       ctx.fillRect(cx - barW / 2, baseY - hTrain - hValid, barW, hValid);
-      ctx.fillStyle = "#f59e0b";
+      ctx.fillStyle = "#B45309";
       ctx.fillRect(cx - barW / 2, baseY - hTrain - hValid - hTest, barW, hTest);
 
       // Total label on top
-      ctx.fillStyle = "#e2e8f0";
+      ctx.fillStyle = "#1C1917";
       ctx.textAlign = "center";
-      ctx.font = "bold 11px Segoe UI, sans-serif";
+      ctx.font = "bold 11px 'Plus Jakarta Sans', 'Segoe UI', sans-serif";
       ctx.fillText(String(total), cx, baseY - hTrain - hValid - hTest - 6);
 
       // Angled class label
       ctx.save();
       ctx.translate(cx, baseY + 12);
       ctx.rotate(-Math.PI / 6);
-      ctx.fillStyle = "#94a3b8";
-      ctx.font = "11px Segoe UI, sans-serif";
+      ctx.fillStyle = "#57534E";
+      ctx.font = "11px 'Plus Jakarta Sans', 'Segoe UI', sans-serif";
       ctx.textAlign = "right";
       ctx.fillText(cls.name, 4, 6);
       ctx.restore();
@@ -2298,15 +2693,19 @@
         groupName: dom.inputGroupName.value.trim(),
         members: dom.inputMembers.value.trim(),
         youtube: dom.inputYoutubeUrl.value.trim(),
+        colab: dom.inputColabUrl ? dom.inputColabUrl.value.trim() : "",
         github: dom.inputGithubUrl.value.trim()
       };
       localStorage.setItem("nv_group_info", JSON.stringify(info));
       syncExternalLinks();
-      showToast("Identitas kelompok & link presentasi tersimpan.");
+      showToast("Identitas kelompok, Colab & link presentasi tersimpan.");
     });
 
     dom.inputYoutubeUrl.addEventListener("input", syncExternalLinks);
     dom.inputGithubUrl.addEventListener("input", syncExternalLinks);
+    if (dom.inputColabUrl) {
+      dom.inputColabUrl.addEventListener("input", syncExternalLinks);
+    }
   }
 
   function loadGroupInfo() {
@@ -2315,6 +2714,7 @@
       if (saved.groupName) dom.inputGroupName.value = saved.groupName;
       if (saved.members) dom.inputMembers.value = saved.members;
       if (saved.youtube) dom.inputYoutubeUrl.value = saved.youtube;
+      if (saved.colab && dom.inputColabUrl) dom.inputColabUrl.value = saved.colab;
       if (saved.github) dom.inputGithubUrl.value = saved.github;
     }
     syncExternalLinks();
@@ -2323,14 +2723,17 @@
   function syncExternalLinks() {
     dom.linkOpenYoutube.href = dom.inputYoutubeUrl.value.trim() || "#";
     dom.linkOpenGithub.href = dom.inputGithubUrl.value.trim() || "#";
+    if (dom.linkOpenColab && dom.inputColabUrl) {
+      dom.linkOpenColab.href = dom.inputColabUrl.value.trim() || "#";
+    }
   }
 
   function renderRubricChecklists() {
     dom.checklistKetentuan.innerHTML = RUBRIC_KETENTUAN.map(
-      (item) => `<li><span class="rubric-check">✔</span><span>${escapeHtml(item)}</span></li>`
+      (item) => `<li><span class="rubric-check">${ICON_CHECK}</span><span>${escapeHtml(item)}</span></li>`
     ).join("");
     dom.checklistPenilaian.innerHTML = RUBRIC_PENILAIAN.map(
-      (item) => `<li><span class="rubric-check">✔</span><span>${escapeHtml(item)}</span></li>`
+      (item) => `<li><span class="rubric-check">${ICON_CHECK}</span><span>${escapeHtml(item)}</span></li>`
     ).join("");
   }
 
@@ -2345,6 +2748,18 @@
         const info = await res.json();
         state.backendConnected = true;
         dom.backendStatusText.textContent = `Backend Aktif (${info.runtime || info.engine || "API"})`;
+      }
+      const clsRes = await fetch("/api/classes");
+      if (clsRes.ok) {
+        const clsData = await clsRes.json();
+        const remoteClasses = Array.isArray(clsData) ? clsData : clsData.classes;
+        if (Array.isArray(remoteClasses) && remoteClasses.length >= 12) {
+          remoteClasses.forEach((rc) => {
+            const match = CULINARY_CLASSES.find((c) => c.name.toLowerCase() === String(rc.name || "").toLowerCase());
+            if (match && rc.dataset_count) match.dataset_count = Number(rc.dataset_count);
+          });
+          drawDatasetChart();
+        }
       }
     } catch (_) {
       dom.backendStatusText.textContent = "Canvas Engine (Offline Ready)";
@@ -2364,37 +2779,71 @@
         [r.x + r.w, r.y + r.h],
         [r.x, r.y + r.h]
       ];
-      const res = await fetch("/api/detect/image", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sample_id: state.sampleKey,
-          filename: state.mediaName,
-          enhancement: state.enhanceMethod === "original" ? "none" : state.enhanceMethod,
-          mode: state.detectMode,
-          region_points: regionPoints,
-          params: {
-            clip_limit: state.clipLimit,
-            brightness: state.brightness,
-            contrast: state.contrast,
-            gamma: state.gamma
-          }
-        })
-      });
+      const payload = {
+        sample_id: state.sampleKey,
+        filename: state.mediaName,
+        enhancement: state.enhanceMethod === "original" ? "none" : state.enhanceMethod,
+        mode: state.detectMode,
+        region_points: regionPoints,
+        params: {
+          clip_limit: state.clipLimit,
+          brightness: state.brightness,
+          contrast: state.contrast,
+          gamma: state.gamma
+        }
+      };
+
+      let res;
+      if (state.mediaType === "sim_video") {
+        const vCfg = VIDEO_SAMPLE_CONFIG[state.sampleKey];
+        const videoPayload = {
+          ...payload,
+          sample_id: (vCfg && vCfg.catalogId) || state.sampleKey,
+          frame_index: state.simFrame
+        };
+        res = await fetch("/api/detect/video/sample", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(videoPayload)
+        });
+        if (res.status === 404) {
+          res = await fetch("/api/detect/video", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(videoPayload)
+          });
+        }
+      } else {
+        if (state.uploadedImage) {
+          payload.image_base64 = rawCanvas.toDataURL("image/jpeg", 0.85);
+        }
+        res = await fetch("/api/detect/image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      }
+
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      if (Array.isArray(data.detections) && data.detections.length > 0 && !state.uploadedImage) {
+      const frameList = Array.isArray(data.frames) ? data.frames : Array.isArray(data.frame_summaries) ? data.frame_summaries : null;
+      const rawDetections = Array.isArray(data.detections)
+        ? data.detections
+        : frameList && frameList.length
+          ? (frameList[state.simFrame % frameList.length].detections || [])
+          : [];
+
+      if (rawDetections.length > 0 && !state.uploadedImage) {
         const iw = (data.image_size && data.image_size.width) || 640;
         const ih = (data.image_size && data.image_size.height) || 480;
-        const sx = CANVAS_W / iw;
-        const sy = CANVAS_H / ih;
-        const mapped = data.detections.map((d, i) => ({
+        const place = state.lastPlacement || { dx: 0, dy: 0, dw: CANVAS_W, dh: CANVAS_H };
+        const mapped = rawDetections.map((d, i) => ({
           trackId: d.track_id || i + 1,
           label: d.class_name,
-          x: Math.round(d.bbox[0] * sx),
-          y: Math.round(d.bbox[1] * sy),
-          w: Math.round((d.bbox[2] - d.bbox[0]) * sx),
-          h: Math.round((d.bbox[3] - d.bbox[1]) * sy),
+          x: Math.round(place.dx + (d.bbox[0] / iw) * place.dw),
+          y: Math.round(place.dy + (d.bbox[1] / ih) * place.dh),
+          w: Math.round(((d.bbox[2] - d.bbox[0]) / iw) * place.dw),
+          h: Math.round(((d.bbox[3] - d.bbox[1]) / ih) * place.dh),
           confidence: Number(d.confidence || 0.85)
         }));
         state.detections = mapped;
@@ -2402,6 +2851,7 @@
         ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
         ctx.drawImage(state.splitCompare ? rawCanvas : enhancedCanvas, 0, 0);
         if (state.roiActive) drawRoiOverlay(ctx, state.roi);
+        if (state.detectMode === "tracking") drawTrackingTrails(ctx);
         const summary = drawDetectionBoxes(ctx, mapped);
         updateTelemetryUi(summary);
       }
