@@ -10,18 +10,18 @@
 
   // 12 Indonesian Culinary Classes (Total = 600 images: 420 train, 120 valid, 60 test)
   const CULINARY_CLASSES = [
-    { id: 1, name: "Nasi Goreng", slug: "nasi-goreng", region_origin: "Jawa & Nusantara", category: "Makanan Utama", avg_calories: 450, dataset_count: 65, color: "#B93815", description: "Nasi tumis bumbu kecap manis, bawang, dan pelengkap telur/ayam." },
-    { id: 2, name: "Bakso", slug: "bakso", region_origin: "Jawa Tengah & Timur", category: "Berkuah", avg_calories: 320, dataset_count: 55, color: "#15803D", description: "Bola daging sapi kenyal dalam kuah kaldu gurih dengan mie dan sawi." },
-    { id: 3, name: "Sate Ayam", slug: "sate-ayam", region_origin: "Madura, Jawa Timur", category: "Bakaran", avg_calories: 380, dataset_count: 55, color: "#B45309", description: "Daging ayam panggang tusuk bambu dengan saus kacang dan kecap." },
+    { id: 1, name: "Nasi Goreng", slug: "nasi-goreng", region_origin: "Jawa & Nusantara", category: "Makanan Utama", avg_calories: 450, dataset_count: 50, color: "#B93815", description: "Nasi tumis bumbu kecap manis, bawang, dan pelengkap telur/ayam." },
+    { id: 2, name: "Bakso", slug: "bakso", region_origin: "Jawa Tengah & Timur", category: "Berkuah", avg_calories: 320, dataset_count: 50, color: "#15803D", description: "Bola daging sapi kenyal dalam kuah kaldu gurih dengan mie dan sawi." },
+    { id: 3, name: "Sate Ayam", slug: "sate-ayam", region_origin: "Madura, Jawa Timur", category: "Bakaran", avg_calories: 380, dataset_count: 50, color: "#B45309", description: "Daging ayam panggang tusuk bambu dengan saus kacang dan kecap." },
     { id: 4, name: "Rendang", slug: "rendang", region_origin: "Sumatera Barat", category: "Lauk Utama", avg_calories: 470, dataset_count: 50, color: "#991B1B", description: "Daging sapi dimasak santan dan rempah Minangkabau hingga pekat." },
     { id: 5, name: "Soto Ayam", slug: "soto-ayam", region_origin: "Lamongan & Nusantara", category: "Berkuah", avg_calories: 310, dataset_count: 50, color: "#7C2D12", description: "Sup ayam kuah kuning kunyit dengan soun, kol, dan koya." },
     { id: 6, name: "Ayam Goreng", slug: "ayam-goreng", region_origin: "Jawa & Sunda", category: "Lauk Utama", avg_calories: 390, dataset_count: 50, color: "#C2410C", description: "Ayam ungkep rempah lengkuas dan kunyit digoreng renyah keemasan." },
     { id: 7, name: "Mie Goreng", slug: "mie-goreng", region_origin: "Nusantara", category: "Makanan Utama", avg_calories: 430, dataset_count: 50, color: "#0F766E", description: "Mie kuning tumis kecap manis bersama sawi, bakso, dan telur." },
-    { id: 8, name: "Tempe Goreng", slug: "tempe-goreng", region_origin: "Jawa", category: "Lauk Pendamping", avg_calories: 195, dataset_count: 45, color: "#A16207", description: "Irisan kedelai fermentasi berbumbu ketumbar digoreng garing." },
-    { id: 9, name: "Tahu Goreng", slug: "tahu-goreng", region_origin: "Jawa Barat & Tengah", category: "Lauk Pendamping", avg_calories: 165, dataset_count: 45, color: "#6D28D9", description: "Tahu putih atau kuning digoreng berkulit keemasan gurih." },
-    { id: 10, name: "Gado-Gado", slug: "gado-gado", region_origin: "DKI Jakarta / Betawi", category: "Sayuran", avg_calories: 340, dataset_count: 45, color: "#166534", description: "Salad sayur rebus, lontong, dan tahu disiram saus kacang." },
-    { id: 11, name: "Pempek", slug: "pempek", region_origin: "Palembang, Sumsel", category: "Kudapan", avg_calories: 360, dataset_count: 45, color: "#1D4ED8", description: "Olahan ikan tenggiri dan sagu disajikan dengan kuah cuko asam pedas." },
-    { id: 12, name: "Telur Balado", slug: "telur-balado", region_origin: "Sumatera Barat", category: "Lauk Utama", avg_calories: 230, dataset_count: 45, color: "#BE123C", description: "Telur rebus goreng bersalut sambal cabai merah Minang." }
+    { id: 8, name: "Tempe Goreng", slug: "tempe-goreng", region_origin: "Jawa", category: "Lauk Pendamping", avg_calories: 195, dataset_count: 50, color: "#A16207", description: "Irisan kedelai fermentasi berbumbu ketumbar digoreng garing." },
+    { id: 9, name: "Tahu Goreng", slug: "tahu-goreng", region_origin: "Jawa Barat & Tengah", category: "Lauk Pendamping", avg_calories: 165, dataset_count: 50, color: "#6D28D9", description: "Tahu putih atau kuning digoreng berkulit keemasan gurih." },
+    { id: 10, name: "Gado-Gado", slug: "gado-gado", region_origin: "DKI Jakarta / Betawi", category: "Sayuran", avg_calories: 340, dataset_count: 50, color: "#166534", description: "Salad sayur rebus, lontong, dan tahu disiram saus kacang." },
+    { id: 11, name: "Pempek", slug: "pempek", region_origin: "Palembang, Sumsel", category: "Kudapan", avg_calories: 360, dataset_count: 50, color: "#1D4ED8", description: "Olahan ikan tenggiri dan sagu disajikan dengan kuah cuko asam pedas." },
+    { id: 12, name: "Telur Balado", slug: "telur-balado", region_origin: "Sumatera Barat", category: "Lauk Utama", avg_calories: 230, dataset_count: 50, color: "#BE123C", description: "Telur rebus goreng bersalut sambal cabai merah Minang." }
   ];
 
   const ICON_PLAY = '<svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"/></svg>';
@@ -90,18 +90,18 @@
       framesDir: "samples/videos/frames/prasmanan_tracking_demo",
       totalFrames: 16,
       fps: 6,
-      width: 320,
-      height: 240,
-      defaultRoiNorm: [105 / 320, 35 / 240, 120 / 320, 170 / 240]
+      width: 960,
+      height: 540,
+      defaultRoiNorm: [288 / 960, 54 / 540, 403 / 960, 432 / 540]
     },
     video_kasir: {
       catalogId: "antrean_kantin_demo",
       framesDir: "samples/videos/frames/antrean_kantin_demo",
       totalFrames: 16,
       fps: 6,
-      width: 320,
-      height: 240,
-      defaultRoiNorm: [135 / 320, 30 / 240, 160 / 320, 180 / 240]
+      width: 960,
+      height: 540,
+      defaultRoiNorm: [451 / 960, 43 / 540, 423 / 960, 454 / 540]
     }
   };
 
@@ -330,8 +330,8 @@
     if (state.mediaType === "sim_video") {
       const catVid = catalogState.videosByKey[state.sampleKey];
       const vCfg = VIDEO_SAMPLE_CONFIG[state.sampleKey];
-      const w = (catVid && catVid.width) || (vCfg && vCfg.width) || 320;
-      const h = (catVid && catVid.height) || (vCfg && vCfg.height) || 240;
+      const w = (catVid && catVid.width) || (vCfg && vCfg.width) || 960;
+      const h = (catVid && catVid.height) || (vCfg && vCfg.height) || 540;
       const place = computeFitPlacement(w, h);
       let norm = vCfg && vCfg.defaultRoiNorm;
       if (catVid && Array.isArray(catVid.default_roi) && catVid.default_roi.length >= 3) {
@@ -1295,8 +1295,8 @@
         const ann = catVid && Array.isArray(catVid.frame_annotations) ? catVid.frame_annotations[safeIdx] : null;
         let objects = [];
         if (ann && Array.isArray(ann.objects) && ann.objects.length > 0) {
-          const vw = catVid.width || (vCfg && vCfg.width) || frameRec.img.naturalWidth || 320;
-          const vh = catVid.height || (vCfg && vCfg.height) || frameRec.img.naturalHeight || 240;
+          const vw = catVid.width || (vCfg && vCfg.width) || frameRec.img.naturalWidth || 960;
+          const vh = catVid.height || (vCfg && vCfg.height) || frameRec.img.naturalHeight || 540;
           objects = mapCatalogBoxesToCanvas(ann.objects, vw, vh, place);
         } else {
           objects = generateHeuristicUploadDetections(
