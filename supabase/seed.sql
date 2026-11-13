@@ -5,22 +5,22 @@
 -- 15 Before vs After Image Enhancement Comparisons (Original vs HE/CLAHE/CS/Brightness)
 -- ============================================================================
 
--- 1. Seed 12 Indonesian Culinary Classes (65+55+55+50+50+55+50+45+45+45+45+40 = 600)
+-- 1. Seed 12 Indonesian Culinary Classes (12 x 50 = 600, train 35 / valid 10 / test 5 per class)
 insert into public.culinary_classes (
     id, name, slug, region_origin, category, avg_calories, dataset_count, description
 ) values
-    (1, 'Nasi Goreng', 'nasi-goreng', 'Jawa & Nusantara', 'Makanan Utama', 450, 65, 'Nasi tumis bumbu kecap manis, bawang merah, bawang putih, dan telur atau ayam.'),
-    (2, 'Bakso', 'bakso', 'Jawa Tengah & Jawa Timur', 'Berkuah', 320, 55, 'Bola daging sapi kenyal disajikan dengan kuah kaldu gurih, mie, dan sawi.'),
-    (3, 'Sate Ayam', 'sate-ayam', 'Madura, Jawa Timur', 'Bakaran', 380, 55, 'Potongan daging ayam panggang tusuk bambu dengan bumbu kacang dan kecap manis.'),
+    (1, 'Nasi Goreng', 'nasi-goreng', 'Jawa & Nusantara', 'Makanan Utama', 450, 50, 'Nasi tumis bumbu kecap manis, bawang merah, bawang putih, dan telur atau ayam.'),
+    (2, 'Bakso', 'bakso', 'Jawa Tengah & Jawa Timur', 'Berkuah', 320, 50, 'Bola daging sapi kenyal disajikan dengan kuah kaldu gurih, mie, dan sawi.'),
+    (3, 'Sate Ayam', 'sate-ayam', 'Madura, Jawa Timur', 'Bakaran', 380, 50, 'Potongan daging ayam panggang tusuk bambu dengan bumbu kacang dan kecap manis.'),
     (4, 'Rendang', 'rendang', 'Sumatera Barat', 'Lauk Utama', 470, 50, 'Daging sapi dimasak lama dalam santan dan rempah Minangkabau hingga berwarna cokelat gelap.'),
     (5, 'Soto Ayam', 'soto-ayam', 'Jawa & Lamongan', 'Berkuah', 310, 50, 'Sup ayam berkuah kuning kunyit dengan suwiran ayam, soun, telur, dan koya.'),
-    (6, 'Ayam Goreng', 'ayam-goreng', 'Nusantara', 'Lauk Goreng', 360, 55, 'Ayam ungkep rempah kuning yang digoreng keemasan dengan tekstur renyah di luar.'),
+    (6, 'Ayam Goreng', 'ayam-goreng', 'Nusantara', 'Lauk Goreng', 360, 50, 'Ayam ungkep rempah kuning yang digoreng keemasan dengan tekstur renyah di luar.'),
     (7, 'Mie Goreng', 'mie-goreng', 'Jawa & Nusantara', 'Makanan Utama', 410, 50, 'Mie kuning goreng dengan kecap manis, sayuran sawi, kol, dan irisan bakso atau telur.'),
-    (8, 'Tempe Goreng', 'tempe-goreng', 'Jawa Tengah', 'Lauk Nabati', 195, 45, 'Irisan tempe kedelai fermentasi berbumbu ketumbar bawang yang digoreng renyah.'),
-    (9, 'Tahu Goreng', 'tahu-goreng', 'Jawa Barat & Jawa Tengah', 'Lauk Nabati', 175, 45, 'Potongan tahu putih atau kuning digoreng hingga berkulit keemasan.'),
-    (10, 'Gado-Gado', 'gado-gado', 'Betawi, Jakarta', 'Sayuran & Bumbu Kacang', 340, 45, 'Salad sayuran rebus Nusantara dengan tahu, tempe, telur rebus, lontong, dan saus kacang.'),
-    (11, 'Pempek', 'pempek', 'Palembang, Sumatera Selatan', 'Olahan Ikan', 290, 45, 'Olahan ikan tenggiri dan sagu khas Palembang dengan kuah cuko asam manis pedas.'),
-    (12, 'Telur Balado', 'telur-balado', 'Minangkabau, Sumatera Barat', 'Lauk Pedas', 230, 40, 'Telur rebus goreng yang dilapisi sambal cabai merah tumis khas Padang.')
+    (8, 'Tempe Goreng', 'tempe-goreng', 'Jawa Tengah', 'Lauk Nabati', 195, 50, 'Irisan tempe kedelai fermentasi berbumbu ketumbar bawang yang digoreng renyah.'),
+    (9, 'Tahu Goreng', 'tahu-goreng', 'Jawa Barat & Jawa Tengah', 'Lauk Nabati', 175, 50, 'Potongan tahu putih atau kuning digoreng hingga berkulit keemasan.'),
+    (10, 'Gado-Gado', 'gado-gado', 'Betawi, Jakarta', 'Sayuran & Bumbu Kacang', 340, 50, 'Salad sayuran rebus Nusantara dengan tahu, tempe, telur rebus, lontong, dan saus kacang.'),
+    (11, 'Pempek', 'pempek', 'Palembang, Sumatera Selatan', 'Olahan Ikan', 290, 50, 'Olahan ikan tenggiri dan sagu khas Palembang dengan kuah cuko asam manis pedas.'),
+    (12, 'Telur Balado', 'telur-balado', 'Minangkabau, Sumatera Barat', 'Lauk Pedas', 230, 50, 'Telur rebus goreng yang dilapisi sambal cabai merah tumis khas Padang.')
 on conflict (id) do update set
     name = excluded.name,
     slug = excluded.slug,
