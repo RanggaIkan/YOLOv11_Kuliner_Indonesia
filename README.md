@@ -19,20 +19,20 @@
 
 ## Ringkasan Proyek & 12 Kelas Kuliner Indonesia
 
-Proyek ini berfokus pada tema **Kuliner Umum Indonesia** dengan **600 gambar** beranotasi format YOLOv11 (**420 Train / 70%**, **120 Valid / 20%**, **60 Test / 10%**) yang mencakup **12 kelas makanan khas Nusantara**:
+Proyek ini berfokus pada tema **Kuliner Umum Indonesia** dengan **600 gambar** beranotasi saliency format YOLOv11 (**494 foto asli unik + 106 augmentasi tajam khusus train**, terbagi **420 Train [314 asli + 106 aug] / 70%**, **120 Valid [100% asli] / 20%**, **60 Test [100% asli] / 10%**) yang mencakup **12 kelas makanan khas Nusantara** seimbang (**50 citra per kelas** — `35 Train / 10 Valid / 5 Test`):
 
-1. **Nasi Goreng** (60 citra)
-2. **Bakso** (54 citra)
-3. **Sate Ayam** (54 citra)
-4. **Rendang** (50 citra)
-5. **Soto Ayam** (50 citra)
-6. **Ayam Goreng** (50 citra)
-7. **Mie Goreng** (50 citra)
-8. **Tempe Goreng** (50 citra)
-9. **Tahu Goreng** (50 citra)
-10. **Gado-Gado** (46 citra)
-11. **Pempek** (46 citra)
-12. **Telur Balado** (40 citra)
+1. **Nasi Goreng** (`50` citra: `50` asli)
+2. **Bakso** (`50` citra: `50` asli)
+3. **Sate Ayam** (`50` citra: `50` asli)
+4. **Rendang** (`50` citra: `37` asli + `13` aug train)
+5. **Soto Ayam** (`50` citra: `50` asli)
+6. **Ayam Goreng** (`50` citra: `50` asli)
+7. **Mie Goreng** (`50` citra: `31` asli + `19` aug train)
+8. **Tempe Goreng** (`50` citra: `48` asli + `2` aug train)
+9. **Tahu Goreng** (`50` citra: `35` asli + `15` aug train)
+10. **Gado-Gado** (`50` citra: `33` asli + `17` aug train)
+11. **Pempek** (`50` citra: `39` asli + `11` aug train)
+12. **Telur Balado** (`50` citra: `21` asli + `29` aug train)
 
 ---
 
@@ -67,7 +67,7 @@ Sesuai ketentuan penilaian (*"Ada GUI, dijelaskan pakai bahasa pemrograman apa?"
 │   └── Presentasi_UAS_YOLOv11_Kuliner_Indonesia.pptx # Dek presentasi 10 slide
 ├── frontend/
 │   ├── index.html             # GUI Web NusantaraVision YOLOv11 (4 Tab)
-│   ├── styles.css             # Tema gelap modern responsif
+│   ├── styles.css             # Tema Light Editorial Workbench responsif
 │   ├── app.js                 # Logika Canvas Enhancement, ROI drag, Tracking & Chart
 │   └── supabase-service.js    # Klien Supabase REST API + fallback offline
 ├── models/
@@ -79,8 +79,8 @@ Sesuai ketentuan penilaian (*"Ada GUI, dijelaskan pakai bahasa pemrograman apa?"
 │   ├── Laporan_Before_After_Enhancement.csv  # Data mentah CSV (30 citra uji)
 │   └── local_db_fallback.json # Cache/seed JSON lokal saat offline
 ├── samples/
-│   ├── images/                # 6 sampel citra adegan kuliner Indonesia
-│   ├── videos/                # Sampel video AVI & frame sequence untuk tracking demo
+│   ├── images/                # 13 foto nyata kuliner Indonesia + real_samples_manifest.json
+│   ├── videos/                # 2 video tracking 960x540 (MJPG AVI + 16 PNG frame sequence)
 │   └── sample_catalog.json    # Ground-truth bounding box & koordinat ROI default
 ├── scripts/
 │   ├── generate_excel_and_ppt.mjs # Generator OOXML .xlsx, .csv, .pptx (Node.js v24)
@@ -109,9 +109,10 @@ Cukup pastikan **Node.js v20/v24+** terpasang:
 node server.js
 ```
 Buka browser dan kunjungi:
-- **GUI Web**: `http://localhost:8000`
+- **GUI Web**: `http://localhost:8000` (Light Editorial Workbench — 13 foto nyata + 2 video tracking `960x540`)
 - **Health Check API**: `http://localhost:8000/api/health`
 - **Daftar 12 Kelas**: `http://localhost:8000/api/classes`
+- **Katalog Sampel**: `http://localhost:8000/api/samples`
 
 *(Catatan: `frontend/index.html` juga dapat dibuka langsung melalui `file://` di browser dengan fitur simulasi Canvas penuh).*
 
@@ -132,10 +133,10 @@ Swagger API Documentation tersedia di `http://localhost:8000/docs`.
 Bagi anggota tim yang bertugas melatih model pada GPU (Google Colab T4 atau laptop gaming):
 1. Buka Google Colab ([colab.research.google.com](https://colab.research.google.com/)) dan unggah file `notebooks/Train_YOLOv11_Kuliner_Indonesia_Colab.ipynb`.
 2. Ubah runtime ke **T4 GPU** (`Runtime` -> `Change runtime type` -> `T4 GPU`).
-3. *(Opsional)* Masukkan `ROBOFLOW_API_KEY` Anda di cell konfigurasi jika ingin mengunduh langsung dari Roboflow Universe; jika dilewati, notebook otomatis menjalankan **fallback dataset builder 600 citra** agar *Run All* tidak pernah gagal.
+3. *(Opsional)* Letakkan `Dataset_Kuliner_Indonesia_YOLOv11.zip` (atau jalankan langsung di root repo) / masukkan `ROBOFLOW_API_KEY`; jika tidak ada koneksi Roboflow, notebook otomatis mengekstrak dataset 600 citra terkurasi (**494 asli unik + 106 aug train**) atau membangun fallback 600 citra agar *Run All* tidak pernah gagal.
 4. Klik **Runtime -> Run all**. Notebook akan otomatis:
    - Menginstal `ultralytics`, `roboflow`, `opencv-python`, `openpyxl`, `pandas`, `matplotlib`, `supabase`.
-   - Menyiapkan 600 gambar (420 train / 120 valid / 60 test) untuk 12 kelas kuliner Indonesia.
+   - Menyiapkan 600 gambar (**50 per kelas**; `420` train [`314` asli + `106` aug] / `120` valid asli / `60` test asli) untuk 12 kelas kuliner Indonesia.
    - Melatih `YOLO("yolo11n.pt")` selama 50–100 epochs (`imgsz=640`).
    - Menjalankan evaluasi **Before vs After** (Original, HE, CLAHE, CS, Brightness), **Object Counting**, **ByteTrack**, dan **ObjectCounter ROI**.
    - Mengekspor `best.pt`, `best.onnx`, dan `Laporan_Before_After_Enhancement.xlsx`.

@@ -17,7 +17,7 @@ Panduan ini disusun khusus agar teman satu tim dapat menjalankan seluruh proses 
      - Klik ikon **Kunci (Secrets)** di panel kiri Google Colab.
      - Tambahkan Secret baru dengan nama `ROBOFLOW_API_KEY` dan isi dengan API Key Anda, lalu aktifkan *Notebook access*.
    - **Bagaimana jika tidak punya `ROBOFLOW_API_KEY`?**
-     - Tidak masalah! Notebook sudah dilengkapi **Fallback Dataset Builder Otomatis** yang akan membangun dataset 600 citra berformat YOLOv11 (**Train 420 / Valid 120 / Test 60**) untuk ke-12 kelas kuliner Indonesia sehingga **Run All tetap berjalan mulus tanpa crash**.
+     - Tidak masalah! Notebook sudah mendukung **`Dataset_Kuliner_Indonesia_YOLOv11.zip`** dari repositori/lokal (600 citra kurasi: **494 foto asli unik + 106 augmentasi tajam khusus train**, tepat **50 citra/kelas**, split **Train 420 / Valid 120 / Test 60**) plus **Fallback Dataset Builder Otomatis** sehingga **Run All tetap berjalan mulus tanpa crash**.
 
 ---
 
@@ -26,7 +26,7 @@ Panduan ini disusun khusus agar teman satu tim dapat menjalankan seluruh proses 
 1. Klik menu **Runtime -> Run all** (atau tekan `Ctrl + F9`).
 2. Tunggu seluruh sel selesai dieksekusi secara berurutan:
    - **Sel 1–2**: Cek GPU T4 & install library (`ultralytics`, `roboflow`, `opencv-python`, `openpyxl`, `pandas`, `matplotlib`, `supabase`).
-   - **Sel 3**: Mengunduh dataset 600 citra dari Roboflow Universe (atau membangun dataset fallback 600 citra) dengan split `70% train (420)`, `20% valid (120)`, `10% test (60)`.
+   - **Sel 3**: Menyiapkan dataset **600 citra** (`494` foto asli unik + `106` augmentasi train-only, `50` per kelas) dari `Dataset_Kuliner_Indonesia_YOLOv11.zip` / Roboflow Universe / Fallback Builder dengan split `70% train (420)`, `20% valid (120)`, `10% test (60)`.
    - **Sel 4**: Menerapkan **5 teknik Image Enhancement** (`Original`, `HE YCrCb`, `CLAHE LAB`, `Contrast Stretching 2–98%`, `Brightness & Contrast`) dan menampilkan grafik perbandingan Before vs After.
    - **Sel 5**: Melatih `YOLO("yolo11n.pt")` selama 60 epoch (`imgsz=640`) lalu menyimpan `models/best.pt` dan `models/best.onnx`.
    - **Sel 6**: Menjalankan **Object Counting**, **ByteTrack Tracking**, dan **Region Counter (`ultralytics.solutions.ObjectCounter` Polygon ROI)**.

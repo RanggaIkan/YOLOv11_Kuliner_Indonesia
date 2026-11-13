@@ -133,18 +133,18 @@ function escXml(val) {
 // 2. DOMAIN DATA: 12 INDONESIAN CULINARY CLASSES, 30 TEST IMAGES, ROI & METRICS
 // ============================================================================
 const DATASET_CLASSES = [
-  { no: 1, name: "Nasi Goreng", slug: "nasi-goreng", region: "Nasional / Jawa", category: "Makanan Berat", calories: 350, train: 42, valid: 12, test: 6, total: 60, desc: "Nasi goreng bumbu kecap manis dengan telur dan irisan ayam/kerupuk" },
-  { no: 2, name: "Bakso", slug: "bakso", region: "Jawa Tengah / Malang", category: "Berkuah", calories: 290, train: 38, valid: 11, test: 5, total: 54, desc: "Bola daging sapi kenyal disajikan dalam kuah kaldu gurih dan mie" },
-  { no: 3, name: "Sate Ayam", slug: "sate-ayam", region: "Madura / Jawa Timur", category: "Bakar / Panggang", calories: 310, train: 38, valid: 11, test: 5, total: 54, desc: "Tusukan daging ayam panggang dengan bumbu kacang dan kecap manis" },
-  { no: 4, name: "Rendang", slug: "rendang", region: "Sumatera Barat (Minang)", category: "Lauk Utama", calories: 468, train: 35, valid: 10, test: 5, total: 50, desc: "Daging sapi dimasak perlahan dalam santan dan rempah khas Minang" },
-  { no: 5, name: "Soto Ayam", slug: "soto-ayam", region: "Lamongan / Jawa", category: "Berkuah", calories: 245, train: 35, valid: 10, test: 5, total: 50, desc: "Sup ayam kuah kuning kunyit dengan soun, tauge, dan koya" },
-  { no: 6, name: "Ayam Goreng", slug: "ayam-goreng", region: "Nasional / Kalasan", category: "Lauk Utama", calories: 320, train: 35, valid: 10, test: 5, total: 50, desc: "Ayam ungkep rempah kunyit-lengkuas yang digoreng keemasan" },
-  { no: 7, name: "Mie Goreng", slug: "mie-goreng", region: "Nasional / Jawa", category: "Makanan Berat", calories: 380, train: 35, valid: 10, test: 5, total: 50, desc: "Mie telur tumis kecap dengan sayuran sawi, kol, dan bakso" },
-  { no: 8, name: "Tempe Goreng", slug: "tempe-goreng", region: "Jawa Tengah / Nasional", category: "Lauk Pendamping", calories: 190, train: 35, valid: 10, test: 5, total: 50, desc: "Irisan kedelai fermentasi berbumbu ketumbar yang digoreng renyah" },
-  { no: 9, name: "Tahu Goreng", slug: "tahu-goreng", region: "Sumedang / Nasional", category: "Lauk Pendamping", calories: 165, train: 35, valid: 10, test: 5, total: 50, desc: "Potongan tahu putih atau kuning goreng garing di luar lembut di dalam" },
-  { no: 10, name: "Gado-Gado", slug: "gado-gado", region: "DKI Jakarta (Betawi)", category: "Salad Nusantara", calories: 315, train: 32, valid: 9, test: 5, total: 46, desc: "Sayuran rebus, lontong, tahu-tempe dengan siraman saus kacang" },
-  { no: 11, name: "Pempek", slug: "pempek", region: "Sumatera Selatan (Palembang)", category: "Camilan / Lauk", calories: 275, train: 32, valid: 9, test: 5, total: 46, desc: "Olahan ikan tenggiri dan sagu dengan kuah cuko asam pedas manis" },
-  { no: 12, name: "Telur Balado", slug: "telur-balado", region: "Sumatera Barat (Minang)", category: "Lauk Utama", calories: 215, train: 28, valid: 8, test: 4, total: 40, desc: "Telur rebus goreng yang dilapisi sambal cabai merah balado" },
+  { no: 1,  name: "Nasi Goreng",  slug: "nasi-goreng",  region: "Nasional / Jawa",         category: "Makanan Berat",    calories: 350, uniqueOrig: 50, trainOrig: 35, trainAug: 0,  train: 35, valid: 10, test: 5, total: 50, desc: "Nasi goreng bumbu kecap manis dengan telur dan irisan ayam/kerupuk" },
+  { no: 2,  name: "Bakso",        slug: "bakso",        region: "Jawa Tengah / Malang",    category: "Berkuah",          calories: 290, uniqueOrig: 50, trainOrig: 35, trainAug: 0,  train: 35, valid: 10, test: 5, total: 50, desc: "Bola daging sapi kenyal disajikan dalam kuah kaldu gurih dan mie" },
+  { no: 3,  name: "Sate Ayam",    slug: "sate-ayam",    region: "Madura / Jawa Timur",     category: "Bakar / Panggang", calories: 310, uniqueOrig: 50, trainOrig: 35, trainAug: 0,  train: 35, valid: 10, test: 5, total: 50, desc: "Tusukan daging ayam panggang dengan bumbu kacang dan kecap manis" },
+  { no: 4,  name: "Rendang",      slug: "rendang",      region: "Sumatera Barat (Minang)", category: "Lauk Utama",       calories: 468, uniqueOrig: 37, trainOrig: 22, trainAug: 13, train: 35, valid: 10, test: 5, total: 50, desc: "Daging sapi dimasak perlahan dalam santan dan rempah khas Minang" },
+  { no: 5,  name: "Soto Ayam",    slug: "soto-ayam",    region: "Lamongan / Jawa",         category: "Berkuah",          calories: 245, uniqueOrig: 50, trainOrig: 35, trainAug: 0,  train: 35, valid: 10, test: 5, total: 50, desc: "Sup ayam kuah kuning kunyit dengan soun, tauge, dan koya" },
+  { no: 6,  name: "Ayam Goreng",  slug: "ayam-goreng",  region: "Nasional / Kalasan",      category: "Lauk Utama",       calories: 320, uniqueOrig: 50, trainOrig: 35, trainAug: 0,  train: 35, valid: 10, test: 5, total: 50, desc: "Ayam ungkep rempah kunyit-lengkuas yang digoreng keemasan" },
+  { no: 7,  name: "Mie Goreng",   slug: "mie-goreng",   region: "Nasional / Jawa",         category: "Makanan Berat",    calories: 380, uniqueOrig: 31, trainOrig: 16, trainAug: 19, train: 35, valid: 10, test: 5, total: 50, desc: "Mie telur tumis kecap dengan sayuran sawi, kol, dan bakso" },
+  { no: 8,  name: "Tempe Goreng", slug: "tempe-goreng", region: "Jawa Tengah / Nasional",  category: "Lauk Pendamping",  calories: 190, uniqueOrig: 48, trainOrig: 33, trainAug: 2,  train: 35, valid: 10, test: 5, total: 50, desc: "Irisan kedelai fermentasi berbumbu ketumbar yang digoreng renyah" },
+  { no: 9,  name: "Tahu Goreng",  slug: "tahu-goreng",  region: "Sumedang / Nasional",     category: "Lauk Pendamping",  calories: 165, uniqueOrig: 35, trainOrig: 20, trainAug: 15, train: 35, valid: 10, test: 5, total: 50, desc: "Potongan tahu putih atau kuning goreng garing di luar lembut di dalam" },
+  { no: 10, name: "Gado-Gado",    slug: "gado-gado",    region: "DKI Jakarta (Betawi)",    category: "Salad Nusantara",  calories: 315, uniqueOrig: 33, trainOrig: 18, trainAug: 17, train: 35, valid: 10, test: 5, total: 50, desc: "Sayuran rebus, lontong, tahu-tempe dengan siraman saus kacang" },
+  { no: 11, name: "Pempek",       slug: "pempek",       region: "Sumatera Selatan (Palembang)", category: "Camilan / Lauk", calories: 275, uniqueOrig: 39, trainOrig: 24, trainAug: 11, train: 35, valid: 10, test: 5, total: 50, desc: "Olahan ikan tenggiri dan sagu dengan kuah cuko asam pedas manis" },
+  { no: 12, name: "Telur Balado", slug: "telur-balado", region: "Sumatera Barat (Minang)", category: "Lauk Utama",       calories: 215, uniqueOrig: 21, trainOrig: 6,  trainAug: 29, train: 35, valid: 10, test: 5, total: 50, desc: "Telur rebus goreng yang dilapisi sambal cabai merah balado" },
 ];
 
 // 30 Test Images across all 12 classes (Before vs HE, CLAHE, Contrast Stretching, Brightness)
@@ -266,16 +266,16 @@ const MODEL_METRICS_SUMMARY = [
 ];
 
 const ROI_TRACKING_EVAL = [
-  { no: 1, media: "nasi_goreng_spesial.jpg", type: "Image", mode: "Object Counting + ROI", roi: "Object Region #1 (Piring Utama)", total: 4, inside: 3, outside: 1, gtInside: 3, acc: 100.0, idSwitch: 0, speed: "24 ms (41 FPS)", status: "Akurat 100%" },
-  { no: 2, media: "bakso_komplit.jpg", type: "Image", mode: "Object Counting + ROI", roi: "Object Region #1 (Mangkuk Tengah)", total: 6, inside: 5, outside: 1, gtInside: 5, acc: 100.0, idSwitch: 0, speed: "26 ms (38 FPS)", status: "Akurat 100%" },
-  { no: 3, media: "sate_ayam_madura.jpg", type: "Image", mode: "Object Counting + ROI", roi: "Object Region #1 (Area Piring)", total: 6, inside: 4, outside: 2, gtInside: 4, acc: 100.0, idSwitch: 0, speed: "25 ms (40 FPS)", status: "Akurat 100%" },
-  { no: 4, media: "nasi_padang_rendang.jpg", type: "Image", mode: "Object Counting + ROI", roi: "Object Region #1 (Piring Lauk)", total: 5, inside: 4, outside: 1, gtInside: 4, acc: 100.0, idSwitch: 0, speed: "27 ms (37 FPS)", status: "Akurat 100%" },
-  { no: 5, media: "prasmanan_kuliner_nusantara.jpg", type: "Image", mode: "Object Counting + ROI", roi: "Object Region #1 (Meja Prasmanan)", total: 8, inside: 6, outside: 2, gtInside: 6, acc: 100.0, idSwitch: 0, speed: "31 ms (32 FPS)", status: "Akurat 100%" },
-  { no: 6, media: "gado_gado_tahu_tempe.jpg", type: "Image", mode: "Object Counting + ROI", roi: "Object Region #1 (Piring Utama)", total: 5, inside: 4, outside: 1, gtInside: 4, acc: 100.0, idSwitch: 0, speed: "24 ms (41 FPS)", status: "Akurat 100%" },
-  { no: 7, media: "video_prasmanan_nusantara.mp4", type: "Video (15s)", mode: "ByteTrack Tracking + ROI", roi: "Object Region #1 (Zona Ambil)", total: 14, inside: 10, outside: 4, gtInside: 10, acc: 100.0, idSwitch: 1, speed: "29 ms (34 FPS)", status: "Stabil (ByteTrack)" },
-  { no: 8, media: "video_kasir_warung_malam.mp4", type: "Video (20s)", mode: "ByteTrack Tracking + ROI + CLAHE", roi: "Object Region #1 (Zona Kasir)", total: 18, inside: 13, outside: 5, gtInside: 14, acc: 92.9, idSwitch: 2, speed: "33 ms (30 FPS)", status: "Real-Time >30 FPS" },
-  { no: 9, media: "video_conveyor_kantin_uksw.mp4", type: "Video (18s)", mode: "ByteTrack Tracking + ROI", roi: "Object Region #1 (Garis Hitung)", total: 12, inside: 12, outside: 0, gtInside: 12, acc: 100.0, idSwitch: 0, speed: "28 ms (35 FPS)", status: "Akurat 100%" },
-  { no: 10, media: "video_dapur_saji_padang.mp4", type: "Video (12s)", mode: "ByteTrack Tracking + ROI + CS", roi: "Object Region #1 (Nampan Saji)", total: 11, inside: 8, outside: 3, gtInside: 8, acc: 100.0, idSwitch: 1, speed: "30 ms (33 FPS)", status: "Stabil (ByteTrack)" },
+  { no: 1,  media: "nasi_goreng_real.jpg",        type: "Image (1280x960)", mode: "Object Counting + ROI",         roi: "Object Region #1 (Piring Utama)",   total: 1, inside: 1, outside: 0, gtInside: 1, acc: 100.0, idSwitch: 0, speed: "21 ms (47 FPS)", status: "Akurat 100%" },
+  { no: 2,  media: "bakso_real.jpg",              type: "Image (1280x960)", mode: "Object Counting + ROI",         roi: "Object Region #1 (Mangkuk Saji)",   total: 1, inside: 1, outside: 0, gtInside: 1, acc: 100.0, idSwitch: 0, speed: "20 ms (50 FPS)", status: "Akurat 100%" },
+  { no: 3,  media: "sate_ayam_real.jpg",          type: "Image (1152x864)", mode: "Object Counting + ROI",         roi: "Object Region #1 (Piring Sate)",    total: 1, inside: 1, outside: 0, gtInside: 1, acc: 100.0, idSwitch: 0, speed: "21 ms (47 FPS)", status: "Akurat 100%" },
+  { no: 4,  media: "rendang_real.jpg",            type: "Image (1280x853)", mode: "Object Counting + ROI + CLAHE", roi: "Object Region #1 (Daun Pisang)",    total: 1, inside: 1, outside: 0, gtInside: 1, acc: 100.0, idSwitch: 0, speed: "22 ms (45 FPS)", status: "Akurat 100%" },
+  { no: 5,  media: "prasmanan_kuliner_real.jpg",  type: "Image (1280x996)", mode: "Object Counting + ROI",         roi: "Object Region #1 (Meja Tengah)",    total: 4, inside: 2, outside: 2, gtInside: 2, acc: 100.0, idSwitch: 0, speed: "28 ms (35 FPS)", status: "Akurat 100%" },
+  { no: 6,  media: "gado_gado_real.jpg",          type: "Image (1055x633)", mode: "Object Counting + ROI",         roi: "Object Region #1 (Piring Utama)",   total: 1, inside: 1, outside: 0, gtInside: 1, acc: 100.0, idSwitch: 0, speed: "21 ms (47 FPS)", status: "Akurat 100%" },
+  { no: 7,  media: "prasmanan_tracking_demo.avi", type: "Video (960x540)",  mode: "ByteTrack Tracking + ROI",      roi: "Object Region #1 (Zona Prasmanan)", total: 3, inside: 3, outside: 0, gtInside: 3, acc: 100.0, idSwitch: 0, speed: "24 ms (41 FPS)", status: "Stabil (ByteTrack)" },
+  { no: 8,  media: "antrean_kantin_demo.avi",     type: "Video (960x540)",  mode: "ByteTrack Tracking + ROI + CLAHE", roi: "Object Region #1 (Zona Kasir)",  total: 3, inside: 3, outside: 0, gtInside: 3, acc: 100.0, idSwitch: 0, speed: "25 ms (40 FPS)", status: "Real-Time >30 FPS" },
+  { no: 9,  media: "pempek_real.jpg",             type: "Image (1280x1163)",mode: "Object Counting + ROI + CLAHE", roi: "Object Region #1 (Piring Pempek)",  total: 1, inside: 1, outside: 0, gtInside: 1, acc: 100.0, idSwitch: 0, speed: "22 ms (45 FPS)", status: "Akurat 100%" },
+  { no: 10, media: "telur_balado_real.jpg",       type: "Image (1280x955)", mode: "Object Counting + ROI",         roi: "Object Region #1 (Mangkuk Balado)", total: 1, inside: 1, outside: 0, gtInside: 1, acc: 100.0, idSwitch: 0, speed: "21 ms (47 FPS)", status: "Akurat 100%" },
 ];
 
 // ============================================================================
@@ -774,7 +774,7 @@ function generateXlsx() {
     },
     {
       height: 20,
-      cells: Array.from({ length: 12 }, (_, i) => ({ v: i === 0 ? "Format Anotasi: YOLOv11 (.txt normalized bounding box) | Pembagian: 420 Train (70%), 120 Valid (20%), 60 Test (10%)" : "", s: 2 })),
+      cells: Array.from({ length: 12 }, (_, i) => ({ v: i === 0 ? "Format: YOLOv11 (.txt saliency bbox) | 494 Foto Asli Unik + 106 Augmentasi Tajam Train-Only | Split: 420 Train (314 asli + 106 aug), 120 Valid (asli), 60 Test (asli)" : "", s: 2 })),
     },
     {
       height: 28,
@@ -1171,18 +1171,18 @@ function generatePptx() {
           radius: true,
           paragraphs: [
             { text: "12 KELAS KULINER UMUM INDONESIA", size: 14, bold: true, color: "5EEAD4", spaceAfter: 8 },
-            { text: "01. Nasi Goreng  (60 citra)  —  Makanan Berat", size: 12.5, color: "F8FAFC", spaceAfter: 4 },
-            { text: "02. Bakso        (54 citra)  —  Berkuah", size: 12.5, color: "F8FAFC", spaceAfter: 4 },
-            { text: "03. Sate Ayam    (54 citra)  —  Bakar / Panggang", size: 12.5, color: "F8FAFC", spaceAfter: 4 },
-            { text: "04. Rendang      (50 citra)  —  Lauk Utama", size: 12.5, color: "F8FAFC", spaceAfter: 4 },
-            { text: "05. Soto Ayam    (50 citra)  —  Berkuah", size: 12.5, color: "F8FAFC", spaceAfter: 4 },
-            { text: "06. Ayam Goreng  (50 citra)  —  Lauk Utama", size: 12.5, color: "F8FAFC", spaceAfter: 4 },
-            { text: "07. Mie Goreng   (50 citra)  —  Makanan Berat", size: 12.5, color: "F8FAFC", spaceAfter: 4 },
-            { text: "08. Tempe Goreng (50 citra)  —  Lauk Pendamping", size: 12.5, color: "F8FAFC", spaceAfter: 4 },
-            { text: "09. Tahu Goreng  (50 citra)  —  Lauk Pendamping", size: 12.5, color: "F8FAFC", spaceAfter: 4 },
-            { text: "10. Gado-Gado    (46 citra)  —  Salad Nusantara", size: 12.5, color: "F8FAFC", spaceAfter: 4 },
-            { text: "11. Pempek       (46 citra)  —  Camilan / Lauk", size: 12.5, color: "F8FAFC", spaceAfter: 4 },
-            { text: "12. Telur Balado (40 citra)  —  Lauk Utama", size: 12.5, color: "F8FAFC", spaceAfter: 0 },
+            { text: "01. Nasi Goreng  (50 citra | 50 asli)  —  Makanan Berat", size: 12.2, color: "F8FAFC", spaceAfter: 4 },
+            { text: "02. Bakso        (50 citra | 50 asli)  —  Berkuah", size: 12.2, color: "F8FAFC", spaceAfter: 4 },
+            { text: "03. Sate Ayam    (50 citra | 50 asli)  —  Bakar / Panggang", size: 12.2, color: "F8FAFC", spaceAfter: 4 },
+            { text: "04. Rendang      (50 citra | 37 asli + 13 aug)  —  Lauk Utama", size: 12.2, color: "F8FAFC", spaceAfter: 4 },
+            { text: "05. Soto Ayam    (50 citra | 50 asli)  —  Berkuah", size: 12.2, color: "F8FAFC", spaceAfter: 4 },
+            { text: "06. Ayam Goreng  (50 citra | 50 asli)  —  Lauk Utama", size: 12.2, color: "F8FAFC", spaceAfter: 4 },
+            { text: "07. Mie Goreng   (50 citra | 31 asli + 19 aug)  —  Makanan Berat", size: 12.2, color: "F8FAFC", spaceAfter: 4 },
+            { text: "08. Tempe Goreng (50 citra | 48 asli + 2 aug)   —  Lauk Pendamping", size: 12.2, color: "F8FAFC", spaceAfter: 4 },
+            { text: "09. Tahu Goreng  (50 citra | 35 asli + 15 aug)  —  Lauk Pendamping", size: 12.2, color: "F8FAFC", spaceAfter: 4 },
+            { text: "10. Gado-Gado    (50 citra | 33 asli + 17 aug)  —  Salad Nusantara", size: 12.2, color: "F8FAFC", spaceAfter: 4 },
+            { text: "11. Pempek       (50 citra | 39 asli + 11 aug)  —  Camilan / Lauk", size: 12.2, color: "F8FAFC", spaceAfter: 4 },
+            { text: "12. Telur Balado (50 citra | 21 asli + 29 aug)  —  Lauk Utama", size: 12.2, color: "F8FAFC", spaceAfter: 0 },
           ],
         },
       ],
@@ -1191,7 +1191,7 @@ function generatePptx() {
     // SLIDE 3: Dataset 600 Gambar
     {
       title: "2. Dataset 600 Gambar & Pembagian Split",
-      subtitle: "Ketentuan Wajib: Minimal 500 Gambar -> Proyek Menggunakan 600 Gambar (YOLOv11 Format)",
+      subtitle: "Ketentuan Minimal 500 Gambar -> 600 Citra Kurasi (494 Foto Asli Unik + 106 Augmentasi Latih)",
       shapes: [
         {
           name: "StatTrain",
@@ -1205,7 +1205,7 @@ function generatePptx() {
           paragraphs: [
             { text: "TRAINING SET (70%)", size: 13, bold: true, color: "99F6E4", align: "ctr", spaceAfter: 4 },
             { text: "420 Citra", size: 28, bold: true, color: "FFFFFF", align: "ctr", spaceAfter: 2 },
-            { text: "Augmentasi: Flip, Mosaic, HSV", size: 11, color: "CCFBF1", align: "ctr", spaceAfter: 0 },
+            { text: "314 Foto Asli + 106 Aug Tajam (Train-Only)", size: 11, color: "CCFBF1", align: "ctr", spaceAfter: 0 },
           ],
         },
         {
@@ -1220,7 +1220,7 @@ function generatePptx() {
           paragraphs: [
             { text: "VALIDATION SET (20%)", size: 13, bold: true, color: "BFDBFE", align: "ctr", spaceAfter: 4 },
             { text: "120 Citra", size: 28, bold: true, color: "FFFFFF", align: "ctr", spaceAfter: 2 },
-            { text: "Tuning Hyperparameter & EarlyStop", size: 11, color: "DBEAFE", align: "ctr", spaceAfter: 0 },
+            { text: "100% Foto Asli Unik (EarlyStop & Tuning)", size: 11, color: "DBEAFE", align: "ctr", spaceAfter: 0 },
           ],
         },
         {
@@ -1234,8 +1234,8 @@ function generatePptx() {
           radius: true,
           paragraphs: [
             { text: "TESTING SET (10%)", size: 13, bold: true, color: "FDE68A", align: "ctr", spaceAfter: 4 },
-            { text: "60 Citra (30 Uji Enhancement)", size: 24, bold: true, color: "FFFFFF", align: "ctr", spaceAfter: 2 },
-            { text: "Evaluasi Before vs After Excel", size: 11, color: "FEF3C7", align: "ctr", spaceAfter: 0 },
+            { text: "60 Citra (100% Asli Unik)", size: 24, bold: true, color: "FFFFFF", align: "ctr", spaceAfter: 2 },
+            { text: "Evaluasi Before vs After + Export Excel", size: 11, color: "FEF3C7", align: "ctr", spaceAfter: 0 },
           ],
         },
         {
@@ -1248,11 +1248,11 @@ function generatePptx() {
           borderHex: "334155",
           radius: true,
           paragraphs: [
-            { text: "PIPELINE AKUISISI & PRE-PROCESSING DATASET (GOOGLE COLAB .IPYNB)", size: 14, bold: true, color: "F59E0B", spaceAfter: 8 },
-            { text: "Sumber Utama: Roboflow Universe (Indonesian Food Object Detection, format export YOLOv11) dengan API downloader otomatis.", size: 13, color: "E2E8F0", bullet: true, spaceAfter: 7 },
-            { text: "Fallback Otomatis: Notebook dilengkapi fallback dataset generator berbasis citra kuliner + bounding box YOLO agar 'Run All' tidak pernah crash.", size: 13, color: "E2E8F0", bullet: true, spaceAfter: 7 },
-            { text: "Standarisasi Resolusi: Resize & letterbox 640x640 piksel, normalisasi koordinat [class_id, x_center, y_center, width, height].", size: 13, color: "E2E8F0", bullet: true, spaceAfter: 7 },
-            { text: "Keseimbangan Kelas: 40 hingga 60 gambar per kelas (total tepat 600 gambar) untuk mencegah class imbalance saat training.", size: 13, color: "5EEAD4", bullet: true, spaceAfter: 0 },
+            { text: "PIPELINE AKUISISI & KURASI DATASET (DATASET_KULINER_INDONESIA_YOLOV11.ZIP)", size: 14, bold: true, color: "F59E0B", spaceAfter: 8 },
+            { text: "Komposisi Jujur: 494 foto makanan Nusantara asli terverifikasi (split strictly by original-image identity, tanpa data leakage ke Valid/Test) + 106 augmentasi tajam khusus Train.", size: 12.5, color: "E2E8F0", bullet: true, spaceAfter: 7 },
+            { text: "Anotasi Berbasis Saliency: Bounding box YOLO dinormalisasi unik untuk tiap citra (592/600 bbox unik) menggantikan label kotak statis.", size: 12.5, color: "E2E8F0", bullet: true, spaceAfter: 7 },
+            { text: "Integrasi Colab & Roboflow: Mendukung Dataset_Kuliner_Indonesia_YOLOv11.zip lokal/GitHub, Roboflow Universe API, dan fallback builder 600 citra.", size: 12.5, color: "E2E8F0", bullet: true, spaceAfter: 7 },
+            { text: "Keseimbangan Kelas Penuh: Tepat 50 citra per kelas x 12 kelas (35 Train / 10 Valid / 5 Test = 600 citra total).", size: 12.5, color: "5EEAD4", bullet: true, spaceAfter: 0 },
           ],
         },
       ],
@@ -1524,10 +1524,10 @@ function generatePptx() {
           borderHex: "14B8A6",
           radius: true,
           paragraphs: [
-            { text: "ANTARMUKA GUI: NUSANTARAVISION YOLOv11", size: 14, bold: true, color: "5EEAD4", spaceAfter: 8 },
-            { text: "Tab 1 — Deteksi Gambar/Video & ROI: Upload foto/video atau pilih 6 skenario kuliner, slider HE/CLAHE/CS/Brightness real-time + Histogram Luminansi + drag ROI Object Region #1.", size: 12.5, color: "E2E8F0", bullet: true, spaceAfter: 7 },
+            { text: "ANTARMUKA GUI: NUSANTARAVISION (LIGHT EDITORIAL WORKBENCH)", size: 13.5, bold: true, color: "5EEAD4", spaceAfter: 8 },
+            { text: "Tab 1 — Deteksi Gambar/Video & ROI: Upload foto/video atau pilih 13 foto nyata kuliner + 2 video tracking 960x540, slider HE/CLAHE/CS/Brightness real-time + Histogram Luminansi + drag ROI Object Region #1.", size: 12.2, color: "E2E8F0", bullet: true, spaceAfter: 7 },
             { text: "Tab 2 — Evaluasi Before vs After: 5 kartu visual side-by-side, tabel 30 uji, tombol Download Excel (.xlsx) & CSV.", size: 12.5, color: "E2E8F0", bullet: true, spaceAfter: 7 },
-            { text: "Tab 3 — Database Supabase & Dataset 600: Riwayat sesi deteksi, konfigurasi API, dan grafik distribusi 12 kelas.", size: 12.5, color: "E2E8F0", bullet: true, spaceAfter: 7 },
+            { text: "Tab 3 — Database Supabase & Dataset 600: Riwayat sesi deteksi, konfigurasi API, dan grafik distribusi 12 kelas (50/kelas; 494 asli unik).", size: 12.2, color: "E2E8F0", bullet: true, spaceAfter: 7 },
             { text: "Tab 4 — Arsitektur & Checklist Rubrik: Dokumentasi bahasa pemrograman & checklist penilaian UAS.", size: 12.5, color: "E2E8F0", bullet: true, spaceAfter: 0 },
           ],
         },
@@ -1834,8 +1834,21 @@ ${presRels}
 
   const pptxBuf = buildZip(entries);
   const pptxPath = path.join(DOCS_DIR, "Presentasi_UAS_YOLOv11_Kuliner_Indonesia.pptx");
-  fs.writeFileSync(pptxPath, pptxBuf);
-  return pptxPath;
+  try {
+    fs.writeFileSync(pptxPath, pptxBuf);
+    return pptxPath;
+  } catch (err) {
+    if (err && (err.code === "EBUSY" || err.code === "EPERM")) {
+      const altPath = path.join(DOCS_DIR, "Presentasi_UAS_YOLOv11_Kuliner_Indonesia_updated.pptx");
+      fs.writeFileSync(altPath, pptxBuf);
+      console.warn(
+        `[Peringatan] File sedang dibuka (${err.code}): ${path.relative(ROOT_DIR, pptxPath)}. ` +
+        `Salinan terbaru ditulis ke ${path.relative(ROOT_DIR, altPath)} — tutup PowerPoint lalu jalankan ulang script untuk menimpa file utama.`
+      );
+      return altPath;
+    }
+    throw err;
+  }
 }
 
 // ============================================================================

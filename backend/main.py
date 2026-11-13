@@ -141,12 +141,39 @@ def _decode_base64_image(data_url_or_b64: str) -> np.ndarray:
     return _decode_image_bytes(raw)
 
 
+SAMPLE_ALIAS_TO_FILE = {
+    "nasgor_malam": "nasi_goreng_real.jpg",
+    "nasi_goreng": "nasi_goreng_real.jpg",
+    "nasi_goreng_spesial": "nasi_goreng_real.jpg",
+    "bakso_komplit": "bakso_real.jpg",
+    "bakso": "bakso_real.jpg",
+    "sate_madura": "sate_ayam_real.jpg",
+    "sate_ayam": "sate_ayam_real.jpg",
+    "padang_rendang": "rendang_real.jpg",
+    "rendang": "rendang_real.jpg",
+    "soto_ayam": "soto_ayam_real.jpg",
+    "ayam_goreng": "ayam_goreng_real.jpg",
+    "mie_goreng": "mie_goreng_real.jpg",
+    "tempe_goreng": "tempe_goreng_real.jpg",
+    "tahu_goreng": "tahu_goreng_real.jpg",
+    "gado_gado": "gado_gado_real.jpg",
+    "pempek": "pempek_real.jpg",
+    "telur_balado": "telur_balado_real.jpg",
+    "prasmanan_kuliner": "prasmanan_kuliner_real.jpg",
+}
+
+
 def _resolve_sample_image(sample_id: str) -> np.ndarray:
-    """Load sample image from samples/images/ based on sample_id or filename."""
+    """Load sample image from samples/images/ based on sample_id, alias, or filename."""
+    clean_id = Path(sample_id).name
+    stem = clean_id.rsplit(".", 1)[0].lower()
+    mapped = SAMPLE_ALIAS_TO_FILE.get(stem)
     candidates = [
-        SAMPLES_DIR / "images" / sample_id,
-        SAMPLES_DIR / "images" / f"{sample_id}.png",
-        SAMPLES_DIR / "images" / f"{sample_id}.jpg",
+        SAMPLES_DIR / "images" / clean_id,
+        SAMPLES_DIR / "images" / (mapped or ""),
+        SAMPLES_DIR / "images" / f"{stem}_real.jpg",
+        SAMPLES_DIR / "images" / f"{stem}.jpg",
+        SAMPLES_DIR / "images" / f"{stem}.png",
     ]
     for path in candidates:
         if path.exists() and path.is_file():
@@ -177,6 +204,20 @@ def _maybe_save_session(payload: Dict[str, Any]) -> None:
         return
 
 
+DATASET_TELEMETRY = {
+    "total": 600,
+    "unique_originals": 494,
+    "split": {
+        "train": 420,
+        "train_originals": 314,
+        "train_augmented": 106,
+        "valid": 120,
+        "test": 60,
+    },
+    "hero_samples": 13,
+}
+
+
 @app.get("/api/health")
 def health_check() -> Dict[str, Any]:
     """Return server, model, and database readiness status."""
@@ -190,6 +231,8 @@ def health_check() -> Dict[str, Any]:
         "custom_model_present": model_exists,
         "detector_state": detector_status,
         "classes_count": len(CULINARY_CLASSES),
+        "hero_samples_count": DATASET_TELEMETRY["hero_samples"],
+        "dataset_summary": DATASET_TELEMETRY,
         "supabase_module_loaded": supabase_client is not None,
     }
 
@@ -202,8 +245,37 @@ def list_classes() -> Dict[str, Any]:
     return {
         "total_classes": len(classes),
         "total_dataset_images": total_images or 600,
+        "dataset_stats": DATASET_TELEMETRY,
         "classes": classes,
     }
+
+
+@app.get("/api/samples")
+def list_samples() -> Dict[str, Any]:
+    """Return synchronized sample catalog (13 real hero photos + 2 960x540 tracking videos)."""
+    catalog_path = SAMPLES_DIR / "sample_catalog.json"
+    if catalog_path.exists():
+        try:
+            return json.loads(catalog_path.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return {"total_classes": len(CULINARY_CLASSES), "classes": _default_classes_payload(), "images": [], "videos": []}
+
+
+@app.get("/api/sessions")
+def list_sessions(limit: int = Query(default=50)) -> Dict[str, Any]:
+    """Return saved detection sessions from Supabase or local JSON fallback."""
+    db_client = _get_db_client()
+    sessions: List[Dict[str, Any]] = []
+    if db_client is not None:
+        try:
+            sessions = list(db_client.get_sessions(limit=limit))
+        except Exception:
+            sessions = []
+    if not sessions:
+        fallback = _load_fallback_db()
+        sessions = list(fallback.get("detection_sessions", []))[:limit]
+    return {"total": len(sessions), "sessions": sessions}
 
 
 @app.post("/api/detect/image")
@@ -285,7 +357,9 @@ async def detect_image_endpoint(
 
 
 @app.post("/api/detect/video")
+@app.post("/api/detect/video/sample")
 async def detect_video_endpoint(
+    request: Request,
     file: Optional[UploadFile] = File(default=None),
     sample_id: Optional[str] = Form(default=None),
     enhancement: str = Form(default="none"),
@@ -294,10 +368,24 @@ async def detect_video_endpoint(
     conf: float = Form(default=0.25),
     region_points: Optional[str] = Form(default=None),
     params: Optional[str] = Form(default=None),
+    frame_index: Optional[int] = Form(default=None),
 ) -> JSONResponse:
     """Run YOLOv11 + ByteTrack/BoT-SORT + Region Counter on an uploaded or sample video."""
+    content_type = request.headers.get("content-type", "")
     parsed_region = _parse_json_field(region_points, None)
     parsed_params = _parse_json_field(params, {})
+    if "application/json" in content_type:
+        body = await request.json()
+        sample_id = body.get("sample_id", sample_id)
+        enhancement = str(body.get("enhancement", enhancement))
+        mode = str(body.get("mode", mode))
+        tracker = str(body.get("tracker", tracker))
+        conf = float(body.get("conf", conf))
+        parsed_region = body.get("region_points", parsed_region)
+        parsed_params = body.get("params", parsed_params)
+        if body.get("frame_index") is not None:
+            frame_index = int(body["frame_index"])
+
     temp_path: Optional[Path] = None
 
     try:
@@ -309,10 +397,12 @@ async def detect_video_endpoint(
             video_path = temp_path
             media_name = file.filename or "video.mp4"
         elif sample_id:
+            clean_vid = Path(str(sample_id)).name
+            stem_vid = clean_vid.rsplit(".", 1)[0]
             candidates = [
-                SAMPLES_DIR / "videos" / sample_id,
-                SAMPLES_DIR / "videos" / f"{sample_id}.avi",
-                SAMPLES_DIR / "videos" / f"{sample_id}.mp4",
+                SAMPLES_DIR / "videos" / clean_vid,
+                SAMPLES_DIR / "videos" / f"{stem_vid}.avi",
+                SAMPLES_DIR / "videos" / f"{stem_vid}.mp4",
             ]
             found = next((p for p in candidates if p.exists() and p.is_file()), None)
             if not found:
@@ -332,6 +422,15 @@ async def detect_video_endpoint(
             mode=mode,
             tracker=tracker,
         )
+        summaries = result.get("frame_summaries") or []
+        if frame_index is not None and summaries:
+            safe_idx = max(0, min(len(summaries) - 1, int(frame_index)))
+            chosen = summaries[safe_idx]
+            result["detections"] = chosen.get("detections", [])
+            result["total_detected"] = chosen.get("total_detected", len(result["detections"]))
+            result["inside_region_count"] = chosen.get("inside_region_count", result.get("inside_region_count", 0))
+            result["outside_region_count"] = chosen.get("outside_region_count", result.get("outside_region_count", 0))
+            result["active_frame_index"] = safe_idx
         result["media_name"] = media_name
         return JSONResponse(content=result)
     finally:
@@ -340,6 +439,7 @@ async def detect_video_endpoint(
 
 
 @app.post("/api/compare-enhancements")
+@app.post("/api/enhance/compare")
 async def compare_enhancements_endpoint(
     request: Request,
     file: Optional[UploadFile] = File(default=None),
@@ -382,11 +482,14 @@ async def compare_enhancements_endpoint(
 
 
 @app.api_route("/api/export/excel", methods=["GET", "POST"])
+@app.api_route("/api/export/csv", methods=["GET", "POST"])
 async def export_excel_endpoint(
     request: Request,
     format: str = Query(default="xlsx"),
 ) -> Response:
     """Export Before vs After Enhancement comparison report as .xlsx or .csv."""
+    if request.url.path.endswith("/csv"):
+        format = "csv"
     comparisons: Optional[List[Dict[str, Any]]] = None
     if request.method == "POST":
         try:

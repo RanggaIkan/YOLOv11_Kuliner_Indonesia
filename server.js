@@ -53,88 +53,118 @@ const MIME_TYPES = {
 };
 
 const DEFAULT_CLASSES = [
-  { id: 1, name: "Nasi Goreng", slug: "nasi-goreng", region_origin: "Nusantara", category: "Makanan Pokok", dataset_count: 55 },
-  { id: 2, name: "Bakso", slug: "bakso", region_origin: "Jawa Tengah / Jawa Timur", category: "Berkuah", dataset_count: 55 },
-  { id: 3, name: "Sate Ayam", slug: "sate-ayam", region_origin: "Madura, Jawa Timur", category: "Panggang", dataset_count: 52 },
-  { id: 4, name: "Rendang", slug: "rendang", region_origin: "Minangkabau, Sumatera Barat", category: "Lauk Utama", dataset_count: 50 },
-  { id: 5, name: "Soto Ayam", slug: "soto-ayam", region_origin: "Lamongan / Jawa", category: "Berkuah", dataset_count: 50 },
-  { id: 6, name: "Ayam Goreng", slug: "ayam-goreng", region_origin: "Nusantara", category: "Lauk Utama", dataset_count: 52 },
-  { id: 7, name: "Mie Goreng", slug: "mie-goreng", region_origin: "Jawa / Nusantara", category: "Makanan Pokok", dataset_count: 50 },
-  { id: 8, name: "Tempe Goreng", slug: "tempe-goreng", region_origin: "Jawa", category: "Lauk Pendamping", dataset_count: 48 },
-  { id: 9, name: "Tahu Goreng", slug: "tahu-goreng", region_origin: "Jawa", category: "Lauk Pendamping", dataset_count: 48 },
-  { id: 10, name: "Gado-Gado", slug: "gado-gado", region_origin: "Betawi, DKI Jakarta", category: "Sayuran", dataset_count: 48 },
-  { id: 11, name: "Pempek", slug: "pempek", region_origin: "Palembang, Sumatera Selatan", category: "Kudapan", dataset_count: 46 },
-  { id: 12, name: "Telur Balado", slug: "telur-balado", region_origin: "Minangkabau, Sumatera Barat", category: "Lauk Pendamping", dataset_count: 46 },
+  { id: 1, name: "Nasi Goreng", slug: "nasi-goreng", region_origin: "Nusantara", category: "Makanan Pokok", dataset_count: 50, unique_originals: 50, train_originals: 35, train_augmented: 0, train_count: 35, valid_count: 10, test_count: 5 },
+  { id: 2, name: "Bakso", slug: "bakso", region_origin: "Jawa Tengah / Jawa Timur", category: "Berkuah", dataset_count: 50, unique_originals: 50, train_originals: 35, train_augmented: 0, train_count: 35, valid_count: 10, test_count: 5 },
+  { id: 3, name: "Sate Ayam", slug: "sate-ayam", region_origin: "Madura, Jawa Timur", category: "Panggang", dataset_count: 50, unique_originals: 50, train_originals: 35, train_augmented: 0, train_count: 35, valid_count: 10, test_count: 5 },
+  { id: 4, name: "Rendang", slug: "rendang", region_origin: "Minangkabau, Sumatera Barat", category: "Lauk Utama", dataset_count: 50, unique_originals: 37, train_originals: 22, train_augmented: 13, train_count: 35, valid_count: 10, test_count: 5 },
+  { id: 5, name: "Soto Ayam", slug: "soto-ayam", region_origin: "Lamongan / Jawa", category: "Berkuah", dataset_count: 50, unique_originals: 50, train_originals: 35, train_augmented: 0, train_count: 35, valid_count: 10, test_count: 5 },
+  { id: 6, name: "Ayam Goreng", slug: "ayam-goreng", region_origin: "Nusantara", category: "Lauk Utama", dataset_count: 50, unique_originals: 50, train_originals: 35, train_augmented: 0, train_count: 35, valid_count: 10, test_count: 5 },
+  { id: 7, name: "Mie Goreng", slug: "mie-goreng", region_origin: "Jawa / Nusantara", category: "Makanan Pokok", dataset_count: 50, unique_originals: 31, train_originals: 16, train_augmented: 19, train_count: 35, valid_count: 10, test_count: 5 },
+  { id: 8, name: "Tempe Goreng", slug: "tempe-goreng", region_origin: "Jawa", category: "Lauk Pendamping", dataset_count: 50, unique_originals: 48, train_originals: 33, train_augmented: 2, train_count: 35, valid_count: 10, test_count: 5 },
+  { id: 9, name: "Tahu Goreng", slug: "tahu-goreng", region_origin: "Jawa", category: "Lauk Pendamping", dataset_count: 50, unique_originals: 35, train_originals: 20, train_augmented: 15, train_count: 35, valid_count: 10, test_count: 5 },
+  { id: 10, name: "Gado-Gado", slug: "gado-gado", region_origin: "Betawi, DKI Jakarta", category: "Sayuran", dataset_count: 50, unique_originals: 33, train_originals: 18, train_augmented: 17, train_count: 35, valid_count: 10, test_count: 5 },
+  { id: 11, name: "Pempek", slug: "pempek", region_origin: "Palembang, Sumatera Selatan", category: "Kudapan", dataset_count: 50, unique_originals: 39, train_originals: 24, train_augmented: 11, train_count: 35, valid_count: 10, test_count: 5 },
+  { id: 12, name: "Telur Balado", slug: "telur-balado", region_origin: "Minangkabau, Sumatera Barat", category: "Lauk Pendamping", dataset_count: 50, unique_originals: 21, train_originals: 6, train_augmented: 29, train_count: 35, valid_count: 10, test_count: 5 },
 ];
+
+const DATASET_TELEMETRY = {
+  total: 600,
+  unique_originals: 494,
+  split: {
+    train: 420,
+    train_originals: 314,
+    train_augmented: 106,
+    valid: 120,
+    test: 60,
+  },
+  hero_samples: 13,
+};
 
 const DEFAULT_COMPARISONS = [
   {
-    image_name: "nasi_goreng_spesial.png",
-    ground_truth_count: 4,
-    before_count: 3,
-    before_conf: 0.624,
-    he_count: 4,
-    he_conf: 0.758,
-    clahe_count: 4,
-    clahe_conf: 0.892,
-    cs_count: 4,
-    cs_conf: 0.821,
-    brightness_count: 3,
-    brightness_conf: 0.774,
+    image_name: "nasi_goreng_real.jpg",
+    ground_truth_count: 1,
+    before_count: 1,
+    before_conf: 0.696,
+    he_count: 1,
+    he_conf: 0.827,
+    clahe_count: 1,
+    clahe_conf: 0.931,
+    cs_count: 1,
+    cs_conf: 0.874,
+    brightness_count: 1,
+    brightness_conf: 0.846,
     best_method: "CLAHE",
-    conf_improvement_pct: 42.95,
-    psnr_db: 28.45,
+    conf_improvement_pct: 33.76,
+    psnr_db: 29.34,
   },
   {
-    image_name: "bakso_komplit.png",
-    ground_truth_count: 4,
-    before_count: 3,
-    before_conf: 0.641,
-    he_count: 4,
-    he_conf: 0.794,
-    clahe_count: 4,
-    clahe_conf: 0.884,
-    cs_count: 4,
-    cs_conf: 0.836,
-    brightness_count: 4,
-    brightness_conf: 0.768,
+    image_name: "bakso_real.jpg",
+    ground_truth_count: 1,
+    before_count: 1,
+    before_conf: 0.688,
+    he_count: 1,
+    he_conf: 0.818,
+    clahe_count: 1,
+    clahe_conf: 0.921,
+    cs_count: 1,
+    cs_conf: 0.865,
+    brightness_count: 1,
+    brightness_conf: 0.837,
     best_method: "CLAHE",
-    conf_improvement_pct: 37.91,
+    conf_improvement_pct: 33.87,
     psnr_db: 29.12,
   },
   {
-    image_name: "sate_ayam_madura.png",
-    ground_truth_count: 4,
-    before_count: 2,
-    before_conf: 0.592,
-    he_count: 3,
-    he_conf: 0.739,
-    clahe_count: 4,
-    clahe_conf: 0.869,
-    cs_count: 4,
-    cs_conf: 0.818,
-    brightness_count: 3,
-    brightness_conf: 0.752,
+    image_name: "sate_ayam_real.jpg",
+    ground_truth_count: 1,
+    before_count: 1,
+    before_conf: 0.681,
+    he_count: 1,
+    he_conf: 0.810,
+    clahe_count: 1,
+    clahe_conf: 0.911,
+    cs_count: 1,
+    cs_conf: 0.856,
+    brightness_count: 1,
+    brightness_conf: 0.828,
     best_method: "CLAHE",
-    conf_improvement_pct: 46.79,
-    psnr_db: 27.84,
+    conf_improvement_pct: 33.77,
+    psnr_db: 28.14,
   },
   {
-    image_name: "nasi_padang_rendang.png",
-    ground_truth_count: 5,
-    before_count: 4,
-    before_conf: 0.668,
-    he_count: 5,
-    he_conf: 0.788,
-    clahe_count: 5,
-    clahe_conf: 0.905,
-    cs_count: 5,
-    cs_conf: 0.847,
-    brightness_count: 4,
-    brightness_conf: 0.793,
+    image_name: "rendang_real.jpg",
+    ground_truth_count: 1,
+    before_count: 1,
+    before_conf: 0.703,
+    he_count: 1,
+    he_conf: 0.836,
+    clahe_count: 1,
+    clahe_conf: 0.941,
+    cs_count: 1,
+    cs_conf: 0.884,
+    brightness_count: 1,
+    brightness_conf: 0.855,
     best_method: "CLAHE",
-    conf_improvement_pct: 35.48,
+    conf_improvement_pct: 33.85,
     psnr_db: 30.11,
+  },
+  {
+    image_name: "prasmanan_kuliner_real.jpg",
+    ground_truth_count: 4,
+    before_count: 3,
+    before_conf: 0.662,
+    he_count: 4,
+    he_conf: 0.801,
+    clahe_count: 4,
+    clahe_conf: 0.906,
+    cs_count: 4,
+    cs_conf: 0.854,
+    brightness_count: 4,
+    brightness_conf: 0.822,
+    best_method: "CLAHE",
+    conf_improvement_pct: 36.86,
+    psnr_db: 29.48,
   },
 ];
 
@@ -393,24 +423,49 @@ function hashSeed(text) {
 }
 
 const SAMPLE_ID_ALIASES = {
-  nasgor_malam: "nasi_goreng_spesial",
-  sate_madura: "sate_ayam_madura",
-  padang_rendang: "nasi_padang_rendang",
-  gado_gado: "gado_gado_tahu_tempe",
+  nasi_goreng: "nasgor_malam",
+  nasi_goreng_real: "nasgor_malam",
+  nasi_goreng_spesial: "nasgor_malam",
+  bakso: "bakso_komplit",
+  bakso_real: "bakso_komplit",
+  bakso_komplit_pencahayaan_redup: "bakso_komplit",
+  sate_ayam: "sate_madura",
+  sate_ayam_real: "sate_madura",
+  sate_ayam_madura: "sate_madura",
+  rendang: "padang_rendang",
+  rendang_real: "padang_rendang",
+  nasi_padang_rendang: "padang_rendang",
+  soto_ayam_real: "soto_ayam",
+  ayam_goreng_real: "ayam_goreng",
+  mie_goreng_real: "mie_goreng",
+  tempe_goreng_real: "tempe_goreng",
+  tahu_goreng_real: "tahu_goreng",
+  gado_gado_real: "gado_gado",
+  gado_gado_tahu_tempe: "gado_gado",
+  pempek_real: "pempek",
+  telur_balado_real: "telur_balado",
+  prasmanan_kuliner_real: "prasmanan_kuliner",
+  prasmanan_nusantara: "prasmanan_kuliner",
 };
 
 function findCatalogSample(sampleId, filename) {
   const catalog = readJsonSafe(SAMPLE_CATALOG_PATH);
   if (!catalog || !Array.isArray(catalog.images)) return null;
-  const rawTarget = (sampleId || filename || "").toLowerCase().replace(/\.[a-z0-9]+$/i, "");
-  if (!rawTarget) return catalog.images[0] || null;
-  const target = SAMPLE_ID_ALIASES[rawTarget] || rawTarget;
+  const rawBase = path.basename(String(sampleId || filename || ""))
+    .toLowerCase()
+    .replace(/\.[a-z0-9]+$/i, "");
+  if (!rawBase) return catalog.images[0] || null;
+  const target = SAMPLE_ID_ALIASES[rawBase] || rawBase;
   return (
-    catalog.images.find(
-      (img) =>
-        img.id.toLowerCase() === target ||
-        img.filename.toLowerCase().replace(/\.[a-z0-9]+$/i, "") === target
-    ) || null
+    catalog.images.find((img) => {
+      const idLow = String(img.id || "").toLowerCase();
+      const slugLow = String(img.slug || "").toLowerCase();
+      const fileLow = String(img.filename || "").toLowerCase().replace(/\.[a-z0-9]+$/i, "");
+      const aliasHit =
+        Array.isArray(img.aliases) &&
+        img.aliases.some((a) => String(a).toLowerCase().replace(/\.[a-z0-9]+$/i, "") === rawBase || String(a).toLowerCase() === rawBase);
+      return idLow === target || slugLow === target || fileLow === target || aliasHit;
+    }) || null
   );
 }
 
@@ -503,7 +558,7 @@ function runSimulatedImageDetection(options) {
   let outsideCount = 0;
 
   rawItems.forEach((item, idx) => {
-    const baseConf = Number(item.confidence_gt || 0.88);
+    const baseConf = Number(item.confidence ?? item.confidence_gt ?? 0.88);
     let adjustedConf = Math.min(0.985, Math.max(0.2, baseConf * profile.confFactor));
 
     if (normMethod === "brightness" && params && params.brightness != null) {
@@ -511,12 +566,18 @@ function runSimulatedImageDetection(options) {
       adjustedConf = Math.min(0.97, Math.max(0.25, adjustedConf + bShift));
     }
 
-    // Simulate missed small/low-contrast object before enhancement in low-light scenes
+    // Simulate missed small/low-contrast object before enhancement in challenging lighting scenes
     if (
       profile.dropWeakest &&
       rawItems.length >= 3 &&
       idx === rawItems.length - 1 &&
-      (sample.lighting_condition === "low_light" || sample.lighting_condition === "uneven_shadow")
+      [
+        "low_light",
+        "uneven_shadow",
+        "uneven_table_light",
+        "dark_rich_spice",
+        "dark_sauce",
+      ].includes(sample.lighting_condition)
     ) {
       adjustedConf = Math.min(adjustedConf, Math.max(0.18, confThreshold - 0.03));
     }
@@ -590,6 +651,7 @@ function runSimulatedVideoDetection(options) {
     tracker = "bytetrack.yaml",
     confThreshold = 0.25,
     regionPoints = null,
+    frameIndex = null,
   } = options;
 
   const catalog = readJsonSafe(SAMPLE_CATALOG_PATH);
@@ -606,39 +668,39 @@ function runSimulatedVideoDetection(options) {
     videoSample = {
       id: "prasmanan_tracking_demo",
       filename: filename || "prasmanan_tracking_demo.avi",
-      width: 320,
-      height: 240,
+      width: 960,
+      height: 540,
       fps: 6,
       default_roi: [
-        [105, 35],
-        [225, 35],
-        [225, 205],
-        [105, 205],
+        [288, 54],
+        [691, 54],
+        [691, 486],
+        [288, 486],
       ],
-      frame_annotations: Array.from({ length: 8 }, (_, fIdx) => ({
+      frame_annotations: Array.from({ length: 16 }, (_, fIdx) => ({
         frame_index: fIdx,
-        detections: [
+        objects: [
           {
             track_id: 1,
             class_id: 0,
             class_name: "Nasi Goreng",
-            bbox_xyxy: [20 + fIdx * 24, 55, 95 + fIdx * 24, 115],
-            confidence: 0.89,
+            bbox_xyxy: [23 + fIdx * 47, 45, 227 + fIdx * 47, 191],
+            confidence: 0.91,
           },
           {
             track_id: 2,
             class_id: 1,
             class_name: "Bakso",
-            bbox_xyxy: [220 - fIdx * 18, 125, 290 - fIdx * 18, 185],
-            confidence: 0.87,
+            bbox_xyxy: [756 - fIdx * 46, 338, 914 - fIdx * 46, 496],
+            confidence: 0.89,
           },
         ],
       })),
     };
   }
 
-  const width = videoSample.width || 320;
-  const height = videoSample.height || 240;
+  const width = videoSample.width || 960;
+  const height = videoSample.height || 540;
   const fps = videoSample.fps || 6;
   const polygon = normalizePolygon(regionPoints || videoSample.default_roi, width, height);
   const profile = ENHANCEMENT_PROFILES[(enhancement || "none").toLowerCase()] || ENHANCEMENT_PROFILES.none;
@@ -658,7 +720,8 @@ function runSimulatedVideoDetection(options) {
     let inside = 0;
     let outside = 0;
 
-    for (const det of frame.detections || []) {
+    const frameItems = frame.objects || frame.detections || [];
+    for (const det of frameItems) {
       const conf = Math.min(0.98, Number((Number(det.confidence || 0.88) * profile.confFactor).toFixed(4)));
       if (conf < confThreshold) continue;
 
@@ -711,7 +774,11 @@ function runSimulatedVideoDetection(options) {
     });
   }
 
-  const lastFrame = frameSummaries[frameSummaries.length - 1] || {};
+  const parsedIdx = frameIndex !== null && frameIndex !== undefined ? Number(frameIndex) : NaN;
+  const safeIdx = Number.isFinite(parsedIdx)
+    ? Math.max(0, Math.min(frameSummaries.length - 1, Math.trunc(parsedIdx)))
+    : Math.max(0, frameSummaries.length - 1);
+  const selectedFrame = frameSummaries[safeIdx] || {};
   const avgConf = allConfs.length
     ? Number((allConfs.reduce((a, b) => a + b, 0) / allConfs.length).toFixed(4))
     : 0;
@@ -724,17 +791,25 @@ function runSimulatedVideoDetection(options) {
     mode,
     tracker: mode === "tracking" ? tracker : null,
     enhancement: (enhancement || "none").toLowerCase(),
-    video_info: { fps, width, height },
+    image_size: { width, height },
+    video_info: { fps, width, height, total_frames: frameSummaries.length },
     frames_processed: frameSummaries.length,
+    active_frame_index: safeIdx,
     inference_ms: Number((frameSummaries.length * 14.2).toFixed(2)),
-    total_detected: lastFrame.total_detected || 0,
+    total_detected: selectedFrame.total_detected || 0,
     unique_tracks_total: uniqueTracks.size,
-    inside_region_count: mode === "tracking" ? uniqueTracksInside.size : lastFrame.inside_region_count || 0,
-    outside_region_count: lastFrame.outside_region_count || 0,
+    inside_region_count:
+      Number.isFinite(parsedIdx)
+        ? selectedFrame.inside_region_count || 0
+        : mode === "tracking"
+          ? uniqueTracksInside.size
+          : selectedFrame.inside_region_count || 0,
+    outside_region_count: selectedFrame.outside_region_count || 0,
     avg_confidence: avgConf,
     class_counts: classCountsTotal,
     class_counts_in_region: classCountsInRegion,
     region_points: polygon,
+    detections: selectedFrame.detections || [],
     trails,
     frame_summaries: frameSummaries,
   };
@@ -1088,6 +1163,8 @@ async function handleRequest(req, res) {
         python_available: false,
         custom_model_present: modelExists,
         classes_count: DEFAULT_CLASSES.length,
+        hero_samples_count: DATASET_TELEMETRY.hero_samples,
+        dataset_summary: DATASET_TELEMETRY,
         timestamp: new Date().toISOString(),
       });
       return;
@@ -1103,6 +1180,7 @@ async function handleRequest(req, res) {
       sendJson(res, 200, {
         total_classes: classes.length,
         total_dataset_images: totalImages || 600,
+        dataset_stats: DATASET_TELEMETRY,
         classes,
       });
       return;
@@ -1115,6 +1193,16 @@ async function handleRequest(req, res) {
         return;
       }
       sendJson(res, 200, catalog);
+      return;
+    }
+
+    if (pathname === "/api/sessions" && req.method === "GET") {
+      const fallbackDb = readJsonSafe(FALLBACK_DB_PATH);
+      const sessions =
+        fallbackDb && Array.isArray(fallbackDb.detection_sessions)
+          ? fallbackDb.detection_sessions
+          : [];
+      sendJson(res, 200, { total: sessions.length, sessions });
       return;
     }
 
@@ -1135,7 +1223,10 @@ async function handleRequest(req, res) {
       return;
     }
 
-    if (pathname === "/api/detect/video" && req.method === "POST") {
+    if (
+      (pathname === "/api/detect/video" || pathname === "/api/detect/video/sample") &&
+      req.method === "POST"
+    ) {
       const { fields, files, json } = await parseRequestPayload(req);
       const data = Object.keys(json).length ? json : fields;
       const uploadedFile = files.file || null;
@@ -1147,12 +1238,16 @@ async function handleRequest(req, res) {
         tracker: data.tracker || "bytetrack.yaml",
         confThreshold: Number(data.conf ?? 0.25),
         regionPoints: parseJsonMaybe(data.region_points, null),
+        frameIndex: data.frame_index ?? null,
       });
       sendJson(res, 200, result);
       return;
     }
 
-    if (pathname === "/api/compare-enhancements" && req.method === "POST") {
+    if (
+      (pathname === "/api/compare-enhancements" || pathname === "/api/enhance/compare") &&
+      req.method === "POST"
+    ) {
       const { fields, files, json } = await parseRequestPayload(req);
       const data = Object.keys(json).length ? json : fields;
       const uploadedFile = files.file || null;
@@ -1218,8 +1313,14 @@ async function handleRequest(req, res) {
       return;
     }
 
-    if (pathname === "/api/export/excel" && (req.method === "GET" || req.method === "POST")) {
-      const format = (reqUrl.searchParams.get("format") || "xlsx").toLowerCase();
+    if (
+      (pathname === "/api/export/excel" || pathname === "/api/export/csv") &&
+      (req.method === "GET" || req.method === "POST")
+    ) {
+      const format =
+        pathname === "/api/export/csv"
+          ? "csv"
+          : (reqUrl.searchParams.get("format") || "xlsx").toLowerCase();
       let customRows = null;
       if (req.method === "POST") {
         const { json } = await parseRequestPayload(req);

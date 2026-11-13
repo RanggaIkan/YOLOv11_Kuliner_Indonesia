@@ -1,776 +1,346 @@
+#!/usr/bin/env node
+'use strict';
+
 /**
- * Zero-dependency Node.js v24 script to generate realistic Indonesian culinary
- * sample images (PNG), sample tracking videos (RIFF AVI + PNG frame sequences),
- * and ground-truth annotations in samples/sample_catalog.json.
+ * NusantaraVision YOLOv11 — Synchronized Sample & Demo Video Generator (Wave 2)
  *
- * Usage: node scripts/prepare_samples.mjs
+ * IMPORTANT:
+ * - Reads real culinary hero photos & verified bounding boxes from
+ *   samples/images/real_samples_manifest.json (NEVER overwrites samples/images/).
+ * - Composites two crisp 960x540 photorealistic demo videos (16 frames each +
+ *   MJPG .avi) using real plate crops via Windows .NET System.Drawing (or falls
+ *   back gracefully to raw Node frame compositing if PowerShell GDI+ is absent).
+ * - Writes samples/sample_catalog.json synced with frontend/app.js, server.js,
+ *   and backend/main.py contracts.
  */
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import zlib from 'node:zlib';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const ROOT_DIR = path.resolve(__dirname, '..');
-const IMAGES_DIR = path.join(ROOT_DIR, 'samples', 'images');
-const VIDEOS_DIR = path.join(ROOT_DIR, 'samples', 'videos');
-const FRAMES_DIR = path.join(VIDEOS_DIR, 'frames');
-const CATALOG_PATH = path.join(ROOT_DIR, 'samples', 'sample_catalog.json');
 
-export const CULINARY_CLASSES = [
-  { id: 0, name: 'Nasi Goreng', slug: 'nasi-goreng', color: '#E67E22', category: 'Makanan Pokok', region_origin: 'Nusantara' },
-  { id: 1, name: 'Bakso', slug: 'bakso', color: '#7F8C8D', category: 'Berkuah', region_origin: 'Jawa Tengah / Jawa Timur' },
-  { id: 2, name: 'Sate Ayam', slug: 'sate-ayam', color: '#D35400', category: 'Panggang', region_origin: 'Madura, Jawa Timur' },
-  { id: 3, name: 'Rendang', slug: 'rendang', color: '#6E2C00', category: 'Lauk Utama', region_origin: 'Minangkabau, Sumatera Barat' },
-  { id: 4, name: 'Soto Ayam', slug: 'soto-ayam', color: '#F1C40F', category: 'Berkuah', region_origin: 'Lamongan / Jawa' },
-  { id: 5, name: 'Ayam Goreng', slug: 'ayam-goreng', color: '#CA6F1E', category: 'Lauk Utama', region_origin: 'Nusantara' },
-  { id: 6, name: 'Mie Goreng', slug: 'mie-goreng', color: '#F39C12', category: 'Makanan Pokok', region_origin: 'Jawa / Nusantara' },
-  { id: 7, name: 'Tempe Goreng', slug: 'tempe-goreng', color: '#B7950B', category: 'Lauk Pendamping', region_origin: 'Jawa' },
-  { id: 8, name: 'Tahu Goreng', slug: 'tahu-goreng', color: '#F5B041', category: 'Lauk Pendamping', region_origin: 'Jawa' },
-  { id: 9, name: 'Gado-Gado', slug: 'gado-gado', color: '#27AE60', category: 'Sayuran', region_origin: 'Betawi, DKI Jakarta' },
-  { id: 10, name: 'Pempek', slug: 'pempek', color: '#D4AC0D', category: 'Kudapan', region_origin: 'Palembang, Sumatera Selatan' },
-  { id: 11, name: 'Telur Balado', slug: 'telur-balado', color: '#C0392B', category: 'Lauk Pendamping', region_origin: 'Minangkabau, Sumatera Barat' },
+const ROOT_DIR = path.resolve(__dirname, '..');
+const SAMPLES_DIR = path.join(ROOT_DIR, 'samples');
+const IMAGES_DIR = path.join(SAMPLES_DIR, 'images');
+const VIDEOS_DIR = path.join(SAMPLES_DIR, 'videos');
+const FRAMES_ROOT = path.join(VIDEOS_DIR, 'frames');
+const MANIFEST_PATH = path.join(IMAGES_DIR, 'real_samples_manifest.json');
+const CATALOG_PATH = path.join(SAMPLES_DIR, 'sample_catalog.json');
+
+const VIDEO_WIDTH = 960;
+const VIDEO_HEIGHT = 540;
+const VIDEO_FPS = 6;
+const VIDEO_FRAMES = 16;
+
+const CULINARY_CLASSES = [
+  { id: 0, name: 'Nasi Goreng', slug: 'nasi-goreng' },
+  { id: 1, name: 'Bakso', slug: 'bakso' },
+  { id: 2, name: 'Sate Ayam', slug: 'sate-ayam' },
+  { id: 3, name: 'Rendang', slug: 'rendang' },
+  { id: 4, name: 'Soto Ayam', slug: 'soto-ayam' },
+  { id: 5, name: 'Ayam Goreng', slug: 'ayam-goreng' },
+  { id: 6, name: 'Mie Goreng', slug: 'mie-goreng' },
+  { id: 7, name: 'Tempe Goreng', slug: 'tempe-goreng' },
+  { id: 8, name: 'Tahu Goreng', slug: 'tahu-goreng' },
+  { id: 9, name: 'Gado-Gado', slug: 'gado-gado' },
+  { id: 10, name: 'Pempek', slug: 'pempek' },
+  { id: 11, name: 'Telur Balado', slug: 'telur-balado' },
 ];
 
-const CLASS_BY_NAME = Object.fromEntries(CULINARY_CLASSES.map((c) => [c.name, c]));
+const HERO_METADATA_BY_SLUG = {
+  nasi_goreng: {
+    id: 'nasgor_malam',
+    aliases: ['nasi_goreng', 'nasi_goreng_real.jpg', 'nasi_goreng_spesial'],
+    title: 'Nasi Goreng Spesial — Pencahayaan Hangat',
+    description: 'Foto nyata sepiring Nasi Goreng lengkap dengan irisan telur, ayam panggang, cabai, dan paprika untuk pengujian Counting & CLAHE.',
+    lighting_condition: 'warm_saturated',
+    recommended_enhancement: 'clahe',
+    roi_norm: [0.06, 0.08, 0.84, 0.78],
+    confidence: 0.94,
+  },
+  bakso: {
+    id: 'bakso_komplit',
+    aliases: ['bakso', 'bakso_real.jpg', 'bakso_komplit_pencahayaan_redup'],
+    title: 'Bakso Sapi Komplit — Mangkuk Saji',
+    description: 'Foto nyata semangkuk Bakso urat dengan mie kuning, sawi hijau, dan kuah kaldu bening untuk Region Counter meja saji.',
+    lighting_condition: 'bright_table',
+    recommended_enhancement: 'clahe',
+    roi_norm: [0.22, 0.16, 0.56, 0.68],
+    confidence: 0.93,
+  },
+  sate_ayam: {
+    id: 'sate_madura',
+    aliases: ['sate_ayam', 'sate_ayam_real.jpg', 'sate_ayam_madura'],
+    title: 'Sate Ayam Madura — Bumbu Kacang',
+    description: 'Foto nyata tusukan Sate Ayam panggang dengan bumbu kacang, irisan bawang merah, dan acar ketimun.',
+    lighting_condition: 'indoor_warm',
+    recommended_enhancement: 'cs',
+    roi_norm: [0.16, 0.10, 0.68, 0.74],
+    confidence: 0.92,
+  },
+  rendang: {
+    id: 'padang_rendang',
+    aliases: ['rendang', 'rendang_real.jpg', 'nasi_padang_rendang'],
+    title: 'Rendang Daging Sapi Minang — Daun Pisang',
+    description: 'Foto nyata sajian Rendang daging sapi berbumbu gelap pekat di atas daun pisang — kasus uji ideal untuk CLAHE L-channel.',
+    lighting_condition: 'dark_rich_spice',
+    recommended_enhancement: 'clahe',
+    roi_norm: [0.15, 0.12, 0.70, 0.76],
+    confidence: 0.95,
+  },
+  soto_ayam: {
+    id: 'soto_ayam',
+    aliases: ['soto_ayam_real.jpg', 'pempek_soto_mie_goreng'],
+    title: 'Soto Ayam Kuah Kuning — Lamongan',
+    description: 'Foto nyata semangkuk Soto Ayam dengan suwiran ayam, telur rebus, tauge, jeruk nipis, dan bawang goreng.',
+    lighting_condition: 'high_gloss_broth',
+    recommended_enhancement: 'cs',
+    roi_norm: [0.20, 0.22, 0.62, 0.62],
+    confidence: 0.91,
+  },
+  ayam_goreng: {
+    id: 'ayam_goreng',
+    aliases: ['ayam_goreng_real.jpg'],
+    title: 'Ayam Goreng Kremes Nusantara',
+    description: 'Foto nyata potongan Ayam Goreng keemasan berbumbu ungkep rempah khas Indonesia.',
+    lighting_condition: 'golden_contrast',
+    recommended_enhancement: 'clahe',
+    roi_norm: [0.03, 0.16, 0.86, 0.78],
+    confidence: 0.93,
+  },
+  mie_goreng: {
+    id: 'mie_goreng',
+    aliases: ['mie_goreng_real.jpg'],
+    title: 'Mie Goreng Jawa Komplit',
+    description: 'Foto nyata sepiring Mie Goreng kecap lengkap dengan sayuran, tomat, dan irisan lauk.',
+    lighting_condition: 'warm_indoor',
+    recommended_enhancement: 'clahe',
+    roi_norm: [0.11, 0.11, 0.74, 0.75],
+    confidence: 0.91,
+  },
+  tempe_goreng: {
+    id: 'tempe_goreng',
+    aliases: ['tempe_goreng_real.jpg'],
+    title: 'Tempe Goreng Renyah — Warteg',
+    description: 'Foto nyata irisan Tempe Goreng keemasan untuk uji ketajaman tekstur kedelai dengan Brightness/Gamma & CLAHE.',
+    lighting_condition: 'indoor_ambient',
+    recommended_enhancement: 'brightness',
+    roi_norm: [0.15, 0.15, 0.72, 0.70],
+    confidence: 0.90,
+  },
+  tahu_goreng: {
+    id: 'tahu_goreng',
+    aliases: ['tahu_goreng_real.jpg'],
+    title: 'Tahu Goreng Crispy Nusantara',
+    description: 'Foto nyata potongan Tahu Goreng kecokelatan di atas piring saji.',
+    lighting_condition: 'bright_table',
+    recommended_enhancement: 'cs',
+    roi_norm: [0.09, 0.02, 0.84, 0.76],
+    confidence: 0.89,
+  },
+  gado_gado: {
+    id: 'gado_gado',
+    aliases: ['gado_gado_real.jpg', 'gado_gado_tahu_tempe'],
+    title: 'Gado-Gado Betawi — Bumbu Kacang',
+    description: 'Foto nyata sepiring Gado-Gado dengan lontong, sayuran rebus, kerupuk, dan siraman bumbu kacang.',
+    lighting_condition: 'balanced_daylight',
+    recommended_enhancement: 'cs',
+    roi_norm: [0.13, 0.10, 0.75, 0.82],
+    confidence: 0.92,
+  },
+  pempek: {
+    id: 'pempek',
+    aliases: ['pempek_real.jpg'],
+    title: 'Pempek Palembang — Kuah Cuko Hitam',
+    description: 'Foto nyata sajian Pempek dengan irisan mentimun, mie, dan kuah cuko gelap yang menantang tanpa kontras lokal.',
+    lighting_condition: 'dark_sauce',
+    recommended_enhancement: 'clahe',
+    roi_norm: [0.14, 0.27, 0.71, 0.62],
+    confidence: 0.91,
+  },
+  telur_balado: {
+    id: 'telur_balado',
+    aliases: ['telur_balado_real.jpg'],
+    title: 'Telur Balado Padang — Sambal Merah',
+    description: 'Foto nyata Telur Balado berlumur sambal cabai merah khas rumah makan Padang.',
+    lighting_condition: 'spicy_red_cast',
+    recommended_enhancement: 'clahe',
+    roi_norm: [0.07, 0.11, 0.81, 0.78],
+    confidence: 0.92,
+  },
+  prasmanan_kuliner: {
+    id: 'prasmanan_kuliner',
+    aliases: ['prasmanan_kuliner_real.jpg', 'prasmanan_nusantara'],
+    title: 'Prasmanan Nasi Padang — Multi-Lauk (Inside & Outside ROI)',
+    description: 'Foto nyata meja prasmanan Rumah Makan Padang dengan piring lauk beragam untuk demonstrasi Counting & Region Counter (Object Region #1).',
+    lighting_condition: 'uneven_table_light',
+    recommended_enhancement: 'clahe',
+    roi_norm: [0.22, 0.34, 0.42, 0.40],
+    confidence: 0.91,
+    multi_plates: [
+      { class_id: 5, class_name: 'Ayam Goreng', bbox_xyxy: [102, 360, 314, 526], confidence: 0.91 },
+      { class_id: 5, class_name: 'Ayam Goreng', bbox_xyxy: [286, 418, 504, 580], confidence: 0.92 },
+      { class_id: 3, class_name: 'Rendang', bbox_xyxy: [508, 366, 706, 534], confidence: 0.93 },
+      { class_id: 11, class_name: 'Telur Balado', bbox_xyxy: [6, 570, 240, 770], confidence: 0.89 },
+    ],
+  },
+};
 
-// Deterministic PRNG (Mulberry32)
-function createRng(seed) {
-  let state = seed >>> 0;
-  return function rng() {
-    state = (state + 0x6D2B79F5) >>> 0;
-    let t = Math.imul(state ^ (state >>> 15), 1 | state);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
+const VIDEO_SCENES = [
+  {
+    id: 'prasmanan_tracking_demo',
+    filename: 'prasmanan_tracking_demo.avi',
+    title: 'Video Simulasi #1 — Meja Prasmanan & Tracking Lintas ROI (960x540)',
+    description: 'Simulasi photorealistic 16 frame (960x540 @ 6 FPS) dengan potongan piring nyata Nasi Goreng, Bakso, dan Rendang melintasi Object Region #1.',
+    theme: 'wood_buffet',
+    default_roi_norm: [0.30, 0.10, 0.42, 0.80],
+    tracks: [
+      {
+        track_id: 1,
+        class_id: 0,
+        class_name: 'Nasi Goreng',
+        sourceFile: 'nasi_goreng_real.jpg',
+        srcCrop: [110, 95, 980, 730],
+        drawW: 204,
+        drawH: 146,
+        xStart: 125,
+        xEnd: 830,
+        yBase: 112,
+        yAmp: 10,
+      },
+      {
+        track_id: 2,
+        class_id: 1,
+        class_name: 'Bakso',
+        sourceFile: 'bakso_real.jpg',
+        srcCrop: [255, 85, 780, 780],
+        drawW: 158,
+        drawH: 158,
+        xStart: 835,
+        xEnd: 135,
+        yBase: 422,
+        yAmp: -10,
+      },
+      {
+        track_id: 3,
+        class_id: 3,
+        class_name: 'Rendang',
+        sourceFile: 'rendang_real.jpg',
+        srcCrop: [170, 75, 945, 705],
+        drawW: 212,
+        drawH: 148,
+        xStart: 185,
+        xEnd: 745,
+        yStart: 270,
+        yEnd: 270,
+        yAmp: 8,
+      },
+    ],
+  },
+  {
+    id: 'antrean_kantin_demo',
+    filename: 'antrean_kantin_demo.avi',
+    title: 'Video Simulasi #2 — Antrean Kasir Kantin Masuk ROI (960x540)',
+    description: 'Simulasi photorealistic 16 frame (960x540 @ 6 FPS) nampan Sate Ayam, Gado-Gado, dan Telur Balado bergerak masuk ke zona kasir (Object Region #1).',
+    theme: 'stone_kasir',
+    default_roi_norm: [0.47, 0.08, 0.44, 0.84],
+    tracks: [
+      {
+        track_id: 1,
+        class_id: 2,
+        class_name: 'Sate Ayam',
+        sourceFile: 'sate_ayam_real.jpg',
+        srcCrop: [170, 85, 815, 625],
+        drawW: 198,
+        drawH: 144,
+        xStart: 125,
+        xEnd: 680,
+        yBase: 116,
+        yAmp: 8,
+      },
+      {
+        track_id: 2,
+        class_id: 9,
+        class_name: 'Gado-Gado',
+        sourceFile: 'gado_gado_real.jpg',
+        srcCrop: [140, 50, 790, 540],
+        drawW: 196,
+        drawH: 144,
+        xStart: 165,
+        xEnd: 735,
+        yBase: 426,
+        yAmp: -8,
+      },
+      {
+        track_id: 3,
+        class_id: 11,
+        class_name: 'Telur Balado',
+        sourceFile: 'telur_balado_real.jpg',
+        srcCrop: [95, 110, 1020, 745],
+        drawW: 184,
+        drawH: 142,
+        xStart: 280,
+        xEnd: 635,
+        yStart: 272,
+        yEnd: 272,
+        yAmp: 10,
+      },
+    ],
+  },
+];
+
+function round4(n) {
+  return Number(n.toFixed(4));
 }
 
-// CRC32 table for PNG encoding
-const CRC_TABLE = (() => {
-  const table = new Uint32Array(256);
-  for (let n = 0; n < 256; n++) {
-    let c = n;
-    for (let k = 0; k < 8; k++) {
-      c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-    }
-    table[n] = c >>> 0;
-  }
-  return table;
-})();
-
-function crc32(buf) {
-  let c = 0xFFFFFFFF;
-  for (let i = 0; i < buf.length; i++) {
-    c = CRC_TABLE[(c ^ buf[i]) & 0xFF] ^ (c >>> 8);
-  }
-  return (c ^ 0xFFFFFFFF) >>> 0;
+function round6(n) {
+  return Number(n.toFixed(6));
 }
 
-function pngChunk(type, data) {
-  const typeBuf = Buffer.from(type, 'ascii');
-  const lenBuf = Buffer.alloc(4);
-  lenBuf.writeUInt32BE(data.length, 0);
-  const crcInput = Buffer.concat([typeBuf, data]);
-  const crcBuf = Buffer.alloc(4);
-  crcBuf.writeUInt32BE(crc32(crcInput), 0);
-  return Buffer.concat([lenBuf, typeBuf, data, crcBuf]);
-}
-
-function encodePNG(width, height, rgba) {
-  const signature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
-  const ihdr = Buffer.alloc(13);
-  ihdr.writeUInt32BE(width, 0);
-  ihdr.writeUInt32BE(height, 4);
-  ihdr[8] = 8;  // bit depth
-  ihdr[9] = 6;  // color type RGBA
-  ihdr[10] = 0; // compression
-  ihdr[11] = 0; // filter
-  ihdr[12] = 0; // interlace
-
-  const stride = width * 4;
-  const raw = Buffer.alloc((stride + 1) * height);
-  for (let y = 0; y < height; y++) {
-    const rowStart = y * (stride + 1);
-    raw[rowStart] = 0; // filter type 0 (None)
-    Buffer.from(rgba.buffer, rgba.byteOffset + y * stride, stride).copy(raw, rowStart + 1);
-  }
-  const idatData = zlib.deflateSync(raw, { level: 6 });
-
-  return Buffer.concat([
-    signature,
-    pngChunk('IHDR', ihdr),
-    pngChunk('IDAT', idatData),
-    pngChunk('IEND', Buffer.alloc(0)),
-  ]);
-}
-
-/**
- * Pure JS 2D rasterizer for drawing realistic culinary illustrations.
- */
-class RasterCanvas {
-  constructor(width, height) {
-    this.width = width;
-    this.height = height;
-    this.data = new Uint8Array(width * height * 4);
-    this.fillSolid(36, 26, 20, 255);
-  }
-
-  fillSolid(r, g, b, a = 255) {
-    for (let i = 0; i < this.data.length; i += 4) {
-      this.data[i] = r;
-      this.data[i + 1] = g;
-      this.data[i + 2] = b;
-      this.data[i + 3] = a;
-    }
-  }
-
-  blendPixel(x, y, r, g, b, alpha) {
-    if (x < 0 || x >= this.width || y < 0 || y >= this.height || alpha <= 0) return;
-    const idx = (y * this.width + x) * 4;
-    const a = Math.min(1, Math.max(0, alpha));
-    const inv = 1 - a;
-    this.data[idx] = Math.round(this.data[idx] * inv + r * a);
-    this.data[idx + 1] = Math.round(this.data[idx + 1] * inv + g * a);
-    this.data[idx + 2] = Math.round(this.data[idx + 2] * inv + b * a);
-    this.data[idx + 3] = 255;
-  }
-
-  drawWoodenTable(seed = 101, lighting = 'normal') {
-    const rng = createRng(seed);
-    const base = [110, 74, 46];
-    for (let y = 0; y < this.height; y++) {
-      const plankBand = Math.floor(y / 64);
-      const plankOffset = ((plankBand % 3) - 1) * 7;
-      const seam = (y % 64) < 2 ? -24 : 0;
-      for (let x = 0; x < this.width; x++) {
-        const grain = Math.sin(x * 0.03 + y * 0.14 + plankBand * 2.1) * 8 +
-          Math.sin(x * 0.09 - plankBand) * 4 +
-          (rng() - 0.5) * 6;
-        const r = Math.max(15, Math.min(235, base[0] + plankOffset + seam + grain));
-        const g = Math.max(12, Math.min(220, base[1] + plankOffset * 0.7 + seam + grain * 0.75));
-        const b = Math.max(10, Math.min(200, base[2] + plankOffset * 0.5 + seam + grain * 0.5));
-        const idx = (y * this.width + x) * 4;
-        this.data[idx] = r;
-        this.data[idx + 1] = g;
-        this.data[idx + 2] = b;
-        this.data[idx + 3] = 255;
-      }
-    }
-    this.applyTableclothStrip(lighting);
-  }
-
-  applyTableclothStrip(lighting) {
-    // Subtle woven bamboo mat (tikar/alas makan) in center
-    const x0 = Math.round(this.width * 0.06);
-    const x1 = Math.round(this.width * 0.94);
-    const y0 = Math.round(this.height * 0.08);
-    const y1 = Math.round(this.height * 0.92);
-    for (let y = y0; y < y1; y++) {
-      for (let x = x0; x < x1; x++) {
-        const weave = ((Math.floor(x / 6) + Math.floor(y / 6)) % 2 === 0) ? 10 : -8;
-        this.blendPixel(x, y, 168 + weave, 136 + weave, 92 + weave, 0.36);
-      }
-    }
-    if (lighting === 'low_light') {
-      this.adjustTone(0.62, -18, 1.15);
-    } else if (lighting === 'uneven_shadow') {
-      this.applyDirectionalShadow();
-    } else if (lighting === 'hazy_fluorescent') {
-      this.adjustTone(0.78, 22, 1.0);
-    }
-  }
-
-  applyDirectionalShadow() {
-    for (let y = 0; y < this.height; y++) {
-      for (let x = 0; x < this.width; x++) {
-        const t = (x / this.width) * 0.55 + (y / this.height) * 0.45;
-        const factor = 0.58 + 0.42 * (1 - t);
-        const idx = (y * this.width + x) * 4;
-        this.data[idx] = Math.round(this.data[idx] * factor);
-        this.data[idx + 1] = Math.round(this.data[idx + 1] * factor);
-        this.data[idx + 2] = Math.round(this.data[idx + 2] * factor);
-      }
-    }
-  }
-
-  adjustTone(alpha, beta, gamma = 1.0) {
-    for (let i = 0; i < this.data.length; i += 4) {
-      for (let c = 0; c < 3; c++) {
-        let v = this.data[i + c] * alpha + beta;
-        v = Math.max(0, Math.min(255, v));
-        if (gamma !== 1.0) {
-          v = 255 * Math.pow(v / 255, gamma);
-        }
-        this.data[i + c] = Math.round(Math.max(0, Math.min(255, v)));
-      }
-    }
-  }
-
-  fillEllipse(cx, cy, rx, ry, color, alpha = 1.0, shaded = false) {
-    const x0 = Math.max(0, Math.floor(cx - rx - 1));
-    const x1 = Math.min(this.width - 1, Math.ceil(cx + rx + 1));
-    const y0 = Math.max(0, Math.floor(cy - ry - 1));
-    const y1 = Math.min(this.height - 1, Math.ceil(cy + ry + 1));
-    for (let y = y0; y <= y1; y++) {
-      const dy = (y - cy) / ry;
-      for (let x = x0; x <= x1; x++) {
-        const dx = (x - cx) / rx;
-        const d2 = dx * dx + dy * dy;
-        if (d2 <= 1.0) {
-          const edgeAlpha = d2 > 0.88 ? (1 - d2) / 0.12 : 1.0;
-          let [r, g, b] = color;
-          if (shaded) {
-            const light = 1.08 - 0.25 * (dx * 0.4 + dy * 0.6 + 0.3);
-            r = Math.min(255, Math.max(0, r * light));
-            g = Math.min(255, Math.max(0, g * light));
-            b = Math.min(255, Math.max(0, b * light));
-          }
-          this.blendPixel(x, y, r, g, b, alpha * edgeAlpha);
-        }
-      }
-    }
-  }
-
-  fillRoundRect(x, y, w, h, radius, color, alpha = 1.0, angleRad = 0) {
-    const cx = x + w / 2;
-    const cy = y + h / 2;
-    const hw = w / 2;
-    const hh = h / 2;
-    const cos = Math.cos(-angleRad);
-    const sin = Math.sin(-angleRad);
-    const bound = Math.ceil(Math.hypot(hw, hh) + 2);
-    const x0 = Math.max(0, Math.floor(cx - bound));
-    const x1 = Math.min(this.width - 1, Math.ceil(cx + bound));
-    const y0 = Math.max(0, Math.floor(cy - bound));
-    const y1 = Math.min(this.height - 1, Math.ceil(cy + bound));
-
-    for (let py = y0; py <= y1; py++) {
-      for (let px = x0; px <= x1; px++) {
-        const tx = px - cx;
-        const ty = py - cy;
-        const lx = Math.abs(tx * cos - ty * sin);
-        const ly = Math.abs(tx * sin + ty * cos);
-        const qx = Math.max(0, lx - (hw - radius));
-        const qy = Math.max(0, ly - (hh - radius));
-        const dist = Math.hypot(qx, qy);
-        if (dist <= radius) {
-          const edge = dist > radius - 1.2 ? Math.max(0, (radius - dist) / 1.2) : 1.0;
-          this.blendPixel(px, py, color[0], color[1], color[2], alpha * edge);
-        }
-      }
-    }
-  }
-
-  drawLine(x1, y1, x2, y2, thickness, color, alpha = 1.0) {
-    const steps = Math.max(1, Math.ceil(Math.hypot(x2 - x1, y2 - y1) * 1.5));
-    const r = Math.max(1, thickness / 2);
-    for (let i = 0; i <= steps; i++) {
-      const t = i / steps;
-      const cx = x1 + (x2 - x1) * t;
-      const cy = y1 + (y2 - y1) * t;
-      this.fillEllipse(cx, cy, r, r, color, alpha, false);
-    }
-  }
-
-  drawCeramicPlate(cx, cy, rx, ry, rimColor = [238, 234, 224], innerColor = [248, 246, 240]) {
-    this.fillEllipse(cx + 6, cy + 8, rx * 1.03, ry * 1.03, [20, 14, 10], 0.35);
-    this.fillEllipse(cx, cy, rx, ry, rimColor, 1.0, true);
-    this.fillEllipse(cx, cy, rx * 0.88, ry * 0.88, [212, 206, 195], 0.6);
-    this.fillEllipse(cx, cy, rx * 0.83, ry * 0.83, innerColor, 1.0, true);
-  }
-
-  drawBananaLeaf(cx, cy, rx, ry, angle = 0) {
-    // Classic Indonesian daun pisang base
-    const cos = Math.cos(angle);
-    const sin = Math.sin(angle);
-    const x0 = Math.max(0, Math.floor(cx - rx - 10));
-    const x1 = Math.min(this.width - 1, Math.ceil(cx + rx + 10));
-    const y0 = Math.max(0, Math.floor(cy - ry - 10));
-    const y1 = Math.min(this.height - 1, Math.ceil(cy + ry + 10));
-    for (let y = y0; y <= y1; y++) {
-      for (let x = x0; x <= x1; x++) {
-        const dx = (x - cx) * cos + (y - cy) * sin;
-        const dy = -(x - cx) * sin + (y - cy) * cos;
-        const norm = (dx / rx) ** 2 + (dy / ry) ** 2;
-        if (norm <= 1.0) {
-          const rib = Math.abs(dy) < 2.2 ? 25 : Math.sin(dx * 0.25) * 6;
-          this.blendPixel(x, y, 52 + rib, 126 + rib, 48 + rib * 0.4, 0.96);
-        }
-      }
-    }
-  }
-}
-
-// Specific Indonesian dish painters returning bounding box [x1, y1, x2, y2]
-function paintNasiGoreng(canvas, cx, cy, scale = 1.0, seed = 1) {
-  const rng = createRng(seed);
-  const rx = 74 * scale;
-  const ry = 56 * scale;
-  canvas.fillEllipse(cx, cy + 4 * scale, rx, ry, [186, 118, 52], 0.96, true);
-  for (let i = 0; i < Math.round(280 * scale); i++) {
-    const a = rng() * Math.PI * 2;
-    const rad = Math.sqrt(rng());
-    const gx = cx + Math.cos(a) * rx * 0.88 * rad;
-    const gy = cy + Math.sin(a) * ry * 0.85 * rad;
-    const tone = rng();
-    const col = tone < 0.2 ? [142, 62, 24] : tone < 0.45 ? [216, 148, 72] : tone < 0.85 ? [196, 124, 54] : [68, 138, 48];
-    canvas.fillEllipse(gx, gy, 3.8 * scale, 2.3 * scale, col, 0.9);
-  }
-  // Kerupuk & timun garnish
-  canvas.fillEllipse(cx - 42 * scale, cy - 16 * scale, 16 * scale, 12 * scale, [238, 224, 196], 0.95, true);
-  canvas.fillEllipse(cx + 42 * scale, cy + 16 * scale, 12 * scale, 9 * scale, [94, 178, 72], 0.95, true);
-  canvas.fillEllipse(cx + 42 * scale, cy + 16 * scale, 8 * scale, 6 * scale, [164, 214, 126], 0.9);
-  return clampBox(canvas, cx - rx, cy - ry, cx + rx, cy + ry);
-}
-
-function paintBakso(canvas, cx, cy, scale = 1.0, seed = 2) {
-  const rng = createRng(seed);
-  const r = 68 * scale;
-  // Ceramic bowl + warm broth
-  canvas.fillEllipse(cx + 4, cy + 5, r * 1.05, r * 0.95, [20, 14, 10], 0.35);
-  canvas.fillEllipse(cx, cy, r, r * 0.9, [232, 232, 228], 1.0, true);
-  canvas.fillEllipse(cx, cy, r * 0.88, r * 0.78, [196, 164, 96], 0.96, true);
-  // Noodles & greens
-  for (let i = 0; i < 18; i++) {
-    const ox = (rng() - 0.5) * r * 0.9;
-    const oy = (rng() - 0.5) * r * 0.7;
-    canvas.drawLine(cx + ox - 12 * scale, cy + oy, cx + ox + 14 * scale, cy + oy + (rng() - 0.5) * 14 * scale, 2.5 * scale, [242, 212, 118], 0.85);
-  }
-  // 5 meatballs
-  const balls = [[-22, -12, 17], [16, -15, 16], [-4, 8, 19], [24, 10, 15], [-26, 14, 14]];
-  for (const [bx, by, br] of balls) {
-    canvas.fillEllipse(cx + bx * scale + 2, cy + by * scale + 3, br * scale, br * scale * 0.92, [82, 66, 52], 0.4);
-    canvas.fillEllipse(cx + bx * scale, cy + by * scale, br * scale, br * scale * 0.92, [148, 134, 122], 1.0, true);
-  }
-  // Daun bawang
-  for (let i = 0; i < 20; i++) {
-    canvas.fillEllipse(cx + (rng() - 0.5) * r * 0.9, cy + (rng() - 0.5) * r * 0.7, 3 * scale, 2 * scale, [54, 156, 58], 0.9);
-  }
-  return clampBox(canvas, cx - r * 0.9, cy - r * 0.82, cx + r * 0.9, cy + r * 0.82);
-}
-
-function paintSateAyam(canvas, cx, cy, scale = 1.0, seed = 3) {
-  const rng = createRng(seed);
-  // Peanut sauce pool
-  canvas.fillEllipse(cx + 8 * scale, cy + 12 * scale, 62 * scale, 38 * scale, [138, 86, 36], 0.92, true);
-  // 5 sate skewers angled
-  for (let s = -2; s <= 2; s++) {
-    const oy = s * 13 * scale;
-    const ox = s * 6 * scale;
-    canvas.drawLine(cx - 64 * scale + ox, cy + oy - 18 * scale, cx + 64 * scale + ox, cy + oy + 12 * scale, 2.5 * scale, [214, 186, 134], 0.95);
-    for (let m = -2; m <= 1; m++) {
-      const mx = cx + ox + m * 19 * scale;
-      const my = cy + oy + m * 4.5 * scale;
-      const shade = rng() > 0.4 ? [156, 86, 34] : [92, 46, 18];
-      canvas.fillEllipse(mx, my, 10 * scale, 7.5 * scale, shade, 0.98, true);
-    }
-  }
-  // Kecap drizzle
-  for (let i = 0; i < 6; i++) {
-    canvas.drawLine(cx - 25 * scale + i * 10 * scale, cy - 10 * scale, cx - 10 * scale + i * 9 * scale, cy + 20 * scale, 2 * scale, [46, 24, 12], 0.7);
-  }
-  return clampBox(canvas, cx - 72 * scale, cy - 48 * scale, cx + 72 * scale, cy + 48 * scale);
-}
-
-function paintRendang(canvas, cx, cy, scale = 1.0, seed = 4) {
-  const rng = createRng(seed);
-  canvas.fillEllipse(cx, cy + 4 * scale, 52 * scale, 38 * scale, [94, 42, 16], 0.92, true);
-  const chunks = [[-16, -8, 22, 17], [14, -6, 20, 16], [-4, 12, 24, 18], [20, 12, 16, 13]];
-  for (const [dx, dy, rx, ry] of chunks) {
-    canvas.fillEllipse(cx + dx * scale, cy + dy * scale, rx * scale, ry * scale, [76, 32, 12], 1.0, true);
-    for (let k = 0; k < 10; k++) {
-      canvas.fillEllipse(
-        cx + dx * scale + (rng() - 0.5) * rx * scale,
-        cy + dy * scale + (rng() - 0.5) * ry * scale,
-        3 * scale,
-        2 * scale,
-        [136, 68, 26],
-        0.75
-      );
-    }
-  }
-  return clampBox(canvas, cx - 54 * scale, cy - 38 * scale, cx + 54 * scale, cy + 40 * scale);
-}
-
-function paintSotoAyam(canvas, cx, cy, scale = 1.0, seed = 5) {
-  const rng = createRng(seed);
-  const r = 64 * scale;
-  canvas.fillEllipse(cx, cy, r, r * 0.88, [238, 238, 234], 1.0, true);
-  canvas.fillEllipse(cx, cy, r * 0.86, r * 0.75, [226, 188, 52], 0.96, true);
-  // Shredded chicken, egg half, lime, greens
-  for (let i = 0; i < 16; i++) {
-    canvas.fillRoundRect(
-      cx + (rng() - 0.5) * r * 0.7,
-      cy + (rng() - 0.5) * r * 0.6,
-      14 * scale, 5 * scale, 2 * scale, [242, 222, 174], 0.9, rng() * 3.14
-    );
-  }
-  canvas.fillEllipse(cx - 18 * scale, cy - 8 * scale, 14 * scale, 11 * scale, [250, 248, 238], 0.98, true);
-  canvas.fillEllipse(cx - 18 * scale, cy - 8 * scale, 7 * scale, 6 * scale, [242, 172, 28], 0.98);
-  canvas.fillEllipse(cx + 22 * scale, cy + 12 * scale, 11 * scale, 9 * scale, [76, 168, 54], 0.95);
-  return clampBox(canvas, cx - r * 0.88, cy - r * 0.78, cx + r * 0.88, cy + r * 0.78);
-}
-
-function paintAyamGoreng(canvas, cx, cy, scale = 1.0) {
-  // Golden-brown fried chicken drumstick/thigh + kremesan
-  canvas.fillEllipse(cx + 4, cy + 5, 48 * scale, 32 * scale, [28, 18, 10], 0.3);
-  canvas.fillRoundRect(cx - 44 * scale, cy - 10 * scale, 48 * scale, 16 * scale, 7 * scale, [228, 198, 148], 0.95, -0.25);
-  canvas.fillEllipse(cx + 8 * scale, cy - 2 * scale, 34 * scale, 24 * scale, [192, 112, 34], 1.0, true);
-  canvas.fillEllipse(cx + 12 * scale, cy - 5 * scale, 22 * scale, 15 * scale, [218, 142, 48], 0.85, true);
-  return clampBox(canvas, cx - 48 * scale, cy - 30 * scale, cx + 46 * scale, cy + 28 * scale);
-}
-
-function paintMieGoreng(canvas, cx, cy, scale = 1.0, seed = 7) {
-  const rng = createRng(seed);
-  const rx = 68 * scale;
-  const ry = 48 * scale;
-  canvas.fillEllipse(cx, cy, rx, ry, [198, 134, 48], 0.9, true);
-  for (let i = 0; i < Math.round(90 * scale); i++) {
-    const a = rng() * Math.PI * 2;
-    const rad = Math.sqrt(rng()) * 0.82;
-    const x1 = cx + Math.cos(a) * rx * rad;
-    const y1 = cy + Math.sin(a) * ry * rad;
-    const x2 = x1 + (rng() - 0.5) * 28 * scale;
-    const y2 = y1 + (rng() - 0.5) * 20 * scale;
-    const col = rng() > 0.35 ? [232, 168, 56] : [168, 96, 32];
-    canvas.drawLine(x1, y1, x2, y2, 3.2 * scale, col, 0.92);
-  }
-  // Pakcoy greens & bakso slices
-  canvas.fillEllipse(cx - 24 * scale, cy + 12 * scale, 12 * scale, 8 * scale, [64, 152, 56], 0.95);
-  canvas.fillEllipse(cx + 22 * scale, cy - 10 * scale, 10 * scale, 8 * scale, [156, 138, 126], 0.95);
-  return clampBox(canvas, cx - rx, cy - ry, cx + rx, cy + ry);
-}
-
-function paintTempeGoreng(canvas, cx, cy, scale = 1.0, seed = 8) {
-  const rng = createRng(seed);
-  const pieces = [[-16, -8, -0.25], [14, 6, 0.2]];
-  for (const [dx, dy, ang] of pieces) {
-    canvas.fillRoundRect(cx + dx * scale - 24 * scale, cy + dy * scale - 14 * scale, 48 * scale, 28 * scale, 4 * scale, [188, 128, 42], 1.0, ang);
-    for (let i = 0; i < 16; i++) {
-      canvas.fillEllipse(
-        cx + dx * scale + (rng() - 0.5) * 34 * scale,
-        cy + dy * scale + (rng() - 0.5) * 18 * scale,
-        3.2 * scale, 2.2 * scale, [238, 212, 148], 0.85
-      );
-    }
-  }
-  return clampBox(canvas, cx - 44 * scale, cy - 30 * scale, cx + 44 * scale, cy + 30 * scale);
-}
-
-function paintTahuGoreng(canvas, cx, cy, scale = 1.0) {
-  const pieces = [[-15, -7, 0.15], [15, 7, -0.18]];
-  for (const [dx, dy, ang] of pieces) {
-    canvas.fillRoundRect(cx + dx * scale - 19 * scale, cy + dy * scale - 16 * scale, 38 * scale, 32 * scale, 5 * scale, [224, 158, 54], 1.0, ang);
-    canvas.fillRoundRect(cx + dx * scale - 14 * scale, cy + dy * scale - 11 * scale, 28 * scale, 22 * scale, 4 * scale, [246, 204, 118], 0.85, ang);
-  }
-  return clampBox(canvas, cx - 40 * scale, cy - 30 * scale, cx + 40 * scale, cy + 30 * scale);
-}
-
-function paintGadoGado(canvas, cx, cy, scale = 1.0, seed = 10) {
-  const rng = createRng(seed);
-  const rx = 74 * scale;
-  const ry = 56 * scale;
-  // Fresh greens & bean sprouts bed
-  canvas.fillEllipse(cx, cy, rx, ry, [62, 146, 56], 0.96, true);
-  for (let i = 0; i < 24; i++) {
-    const px = cx + (rng() - 0.5) * rx * 1.2;
-    const py = cy + (rng() - 0.5) * ry * 1.1;
-    const col = i % 3 === 0 ? [242, 236, 198] : i % 3 === 1 ? [88, 174, 68] : [224, 168, 72];
-    canvas.fillEllipse(px, py, 12 * scale, 8 * scale, col, 0.9);
-  }
-  // Peanut sauce center pool + kerupuk udang
-  canvas.fillEllipse(cx, cy + 4 * scale, 40 * scale, 28 * scale, [158, 96, 42], 0.95, true);
-  canvas.fillEllipse(cx - 34 * scale, cy - 18 * scale, 18 * scale, 13 * scale, [242, 182, 162], 0.95, true);
-  return clampBox(canvas, cx - rx, cy - ry, cx + rx, cy + ry);
-}
-
-function paintPempek(canvas, cx, cy, scale = 1.0) {
-  // Cuko dark bowl + pempek kapal selam & lenjer
-  canvas.fillEllipse(cx + 32 * scale, cy + 12 * scale, 20 * scale, 16 * scale, [42, 22, 12], 0.98, true);
-  canvas.fillEllipse(cx - 12 * scale, cy - 6 * scale, 32 * scale, 20 * scale, [228, 194, 126], 1.0, true);
-  canvas.fillRoundRect(cx - 38 * scale, cy + 12 * scale, 48 * scale, 18 * scale, 8 * scale, [218, 182, 112], 1.0, -0.1);
-  // Timun dice
-  canvas.fillEllipse(cx + 12 * scale, cy + 20 * scale, 6 * scale, 5 * scale, [94, 184, 72], 0.95);
-  return clampBox(canvas, cx - 48 * scale, cy - 30 * scale, cx + 54 * scale, cy + 34 * scale);
-}
-
-function paintTelurBalado(canvas, cx, cy, scale = 1.0) {
-  // Spicy red balado chili coating around boiled egg
-  canvas.fillEllipse(cx, cy + 4 * scale, 34 * scale, 26 * scale, [186, 36, 24], 0.94, true);
-  canvas.fillEllipse(cx, cy, 24 * scale, 18 * scale, [214, 58, 36], 0.98, true);
-  canvas.fillEllipse(cx - 4 * scale, cy - 3 * scale, 14 * scale, 10 * scale, [244, 228, 214], 0.55);
-  return clampBox(canvas, cx - 36 * scale, cy - 26 * scale, cx + 36 * scale, cy + 30 * scale);
-}
-
-function clampBox(canvas, x1, y1, x2, y2) {
+function rectNormToPoly(norm, width, height) {
+  const [nx, ny, nw, nh] = norm;
+  const x1 = Math.round(nx * width);
+  const y1 = Math.round(ny * height);
+  const x2 = Math.round((nx + nw) * width);
+  const y2 = Math.round((ny + nh) * height);
   return [
-    Math.max(0, Math.round(x1)),
-    Math.max(0, Math.round(y1)),
-    Math.min(canvas.width, Math.round(x2)),
-    Math.min(canvas.height, Math.round(y2)),
+    [x1, y1],
+    [x2, y1],
+    [x2, y2],
+    [x1, y2],
   ];
 }
 
-function toYoloNorm(box, width, height) {
-  const [x1, y1, x2, y2] = box;
-  const w = (x2 - x1) / width;
-  const h = (y2 - y1) / height;
-  const xc = (x1 + x2) / (2 * width);
-  const yc = (y1 + y2) / (2 * height);
-  return [
-    Number(xc.toFixed(6)),
-    Number(yc.toFixed(6)),
-    Number(w.toFixed(6)),
-    Number(h.toFixed(6)),
-  ];
-}
-
-function pointInPolygon(x, y, poly) {
+function pointInPolygon(px, py, polygon) {
   let inside = false;
-  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
-    const xi = poly[i][0], yi = poly[i][1];
-    const xj = poly[j][0], yj = poly[j][1];
-    const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / ((yj - yi) || 1e-9) + xi);
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const xi = polygon[i][0];
+    const yi = polygon[i][1];
+    const xj = polygon[j][0];
+    const yj = polygon[j][1];
+    const intersect =
+      yi > py !== yj > py &&
+      px < ((xj - xi) * (py - yi)) / (yj - yi || 1e-9) + xi;
     if (intersect) inside = !inside;
   }
   return inside;
 }
 
-function makeGtItem(className, box, width, height, roiPoly, conf = 0.92) {
-  const cls = CLASS_BY_NAME[className];
-  const cx = (box[0] + box[2]) / 2;
-  const cy = (box[1] + box[3]) / 2;
-  return {
-    class_id: cls.id,
-    class_name: cls.name,
-    bbox_xyxy: box,
-    bbox_yolo: toYoloNorm(box, width, height),
-    confidence_gt: conf,
-    in_default_roi: pointInPolygon(cx, cy, roiPoly),
-  };
-}
-
-function generateSampleImages() {
-  const W = 640;
-  const H = 480;
-  const specs = [
-    {
-      id: 'nasi_goreng_spesial',
-      filename: 'nasi_goreng_spesial.png',
-      title: 'Nasi Goreng Spesial Komplit',
-      description: 'Piring nasi goreng dengan telur balado, ayam goreng, dan tempe goreng dalam pencahayaan redup warung malam.',
-      lighting_condition: 'low_light',
-      recommended_enhancement: 'clahe',
-      seed: 101,
-      default_roi: [[110, 80], [530, 80], [530, 410], [110, 410]],
-      paint(canvas, roi) {
-        canvas.drawCeramicPlate(320, 245, 225, 168);
-        canvas.drawBananaLeaf(320, 250, 195, 140, 0.05);
-        const gt = [];
-        gt.push(makeGtItem('Nasi Goreng', paintNasiGoreng(canvas, 285, 255, 1.35, 11), W, H, roi, 0.95));
-        gt.push(makeGtItem('Telur Balado', paintTelurBalado(canvas, 405, 195, 1.05), W, H, roi, 0.91));
-        gt.push(makeGtItem('Ayam Goreng', paintAyamGoreng(canvas, 415, 295, 1.0), W, H, roi, 0.93));
-        gt.push(makeGtItem('Tempe Goreng', paintTempeGoreng(canvas, 195, 175, 0.95, 12), W, H, roi, 0.89));
-        return gt;
-      },
-    },
-    {
-      id: 'bakso_komplit',
-      filename: 'bakso_komplit.png',
-      title: 'Bakso Komplit & Tahu Goreng',
-      description: 'Dua mangkuk bakso urat dengan pendamping tahu goreng dan mie goreng dalam pencahayaan bayangan tidak merata.',
-      lighting_condition: 'uneven_shadow',
-      recommended_enhancement: 'he',
-      seed: 202,
-      default_roi: [[70, 70], [390, 70], [390, 415], [70, 415]],
-      paint(canvas, roi) {
-        const gt = [];
-        gt.push(makeGtItem('Bakso', paintBakso(canvas, 225, 245, 1.45, 21), W, H, roi, 0.96));
-        canvas.drawCeramicPlate(485, 165, 112, 84);
-        gt.push(makeGtItem('Tahu Goreng', paintTahuGoreng(canvas, 485, 165, 1.05), W, H, roi, 0.90));
-        canvas.drawCeramicPlate(485, 340, 118, 86);
-        gt.push(makeGtItem('Mie Goreng', paintMieGoreng(canvas, 485, 340, 1.05, 22), W, H, roi, 0.92));
-        return gt;
-      },
-    },
-    {
-      id: 'sate_ayam_madura',
-      filename: 'sate_ayam_madura.png',
-      title: 'Sate Ayam Madura & Soto Ayam',
-      description: 'Seporsi sate ayam bumbu kacang bersama semangkuk soto ayam dan tahu goreng di meja kantin.',
-      lighting_condition: 'hazy_fluorescent',
-      recommended_enhancement: 'cs',
-      seed: 303,
-      default_roi: [[60, 110], [375, 110], [375, 390], [60, 390]],
-      paint(canvas, roi) {
-        canvas.drawCeramicPlate(225, 250, 170, 128);
-        canvas.drawBananaLeaf(225, 252, 145, 102, -0.06);
-        const gt = [];
-        gt.push(makeGtItem('Sate Ayam', paintSateAyam(canvas, 225, 250, 1.45, 31), W, H, roi, 0.96));
-        gt.push(makeGtItem('Soto Ayam', paintSotoAyam(canvas, 495, 185, 1.15, 32), W, H, roi, 0.93));
-        canvas.drawCeramicPlate(495, 355, 96, 72);
-        gt.push(makeGtItem('Tahu Goreng', paintTahuGoreng(canvas, 495, 355, 0.95), W, H, roi, 0.88));
-        return gt;
-      },
-    },
-    {
-      id: 'nasi_padang_rendang',
-      filename: 'nasi_padang_rendang.png',
-      title: 'Nasi Padang Rendang & Lauk Komplit',
-      description: 'Sajian hidangan Padang berisi rendang daging, telur balado, ayam goreng, dan tempe goreng.',
-      lighting_condition: 'low_light',
-      recommended_enhancement: 'brightness',
-      seed: 404,
-      default_roi: [[120, 75], [520, 75], [520, 405], [120, 405]],
-      paint(canvas, roi) {
-        canvas.drawCeramicPlate(320, 240, 232, 174);
-        canvas.drawBananaLeaf(320, 245, 200, 146, 0.03);
-        const gt = [];
-        gt.push(makeGtItem('Rendang', paintRendang(canvas, 235, 195, 1.2, 41), W, H, roi, 0.95));
-        gt.push(makeGtItem('Telur Balado', paintTelurBalado(canvas, 395, 185, 1.1), W, H, roi, 0.94));
-        gt.push(makeGtItem('Ayam Goreng', paintAyamGoreng(canvas, 255, 315, 1.1), W, H, roi, 0.92));
-        gt.push(makeGtItem('Tempe Goreng', paintTempeGoreng(canvas, 410, 315, 1.0, 42), W, H, roi, 0.90));
-        return gt;
-      },
-    },
-    {
-      id: 'prasmanan_kuliner_nusantara',
-      filename: 'prasmanan_kuliner_nusantara.png',
-      title: 'Prasmanan Kuliner Nusantara (12 Kelas)',
-      description: 'Meja prasmanan besar menampilkan representasi seluruh 12 kelas kuliner Indonesia untuk pengujian counting dan Region ROI.',
-      lighting_condition: 'uneven_shadow',
-      recommended_enhancement: 'clahe',
-      seed: 505,
-      default_roi: [[140, 110], [500, 110], [500, 370], [140, 370]],
-      paint(canvas, roi) {
-        const gt = [];
-        const grid = [
-          ['Nasi Goreng', 95, 92, (c, x, y) => paintNasiGoreng(c, x, y, 0.78, 51)],
-          ['Bakso', 245, 92, (c, x, y) => paintBakso(c, x, y, 0.78, 52)],
-          ['Sate Ayam', 395, 92, (c, x, y) => paintSateAyam(c, x, y, 0.78, 53)],
-          ['Rendang', 545, 92, (c, x, y) => paintRendang(c, x, y, 0.88, 54)],
-          ['Soto Ayam', 95, 240, (c, x, y) => paintSotoAyam(c, x, y, 0.80, 55)],
-          ['Ayam Goreng', 245, 240, (c, x, y) => paintAyamGoreng(c, x, y, 0.88)],
-          ['Mie Goreng', 395, 240, (c, x, y) => paintMieGoreng(c, x, y, 0.78, 56)],
-          ['Tempe Goreng', 545, 240, (c, x, y) => paintTempeGoreng(c, x, y, 0.88, 57)],
-          ['Tahu Goreng', 95, 388, (c, x, y) => paintTahuGoreng(c, x, y, 0.92)],
-          ['Gado-Gado', 245, 388, (c, x, y) => paintGadoGado(c, x, y, 0.76, 58)],
-          ['Pempek', 395, 388, (c, x, y) => paintPempek(c, x, y, 0.88)],
-          ['Telur Balado', 545, 388, (c, x, y) => paintTelurBalado(c, x, y, 0.95)],
-        ];
-        for (const [name, x, y, fn] of grid) {
-          if (name !== 'Bakso' && name !== 'Soto Ayam') {
-            canvas.drawCeramicPlate(x, y, 66, 52);
-          }
-          gt.push(makeGtItem(name, fn(canvas, x, y), W, H, roi, 0.91));
-        }
-        return gt;
-      },
-    },
-    {
-      id: 'gado_gado_tahu_tempe',
-      filename: 'gado_gado_tahu_tempe.png',
-      title: 'Gado-Gado, Pempek & Tahu Tempe',
-      description: 'Hidangan gado-gado Betawi lengkap dengan tempe goreng, tahu goreng, dan pempek kapal selam.',
-      lighting_condition: 'normal',
-      recommended_enhancement: 'clahe',
-      seed: 606,
-      default_roi: [[80, 90], [380, 90], [380, 400], [80, 400]],
-      paint(canvas, roi) {
-        const gt = [];
-        canvas.drawCeramicPlate(225, 245, 164, 126);
-        gt.push(makeGtItem('Gado-Gado', paintGadoGado(canvas, 225, 245, 1.32, 61), W, H, roi, 0.95));
-        canvas.drawCeramicPlate(488, 130, 102, 76);
-        gt.push(makeGtItem('Tempe Goreng', paintTempeGoreng(canvas, 488, 130, 1.0, 62), W, H, roi, 0.91));
-        canvas.drawCeramicPlate(488, 255, 96, 72);
-        gt.push(makeGtItem('Tahu Goreng', paintTahuGoreng(canvas, 488, 255, 0.98), W, H, roi, 0.90));
-        canvas.drawCeramicPlate(488, 380, 108, 78);
-        gt.push(makeGtItem('Pempek', paintPempek(canvas, 488, 380, 1.02), W, H, roi, 0.92));
-        return gt;
-      },
-    },
-  ];
-
-  return specs.map((spec) => {
-    const canvas = new RasterCanvas(W, H);
-    canvas.drawWoodenTable(spec.seed, spec.lighting_condition);
-    const gt = spec.paint(canvas, spec.default_roi);
-    const outPath = path.join(IMAGES_DIR, spec.filename);
-    fs.writeFileSync(outPath, encodePNG(W, H, canvas.data));
-    return {
-      id: spec.id,
-      filename: spec.filename,
-      path: `samples/images/${spec.filename}`,
-      title: spec.title,
-      description: spec.description,
-      width: W,
-      height: H,
-      lighting_condition: spec.lighting_condition,
-      recommended_enhancement: spec.recommended_enhancement,
-      default_roi: spec.default_roi,
-      default_roi_norm: spec.default_roi.map(([x, y]) => [Number((x / W).toFixed(4)), Number((y / H).toFixed(4))]),
-      ground_truth: gt,
-    };
-  });
+function fourcc(str) {
+  return Buffer.from(str, 'ascii');
 }
 
 /**
- * Encodes an array of RGBA frames into a standard uncompressed 24-bit BGR RIFF AVI file
- * compatible with OpenCV cv2.VideoCapture, Ultralytics YOLO/ObjectCounter, and FFmpeg.
+ * Write a Motion-JPEG (.avi) RIFF file from an array of 960x540 JPEG Buffers.
+ * MJPG AVI plays smoothly across OpenCV cv2.VideoCapture, VLC, and Windows tools
+ * while keeping binary size compact (~1.2 MB vs ~25 MB for uncompressed DIB).
  */
-function encodeUncompressedAVI(width, height, fps, rgbaFrames) {
-  const rowStride = (width * 3 + 3) & ~3;
-  const frameSize = rowStride * height;
-  const numFrames = rgbaFrames.length;
-
-  function fourcc(str) {
-    return Buffer.from(str, 'ascii');
-  }
-
-  // avih (56 bytes)
-  const avih = Buffer.alloc(56);
-  avih.writeUInt32LE(Math.round(1_000_000 / fps), 0); // dwMicroSecPerFrame
-  avih.writeUInt32LE(frameSize * fps, 4); // dwMaxBytesPerSec
-  avih.writeUInt32LE(0, 8); // dwPaddingGranularity
-  avih.writeUInt32LE(0x10, 12); // dwFlags (AVIF_HASINDEX)
-  avih.writeUInt32LE(numFrames, 16); // dwTotalFrames
-  avih.writeUInt32LE(0, 20); // dwInitialFrames
-  avih.writeUInt32LE(1, 24); // dwStreams
-  avih.writeUInt32LE(frameSize, 28); // dwSuggestedBufferSize
-  avih.writeUInt32LE(width, 32); // dwWidth
-  avih.writeUInt32LE(height, 36); // dwHeight
-
-  // strh (56 bytes)
-  const strh = Buffer.alloc(56);
-  fourcc('vids').copy(strh, 0); // fccType
-  fourcc('DIB ').copy(strh, 4); // fccHandler
-  strh.writeUInt32LE(0, 8); // dwFlags
-  strh.writeUInt16LE(0, 12); // wPriority
-  strh.writeUInt16LE(0, 14); // wLanguage
-  strh.writeUInt32LE(0, 16); // dwInitialFrames
-  strh.writeUInt32LE(1, 20); // dwScale
-  strh.writeUInt32LE(fps, 24); // dwRate
-  strh.writeUInt32LE(0, 28); // dwStart
-  strh.writeUInt32LE(numFrames, 32); // dwLength
-  strh.writeUInt32LE(frameSize, 36); // dwSuggestedBufferSize
-  strh.writeUInt32LE(0xFFFFFFFF, 40); // dwQuality
-  strh.writeUInt32LE(0, 44); // dwSampleSize
-  strh.writeInt16LE(0, 48);
-  strh.writeInt16LE(0, 50);
-  strh.writeInt16LE(width, 52);
-  strh.writeInt16LE(height, 54);
-
-  // strf BITMAPINFOHEADER (40 bytes)
-  const strf = Buffer.alloc(40);
-  strf.writeUInt32LE(40, 0); // biSize
-  strf.writeInt32LE(width, 4); // biWidth
-  strf.writeInt32LE(height, 8); // biHeight (positive = bottom-up DIB)
-  strf.writeUInt16LE(1, 12); // biPlanes
-  strf.writeUInt16LE(24, 14); // biBitCount
-  strf.writeUInt32LE(0, 16); // biCompression (BI_RGB)
-  strf.writeUInt32LE(frameSize, 20); // biSizeImage
+function writeMjpgAvi(filePath, jpegFrames, width, height, fps) {
+  const maxFrameSize = Math.max(...jpegFrames.map((b) => b.length), 65536);
 
   function makeChunk(tag, payload) {
     const hdr = Buffer.alloc(8);
@@ -788,207 +358,518 @@ function encodeUncompressedAVI(width, height, fps, rgbaFrames) {
     return Buffer.concat([hdr, body]);
   }
 
+  // MainAVIHeader (56 bytes)
+  const avih = Buffer.alloc(56);
+  avih.writeUInt32LE(Math.round(1_000_000 / fps), 0); // dwMicroSecPerFrame
+  avih.writeUInt32LE(maxFrameSize * fps, 4); // dwMaxBytesPerSec
+  avih.writeUInt32LE(0, 8); // dwPaddingGranularity
+  avih.writeUInt32LE(0x10, 12); // AVIF_HASINDEX
+  avih.writeUInt32LE(jpegFrames.length, 16); // dwTotalFrames
+  avih.writeUInt32LE(0, 20); // dwInitialFrames
+  avih.writeUInt32LE(1, 24); // dwStreams
+  avih.writeUInt32LE(maxFrameSize, 28); // dwSuggestedBufferSize
+  avih.writeUInt32LE(width, 32); // dwWidth
+  avih.writeUInt32LE(height, 36); // dwHeight
+
+  // AVIStreamHeader (56 bytes)
+  const strh = Buffer.alloc(56);
+  fourcc('vids').copy(strh, 0);
+  fourcc('MJPG').copy(strh, 4);
+  strh.writeUInt32LE(0, 8);
+  strh.writeUInt16LE(0, 12);
+  strh.writeUInt16LE(0, 14);
+  strh.writeUInt32LE(0, 16);
+  strh.writeUInt32LE(1, 20); // dwScale
+  strh.writeUInt32LE(fps, 24); // dwRate
+  strh.writeUInt32LE(0, 28);
+  strh.writeUInt32LE(jpegFrames.length, 32);
+  strh.writeUInt32LE(maxFrameSize, 36);
+  strh.writeUInt32LE(0xFFFFFFFF, 40);
+  strh.writeUInt32LE(0, 44);
+  strh.writeInt16LE(0, 48);
+  strh.writeInt16LE(0, 50);
+  strh.writeInt16LE(width, 52);
+  strh.writeInt16LE(height, 54);
+
+  // BITMAPINFOHEADER (40 bytes)
+  const strf = Buffer.alloc(40);
+  strf.writeUInt32LE(40, 0);
+  strf.writeInt32LE(width, 4);
+  strf.writeInt32LE(height, 8);
+  strf.writeUInt16LE(1, 12);
+  strf.writeUInt16LE(24, 14);
+  fourcc('MJPG').copy(strf, 16);
+  strf.writeUInt32LE(width * height * 3, 20);
+
   const strl = makeList('strl', [makeChunk('strh', strh), makeChunk('strf', strf)]);
   const hdrl = makeList('hdrl', [makeChunk('avih', avih), strl]);
 
   const frameChunks = [];
   const idxEntries = [];
-  let moviOffset = 4; // relative to 'movi' list type
+  let moviOffset = 4;
 
-  for (const rgba of rgbaFrames) {
-    const bgr = Buffer.alloc(frameSize);
-    for (let y = 0; y < height; y++) {
-      const srcY = height - 1 - y; // bottom-up DIB
-      for (let x = 0; x < width; x++) {
-        const s = (srcY * width + x) * 4;
-        const d = y * rowStride + x * 3;
-        bgr[d] = rgba[s + 2];     // B
-        bgr[d + 1] = rgba[s + 1]; // G
-        bgr[d + 2] = rgba[s];     // R
-      }
-    }
-    const chunk = makeChunk('00db', bgr);
+  for (const jpg of jpegFrames) {
+    const chunk = makeChunk('00dc', jpg);
     frameChunks.push(chunk);
 
     const idx = Buffer.alloc(16);
-    fourcc('00db').copy(idx, 0);
+    fourcc('00dc').copy(idx, 0);
     idx.writeUInt32LE(0x10, 4); // AVIIF_KEYFRAME
     idx.writeUInt32LE(moviOffset, 8);
-    idx.writeUInt32LE(frameSize, 12);
+    idx.writeUInt32LE(jpg.length, 12);
     idxEntries.push(idx);
+
     moviOffset += chunk.length;
   }
 
   const movi = makeList('movi', frameChunks);
   const idx1 = makeChunk('idx1', Buffer.concat(idxEntries));
-  const riffBody = Buffer.concat([fourcc('AVI '), hdrl, movi, idx1]);
+
+  const aviBody = Buffer.concat([fourcc('AVI '), hdrl, movi, idx1]);
   const riffHdr = Buffer.alloc(8);
   fourcc('RIFF').copy(riffHdr, 0);
-  riffHdr.writeUInt32LE(riffBody.length, 4);
-  return Buffer.concat([riffHdr, riffBody]);
+  riffHdr.writeUInt32LE(aviBody.length, 4);
+
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  const payload = Buffer.concat([riffHdr, aviBody]);
+  const tmpOut = `${filePath}.tmp`;
+  fs.writeFileSync(tmpOut, payload);
+  fs.renameSync(tmpOut, filePath);
 }
 
-function generateSampleVideos() {
-  const W = 320;
-  const H = 240;
-  const FPS = 6;
-  const FRAME_COUNT = 16;
+function buildTrackTrajectory(scene) {
+  const roiPoly = rectNormToPoly(scene.default_roi_norm, VIDEO_WIDTH, VIDEO_HEIGHT);
+  const frames = [];
+  const insideTracks = new Set();
 
-  const videoConfigs = [
-    {
-      id: 'prasmanan_tracking_demo',
-      filename: 'prasmanan_tracking_demo.avi',
-      title: 'Demo Tracking Nampan Prasmanan (ByteTrack & Region Counter)',
-      description: 'Simulasi video 16 frame piring kuliner bergerak melintasi zona ROI meja kasir untuk pengujian ByteTrack dan Region Counter.',
-      default_roi: [[105, 35], [225, 35], [225, 205], [105, 205]],
-      tracks: [
-        {
-          track_id: 1,
-          class_name: 'Nasi Goreng',
-          xStart: 42, xEnd: 278, yBase: 68, scale: 0.56,
-          paint: (c, x, y, s) => { c.drawCeramicPlate(x, y, 48 * s * 1.4, 38 * s * 1.4); return paintNasiGoreng(c, x, y, s, 71); },
-        },
-        {
-          track_id: 2,
-          class_name: 'Bakso',
-          xStart: 270, xEnd: 46, yBase: 145, scale: 0.58,
-          paint: (c, x, y, s) => paintBakso(c, x, y, s, 72),
-        },
-        {
-          track_id: 3,
-          class_name: 'Rendang',
-          xStart: 165, xEnd: 165, yBase: 192, scale: 0.56,
-          paint: (c, x, y, s) => { c.drawCeramicPlate(x, y, 42 * s * 1.3, 34 * s * 1.3); return paintRendang(c, x, y, s, 73); },
-        },
-      ],
-    },
-    {
-      id: 'antrean_kantin_demo',
-      filename: 'antrean_kantin_demo.avi',
-      title: 'Demo Antrean Kasir Kantin Nusantara',
-      description: 'Simulasi video 16 frame menu Sate Ayam, Gado-Gado, dan Telur Balado bergerak masuk ke Region Counter kasir.',
-      default_roi: [[135, 30], [295, 30], [295, 210], [135, 210]],
-      tracks: [
-        {
-          track_id: 1,
-          class_name: 'Sate Ayam',
-          xStart: 36, xEnd: 255, yBase: 72, scale: 0.54,
-          paint: (c, x, y, s) => { c.drawCeramicPlate(x, y, 48 * s * 1.4, 36 * s * 1.4); return paintSateAyam(c, x, y, s, 81); },
-        },
-        {
-          track_id: 2,
-          class_name: 'Gado-Gado',
-          xStart: 48, xEnd: 245, yBase: 168, scale: 0.54,
-          paint: (c, x, y, s) => { c.drawCeramicPlate(x, y, 48 * s * 1.4, 36 * s * 1.4); return paintGadoGado(c, x, y, s, 82); },
-        },
-        {
-          track_id: 3,
-          class_name: 'Telur Balado',
-          xStart: 220, xEnd: 220, yBase: 118, scale: 0.62,
-          paint: (c, x, y, s) => { c.drawCeramicPlate(x, y, 36 * s * 1.3, 28 * s * 1.3); return paintTelurBalado(c, x, y, s); },
-        },
-      ],
-    },
-  ];
+  for (let f = 0; f < VIDEO_FRAMES; f++) {
+    const t = VIDEO_FRAMES > 1 ? f / (VIDEO_FRAMES - 1) : 0;
+    const objects = scene.tracks.map((tr) => {
+      const cx = Math.round(tr.xStart + (tr.xEnd - tr.xStart) * t);
+      const baseY =
+        typeof tr.yStart === 'number' && typeof tr.yEnd === 'number'
+          ? tr.yStart + (tr.yEnd - tr.yStart) * t
+          : tr.yBase;
+      const cy = Math.round(baseY + Math.sin(t * Math.PI * 2 + tr.track_id) * tr.yAmp);
 
-  return videoConfigs.map((cfg) => {
-    const videoFramesDir = path.join(FRAMES_DIR, cfg.id);
-    fs.mkdirSync(videoFramesDir, { recursive: true });
+      const x1 = Math.max(4, Math.round(cx - tr.drawW / 2));
+      const y1 = Math.max(4, Math.round(cy - tr.drawH / 2));
+      const x2 = Math.min(VIDEO_WIDTH - 4, Math.round(cx + tr.drawW / 2));
+      const y2 = Math.min(VIDEO_HEIGHT - 4, Math.round(cy + tr.drawH / 2));
 
-    const rgbaFrames = [];
-    const frameAnnotations = [];
-    const trackInsideSet = new Set();
+      const inRoi = pointInPolygon((x1 + x2) / 2, (y1 + y2) / 2, roiPoly);
+      if (inRoi) insideTracks.add(tr.track_id);
 
-    for (let f = 0; f < FRAME_COUNT; f++) {
-      const t = f / (FRAME_COUNT - 1);
-      const canvas = new RasterCanvas(W, H);
-      canvas.drawWoodenTable(900 + f, 'normal');
+      return {
+        track_id: tr.track_id,
+        class_id: tr.class_id,
+        class_name: tr.class_name,
+        cx,
+        cy,
+        drawW: tr.drawW,
+        drawH: tr.drawH,
+        srcPath: path.join(IMAGES_DIR, tr.sourceFile),
+        srcCrop: tr.srcCrop,
+        bbox_xyxy: [x1, y1, x2, y2],
+        in_roi: inRoi,
+        confidence: Number((0.88 + ((f + tr.track_id) % 5) * 0.015).toFixed(2)),
+      };
+    });
 
-      // Subtle conveyor / tray rail guideline
-      for (let x = 0; x < W; x += 2) {
-        canvas.blendPixel(x, Math.round(H * 0.48), 90, 62, 38, 0.35);
-      }
+    frames.push({
+      frame_index: f,
+      frame_name: `frame_${String(f + 1).padStart(3, '0')}.png`,
+      jpg_name: `frame_${String(f + 1).padStart(3, '0')}.jpg`,
+      objects,
+    });
+  }
 
-      const detections = [];
-      for (const tr of cfg.tracks) {
-        const cx = Math.round(tr.xStart + (tr.xEnd - tr.xStart) * t);
-        const cy = Math.round(tr.yBase + Math.sin(t * Math.PI * 2 + tr.track_id) * 6);
-        const box = tr.paint(canvas, cx, cy, tr.scale);
-        const bx = (box[0] + box[2]) / 2;
-        const by = (box[1] + box[3]) / 2;
-        const inside = pointInPolygon(bx, by, cfg.default_roi);
-        if (inside) trackInsideSet.add(tr.track_id);
-        const cls = CLASS_BY_NAME[tr.class_name];
-        detections.push({
-          track_id: tr.track_id,
-          class_id: cls.id,
-          class_name: cls.name,
-          bbox_xyxy: box,
-          in_roi: inside,
-          confidence: Number((0.88 + (f % 4) * 0.02).toFixed(2)),
-        });
-      }
+  return { roiPoly, frames, insideTracks };
+}
 
-      const frameName = `frame_${String(f + 1).padStart(3, '0')}.png`;
-      fs.writeFileSync(path.join(videoFramesDir, frameName), encodePNG(W, H, canvas.data));
-      rgbaFrames.push(new Uint8Array(canvas.data));
-      frameAnnotations.push({
-        frame_index: f,
-        frame_file: `samples/videos/frames/${cfg.id}/${frameName}`,
-        detections,
-      });
+/**
+ * Render all 960x540 PNG + JPEG frames using Windows .NET System.Drawing
+ * so every plate in the tracking video is a sharp circular/elliptical crop
+ * taken from the authentic high-resolution culinary photos.
+ */
+function renderVideoFramesWithDotNet(scene, frames, outPngDir, outJpgDir) {
+  fs.mkdirSync(outPngDir, { recursive: true });
+  fs.mkdirSync(outJpgDir, { recursive: true });
+
+  // Clean old frames so no stale frame_017+ survives
+  for (const existing of fs.readdirSync(outPngDir)) {
+    if (existing.endsWith('.png')) {
+      fs.unlinkSync(path.join(outPngDir, existing));
+    }
+  }
+
+  const renderPlan = {
+    width: VIDEO_WIDTH,
+    height: VIDEO_HEIGHT,
+    theme: scene.theme,
+    roi: rectNormToPoly(scene.default_roi_norm, VIDEO_WIDTH, VIDEO_HEIGHT),
+    frames: frames.map((fr) => ({
+      pngPath: path.join(outPngDir, fr.frame_name),
+      jpgPath: path.join(outJpgDir, fr.jpg_name),
+      plates: fr.objects.map((o) => ({
+        srcPath: o.srcPath,
+        crop: o.srcCrop,
+        dx: Math.round(o.cx - o.drawW / 2),
+        dy: Math.round(o.cy - o.drawH / 2),
+        dw: o.drawW,
+        dh: o.drawH,
+      })),
+    })),
+  };
+
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'nv-vid-'));
+  const planPath = path.join(tmpDir, 'plan.json');
+  const ps1Path = path.join(tmpDir, 'render.ps1');
+  fs.writeFileSync(planPath, JSON.stringify(renderPlan), 'utf8');
+
+  const psScript = `
+param([string]$PlanFile)
+Add-Type -AssemblyName System.Drawing
+
+$plan = Get-Content -Raw -Encoding UTF8 $PlanFile | ConvertFrom-Json
+$W = [int]$plan.width
+$H = [int]$plan.height
+
+# Cache loaded source bitmaps
+$srcCache = @{}
+foreach ($fr in $plan.frames) {
+  foreach ($p in $fr.plates) {
+    if (-not $srcCache.ContainsKey($p.srcPath)) {
+      $srcCache[$p.srcPath] = New-Object System.Drawing.Bitmap($p.srcPath)
+    }
+  }
+}
+
+# Pre-render warm photorealistic tabletop backdrop once
+$bgBmp = New-Object System.Drawing.Bitmap($W, $H, [System.Drawing.Imaging.PixelFormat]::Format24bppRgb)
+$bgG = [System.Drawing.Graphics]::FromImage($bgBmp)
+$bgG.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
+
+if ($plan.theme -eq 'wood_buffet') {
+  $rect = New-Object System.Drawing.Rectangle(0, 0, $W, $H)
+  $grad = New-Object System.Drawing.Drawing2D.LinearGradientBrush(
+    $rect,
+    [System.Drawing.Color]::FromArgb(72, 46, 30),
+    [System.Drawing.Color]::FromArgb(44, 27, 17),
+    90
+  )
+  $bgG.FillRectangle($grad, $rect)
+  $grad.Dispose()
+
+  # Subtle wood plank seams & warm wood grain
+  for ($y = 0; $y -lt $H; $y += 68) {
+    $seamPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(95, 22, 13, 8), 2)
+    $bgG.DrawLine($seamPen, 0, $y, $W, $y)
+    $seamPen.Dispose()
+    $hiPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(35, 156, 108, 72), 1)
+    $bgG.DrawLine($hiPen, 0, $y + 2, $W, $y + 2)
+    $hiPen.Dispose()
+  }
+  for ($g = 0; $g -lt 110; $g++) {
+    $gy = ($g * 19 + 7) % $H
+    $gx1 = ($g * 137) % ($W - 180)
+    $glen = 120 + (($g * 53) % 240)
+    $alpha = 18 + ($g % 18)
+    $grainPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb($alpha, 128, 86, 54), 2)
+    $bgG.DrawLine($grainPen, $gx1, $gy, $gx1 + $glen, $gy + (($g % 3) - 1) * 3)
+    $grainPen.Dispose()
+  }
+} else {
+  # Canteen stone/terrazzo serving counter
+  $rect = New-Object System.Drawing.Rectangle(0, 0, $W, $H)
+  $grad = New-Object System.Drawing.Drawing2D.LinearGradientBrush(
+    $rect,
+    [System.Drawing.Color]::FromArgb(52, 58, 66),
+    [System.Drawing.Color]::FromArgb(34, 38, 44),
+    90
+  )
+  $bgG.FillRectangle($grad, $rect)
+  $grad.Dispose()
+
+  # Counter brushed metal divider line & ambient counter mat
+  for ($i = 0; $i -lt 320; $i++) {
+    $sx = ($i * 193 + 17) % $W
+    $sy = ($i * 97 + 11) % $H
+    $sz = 2 + ($i % 3)
+    $tone = 68 + ($i % 45)
+    $speck = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(32, $tone, $tone + 4, $tone + 8))
+    $bgG.FillEllipse($speck, $sx, $sy, $sz, $sz)
+    $speck.Dispose()
+  }
+  $railPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(75, 165, 175, 185), 3)
+  $bgG.DrawLine($railPen, 0, 58, $W, 58)
+  $bgG.DrawLine($railPen, 0, $H - 44, $W, $H - 44)
+  $railPen.Dispose()
+}
+
+# Subtle translucent serving mat indicating tray zone on physical table
+$rx1 = [int]$plan.roi[0][0]
+$ry1 = [int]$plan.roi[0][1]
+$rx2 = [int]$plan.roi[2][0]
+$ry2 = [int]$plan.roi[2][1]
+$matBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(34, 245, 232, 210))
+$bgG.FillRectangle($matBrush, $rx1, $ry1, $rx2 - $rx1, $ry2 - $ry1)
+$matBrush.Dispose()
+$matPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(80, 215, 195, 160), 2)
+$bgG.DrawRectangle($matPen, $rx1, $ry1, $rx2 - $rx1, $ry2 - $ry1)
+$matPen.Dispose()
+$bgG.Dispose()
+
+# Configure high quality JPEG encoder for MJPG chunks
+$jpgCodec = [System.Drawing.Imaging.ImageCodecInfo]::GetImageEncoders() | Where-Object { $_.MimeType -eq 'image/jpeg' } | Select-Object -First 1
+$encParams = New-Object System.Drawing.Imaging.EncoderParameters(1)
+$encParams.Param[0] = New-Object System.Drawing.Imaging.EncoderParameter([System.Drawing.Imaging.Encoder]::Quality, [int64]90)
+
+foreach ($fr in $plan.frames) {
+  $frame = $bgBmp.Clone()
+  $g = [System.Drawing.Graphics]::FromImage($frame)
+  $g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
+  $g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+  $g.CompositingQuality = [System.Drawing.Drawing2D.CompositingQuality]::HighQuality
+
+  foreach ($p in $fr.plates) {
+    $dx = [float]$p.dx
+    $dy = [float]$p.dy
+    $dw = [float]$p.dw
+    $dh = [float]$p.dh
+
+    # Soft cast shadow beneath real ceramic plate
+    for ($sh = 3; $sh -ge 1; $sh--) {
+      $shAlpha = 26 + (4 - $sh) * 16
+      $shBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb($shAlpha, 8, 6, 4))
+      $g.FillEllipse($shBrush, $dx + 4 + $sh * 3, $dy + 6 + $sh * 3, $dw, $dh)
+      $shBrush.Dispose()
     }
 
-    const aviBuf = encodeUncompressedAVI(W, H, FPS, rgbaFrames);
-    fs.writeFileSync(path.join(VIDEOS_DIR, cfg.filename), aviBuf);
+    # Subtle outer ceramic rim highlight
+    $rimBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(220, 240, 236, 228))
+    $g.FillEllipse($rimBrush, $dx - 3, $dy - 3, $dw + 6, $dh + 6)
+    $rimBrush.Dispose()
 
-    return {
-      id: cfg.id,
-      filename: cfg.filename,
-      path: `samples/videos/${cfg.filename}`,
-      frames_dir: `samples/videos/frames/${cfg.id}`,
-      format: 'AVI (24-bit BGR DIB) + PNG Frame Sequence',
-      title: cfg.title,
-      description: cfg.description,
-      width: W,
-      height: H,
-      fps: FPS,
-      frame_count: FRAME_COUNT,
-      default_roi: cfg.default_roi,
-      expected_tracks: cfg.tracks.map((tr) => ({
-        track_id: tr.track_id,
-        class_id: CLASS_BY_NAME[tr.class_name].id,
-        class_name: tr.class_name,
-        enters_roi: trackInsideSet.has(tr.track_id),
-      })),
-      frame_annotations: frameAnnotations,
-    };
-  });
+    # Clip elliptically and draw crisp real dish photo cutout
+    $path = New-Object System.Drawing.Drawing2D.GraphicsPath
+    $path.AddEllipse($dx, $dy, $dw, $dh)
+    $state = $g.Save()
+    $g.SetClip($path)
+
+    $srcBmp = $srcCache[$p.srcPath]
+    $srcRect = New-Object System.Drawing.Rectangle([int]$p.crop[0], [int]$p.crop[1], [int]$p.crop[2], [int]$p.crop[3])
+    $dstRect = New-Object System.Drawing.Rectangle([int]$dx, [int]$dy, [int]$dw, [int]$dh)
+    $g.DrawImage($srcBmp, $dstRect, $srcRect, [System.Drawing.GraphicsUnit]::Pixel)
+    $g.Restore($state)
+
+    # Fine rim shading
+    $rimPen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(140, 255, 252, 245), 2)
+    $g.DrawEllipse($rimPen, $dx, $dy, $dw, $dh)
+    $rimPen.Dispose()
+    $path.Dispose()
+  }
+
+  $g.Dispose()
+  $frame.Save($fr.pngPath, [System.Drawing.Imaging.ImageFormat]::Png)
+  $frame.Save($fr.jpgPath, $jpgCodec, $encParams)
+  $frame.Dispose()
 }
 
-function main() {
-  fs.mkdirSync(IMAGES_DIR, { recursive: true });
-  fs.mkdirSync(VIDEOS_DIR, { recursive: true });
-  fs.mkdirSync(FRAMES_DIR, { recursive: true });
+foreach ($bmp in $srcCache.Values) {
+  $bmp.Dispose()
+}
+$bgBmp.Dispose()
+`;
 
-  const images = generateSampleImages();
-  const videos = generateSampleVideos();
+  fs.writeFileSync(ps1Path, psScript, 'utf8');
+  try {
+    execFileSync(
+      'powershell',
+      ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ps1Path, '-PlanFile', planPath],
+      { stdio: 'inherit' },
+    );
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+}
 
+function buildCatalog() {
+  if (!fs.existsSync(MANIFEST_PATH)) {
+    throw new Error(`Manifest tidak ditemukan: ${MANIFEST_PATH}`);
+  }
+  const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'));
+  const heroes = Array.isArray(manifest.all_heroes) ? manifest.all_heroes : [];
+  if (heroes.length !== 13) {
+    throw new Error(`Diharapkan 13 foto hero di real_samples_manifest.json, ditemukan ${heroes.length}`);
+  }
+
+  const images = heroes.map((hero) => {
+    const filePath = path.join(IMAGES_DIR, hero.sampleFile);
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`File foto hero hilang: ${filePath}`);
+    }
+    const meta = HERO_METADATA_BY_SLUG[hero.slug];
+    if (!meta) {
+      throw new Error(`Metadata hero belum didefinisikan untuk slug: ${hero.slug}`);
+    }
+
+    const width = Number(hero.width);
+    const height = Number(hero.height);
+    const roiPoly = rectNormToPoly(meta.roi_norm, width, height);
+
+    let groundTruth;
+    if (Array.isArray(meta.multi_plates)) {
+      groundTruth = meta.multi_plates.map((plate) => {
+        const [x1, y1, x2, y2] = plate.bbox_xyxy;
+        const cx = (x1 + x2) / 2;
+        const cy = (y1 + y2) / 2;
+        return {
+          class_id: plate.class_id,
+          class_name: plate.class_name,
+          bbox_xyxy: [x1, y1, x2, y2],
+          bbox_yolo: [
+            round6(cx / width),
+            round6(cy / height),
+            round6((x2 - x1) / width),
+            round6((y2 - y1) / height),
+          ],
+          confidence: plate.confidence,
+          confidence_gt: plate.confidence,
+          in_default_roi: pointInPolygon(cx, cy, roiPoly),
+        };
+      });
+    } else {
+      const [x1, y1, x2, y2] = hero.bbox_xyxy;
+      const cx = (x1 + x2) / 2;
+      const cy = (y1 + y2) / 2;
+      groundTruth = [
+        {
+          class_id: hero.classId,
+          class_name: hero.name,
+          bbox_xyxy: [x1, y1, x2, y2],
+          bbox_yolo: Array.isArray(hero.bbox_yolo)
+            ? hero.bbox_yolo.map(round6)
+            : [
+                round6(cx / width),
+                round6(cy / height),
+                round6((x2 - x1) / width),
+                round6((y2 - y1) / height),
+              ],
+          confidence: meta.confidence,
+          confidence_gt: meta.confidence,
+          in_default_roi: pointInPolygon(cx, cy, roiPoly),
+        },
+      ];
+    }
+
+    return {
+      id: meta.id,
+      slug: hero.slug,
+      aliases: meta.aliases,
+      filename: hero.sampleFile,
+      path: `samples/images/${hero.sampleFile}`,
+      title: meta.title,
+      description: meta.description,
+      width,
+      height,
+      lighting_condition: meta.lighting_condition,
+      recommended_enhancement: meta.recommended_enhancement,
+      default_roi: roiPoly,
+      default_roi_norm: meta.roi_norm.map(round4),
+      ground_truth: groundTruth,
+      source: hero.source || '',
+      license: hero.license || '',
+    };
+  });
+
+  const videos = [];
+  for (const scene of VIDEO_SCENES) {
+    const outPngDir = path.join(FRAMES_ROOT, scene.id);
+    const tmpJpgDir = fs.mkdtempSync(path.join(os.tmpdir(), `nv-jpg-${scene.id}-`));
+    const { roiPoly, frames, insideTracks } = buildTrackTrajectory(scene);
+
+    try {
+      renderVideoFramesWithDotNet(scene, frames, outPngDir, tmpJpgDir);
+      const jpegBuffers = frames.map((fr) => fs.readFileSync(path.join(tmpJpgDir, fr.jpg_name)));
+      const aviPath = path.join(VIDEOS_DIR, scene.filename);
+      writeMjpgAvi(aviPath, jpegBuffers, VIDEO_WIDTH, VIDEO_HEIGHT, VIDEO_FPS);
+    } finally {
+      fs.rmSync(tmpJpgDir, { recursive: true, force: true });
+    }
+
+    videos.push({
+      id: scene.id,
+      filename: scene.filename,
+      path: `samples/videos/${scene.filename}`,
+      frames_dir: `samples/videos/frames/${scene.id}`,
+      format: 'MJPG AVI + PNG Frame Sequence (960x540)',
+      title: scene.title,
+      description: scene.description,
+      width: VIDEO_WIDTH,
+      height: VIDEO_HEIGHT,
+      fps: VIDEO_FPS,
+      total_frames: VIDEO_FRAMES,
+      frame_count: VIDEO_FRAMES,
+      default_roi: roiPoly,
+      default_roi_norm: scene.default_roi_norm.map(round4),
+      expected_tracks: scene.tracks.map((tr) => ({
+        track_id: tr.track_id,
+        class_id: tr.class_id,
+        class_name: tr.class_name,
+        enters_roi: insideTracks.has(tr.track_id),
+      })),
+      frame_annotations: frames.map((fr) => ({
+        frame_index: fr.frame_index,
+        frame_file: `samples/videos/frames/${scene.id}/${fr.frame_name}`,
+        objects: fr.objects.map((o) => ({
+          track_id: o.track_id,
+          class_id: o.class_id,
+          class_name: o.class_name,
+          bbox_xyxy: o.bbox_xyxy,
+          in_roi: o.in_roi,
+          confidence: o.confidence,
+        })),
+      })),
+    });
+  }
+
+  const stats = manifest.stats || {};
   const catalog = {
-    project: 'Sistem Deteksi, Counting, Tracking & Image Enhancement Kuliner Indonesia (YOLOv11)',
+    project: 'NusantaraVision YOLOv11 — Sistem Deteksi, Counting, Tracking & Image Enhancement Kuliner Indonesia',
     generated_at: new Date().toISOString(),
     generator: 'scripts/prepare_samples.mjs',
     total_classes: CULINARY_CLASSES.length,
-    classes: CULINARY_CLASSES,
+    dataset_stats: {
+      total: stats.total || 600,
+      train: stats.train || 420,
+      train_originals: stats.trainOriginals || 314,
+      train_augmented: stats.trainAugmented || 106,
+      valid: stats.valid || 120,
+      test: stats.test || 60,
+      unique_originals: stats.uniqueOriginals || 494,
+    },
+    classes: CULINARY_CLASSES.map((c) => {
+      const br = (stats.perClassBreakdown && stats.perClassBreakdown[c.name]) || {};
+      return {
+        ...c,
+        dataset_count: br.total || 50,
+        unique_originals: br.uniqueOriginals || 50,
+        train_originals: br.trainOriginals || 35,
+        train_augmented: br.trainAugmented || 0,
+        train_count: br.trainTotal || 35,
+        valid_count: br.validTotal || 10,
+        test_count: br.testTotal || 5,
+      };
+    }),
     images,
     videos,
   };
 
-  fs.writeFileSync(CATALOG_PATH, JSON.stringify(catalog, null, 2), 'utf-8');
-
-  console.log(`[prepare_samples.mjs] Generated ${images.length} images in ${IMAGES_DIR}`);
-  console.log(`[prepare_samples.mjs] Generated ${videos.length} AVI videos + PNG frame sequences in ${VIDEOS_DIR}`);
-  console.log(`[prepare_samples.mjs] Wrote catalog to ${CATALOG_PATH}`);
+  fs.writeFileSync(CATALOG_PATH, JSON.stringify(catalog, null, 2) + '\n', 'utf8');
+  console.log(`[prepare_samples] Synced ${images.length} real hero images from real_samples_manifest.json`);
+  console.log(`[prepare_samples] Generated ${videos.length} 960x540 photorealistic videos (${VIDEO_FRAMES} frames each) in ${VIDEOS_DIR}`);
+  console.log(`[prepare_samples] Wrote catalog to ${CATALOG_PATH}`);
 }
 
-main();
+buildCatalog();

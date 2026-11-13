@@ -27,16 +27,16 @@ Dokumen ini berisi panduan lengkap dan naskah (*script*) untuk merekam video pre
 ### [00:45 – 02:00] Segmen 2: Dataset 600 Gambar & Training YOLOv11 di Google Colab (Slide 3–4 + Colab)
 - Tampilkan **Slide 3–4**, lalu tunjukkan **Google Colab** (`Train_YOLOv11_Kuliner_Indonesia_Colab.ipynb`).
 - **Narasi**:
-  > "Untuk memenuhi ketentuan minimal 500 gambar, kami menyiapkan **600 gambar** beranotasi format YOLOv11 yang dibagi menjadi **420 train (70%)**, **120 valid (20%)**, dan **60 test (10%)** melalui Roboflow Universe dengan fallback builder otomatis. Model dilatih menggunakan **YOLOv11n** selama 50–100 epoch (`imgsz=640`) di GPU T4 Google Colab, menghasilkan bobot `best.pt` dan `best.onnx`."
+  > "Untuk memenuhi ketentuan minimal 500 gambar, kami menyiapkan **600 gambar** beranotasi saliency format YOLOv11 (`50` citra per kelas untuk 12 kelas) yang dibagi menjadi **420 train (70% — 314 foto asli unik + 106 augmentasi tajam khusus train)**, **120 valid (20% — 100% foto asli)**, dan **60 test (10% — 100% foto asli)** dengan total **494 foto asli unik** beserta opsi unduh dari Roboflow Universe atau `Dataset_Kuliner_Indonesia_YOLOv11.zip`. Model dilatih menggunakan **YOLOv11n** selama 50–100 epoch (`imgsz=640`) di GPU T4 Google Colab, menghasilkan bobot `best.pt` dan `best.onnx`."
 
 ### [02:00 – 04:15] Segmen 3: Live Demo GUI Web — Image Enhancement, Counting, Tracking & ROI (GUI Tab 1 & 2)
-- Buka **GUI Web NusantaraVision YOLOv11** (`http://localhost:8000`).
+- Buka **GUI Web NusantaraVision YOLOv11 (Light Editorial Workbench)** (`http://localhost:8000`).
 - **Langkah Demo di GUI (Tab 1 - Deteksi Gambar & Video + ROI)**:
-  1. Pilih sampel gambar (misal **Nasi Padang Rendang** atau **Bakso Komplit**), atau unggah foto makanan sendiri.
+  1. Pilih salah satu dari **13 foto nyata kuliner** (misal **Prasmanan Kuliner**, **Rendang**, atau **Nasi Goreng Spesial**), atau unggah foto makanan sendiri.
   2. Tunjukkan kondisi **Original (Before)** terlebih dahulu — sorot confidence score dan objek yang masih terlewat.
   3. Aktifkan **Image Enhancement** satu per satu: **HE**, **CLAHE (LAB L-Channel)**, **Contrast Stretching**, dan **Brightness/Gamma**. Tunjukkan perubahan histogram luminansi secara real-time dan peningkatan confidence score.
   4. Geser / ubah ukuran kotak **Object Region #1 (ROI)** atau klik preset (*Piring Utama* / *Zona Kasir*), lalu tunjukkan angka **Total Detected**, **Inside Region #1**, dan **Outside Region** berubah dinamis.
-  5. Ganti ke **Sampel Video** (*Video Simulasi Prasmanan* / *Video Kasir Warung*), aktifkan mode **Multi-Object Tracking (ByteTrack)** untuk memperlihatkan ID tracking (`#1`, `#2`, ...) dan jejak lintasan (*motion trail*) melintasi Object Region #1.
+  5. Ganti ke **Sampel Video** (`prasmanan_tracking_demo.avi` / `antrean_kantin_demo.avi` resolusi **960x540**, 16 frame photorealistic), aktifkan mode **Multi-Object Tracking (ByteTrack)** untuk memperlihatkan ID tracking (`#1`, `#2`, `#3`) dan jejak lintasan (*motion trail*) melintasi Object Region #1.
 - Pindah ke **Tab 2 (Evaluasi Before vs After)** untuk menunjukkan perbandingan 5 metode berdampingan dan tombol ekspor CSV/Excel.
 
 ### [04:15 – 05:30] Segmen 4: Penjelasan Bahasa Pemrograman, Backend & Supabase (Slide 7–8 + GUI Tab 3 & 4)
