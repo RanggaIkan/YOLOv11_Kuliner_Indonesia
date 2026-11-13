@@ -1,11 +1,17 @@
 {
-  "version": 2,
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index" },
-    { "source": "/samples/(.*)", "destination": "/samples/$1" },
-    { "source": "/reports/(.*)", "destination": "/reports/$1" },
-    { "source": "/(.*)", "destination": "/frontend/$1" }
+    { "source": "/api/(.*)", "destination": "/api/index?__path=$1" },
+    { "source": "/", "destination": "/frontend/index.html" },
+    { "source": "/((?!api/|samples/|reports/|frontend/).+)", "destination": "/frontend/$1" }
   ],
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30,
+      "excludeFiles": "{dataset,docs,notebooks,backend,scripts,Dataset_Kuliner_Indonesia_YOLOv11.zip}/**"
+    }
+  },
   "headers": [
     {
       "source": "/api/(.*)",

@@ -1,0 +1,13 @@
+{
+  "name": "yolov11-kuliner-indonesia",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NusantaraVision YOLOv11 - Deteksi, Counting, Tracking, ROI & Image Enhancement Kuliner Umum Indonesia",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "24.x"
+  }
+}

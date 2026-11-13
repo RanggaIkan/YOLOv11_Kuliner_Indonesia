@@ -229,6 +229,9 @@ function sendError(res, statusCode, message) {
 }
 
 function readRawBody(req, maxBytes = 64 * 1024 * 1024) {
+  if (req.readableEnded) {
+    return Promise.resolve(Buffer.alloc(0));
+  }
   return new Promise((resolve, reject) => {
     const chunks = [];
     let total = 0;
@@ -290,7 +293,21 @@ function parseMultipartForm(buffer, contentType) {
 
 async function parseRequestPayload(req) {
   const contentType = req.headers["content-type"] || "";
-  const rawBody = await readRawBody(req);
+
+  // Vercel Serverless runtime may pre-consume and attach req.body
+  if (req.body !== undefined && !Buffer.isBuffer(req.body) && typeof req.body === "object" && req.body !== null) {
+    return { fields: req.body, files: {}, json: req.body };
+  }
+
+  let rawBody;
+  if (Buffer.isBuffer(req.body)) {
+    rawBody = req.body;
+  } else if (typeof req.body === "string") {
+    rawBody = Buffer.from(req.body, "utf8");
+  } else {
+    rawBody = await readRawBody(req);
+  }
+
   if (!rawBody.length) {
     return { fields: {}, files: {}, json: {} };
   }
