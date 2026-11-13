@@ -1,0 +1,21 @@
+# Dataset Kuliner Umum Indonesia — Format YOLOv11
+# Sumber gambar: Foto real Wikimedia Commons (resolusi tinggi 640px+)
+path: ./dataset
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 12
+names:
+  0: Nasi Goreng
+  1: Bakso
+  2: Sate Ayam
+  3: Rendang
+  4: Soto Ayam
+  5: Ayam Goreng
+  6: Mie Goreng
+  7: Tempe Goreng
+  8: Tahu Goreng
+  9: Gado-Gado
+  10: Pempek
+  11: Telur Balado

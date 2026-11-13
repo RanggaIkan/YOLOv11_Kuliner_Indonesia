@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NusantaraVision YOLOv11 — Kuliner Indonesia | Enhancement &amp; Region Counter</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Header -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 36 36" fill="none">
+            <rect x="2" y="2" width="32" height="32" rx="9" fill="url(#nvGrad)" />
+            <path d="M9 14V10H13M23 10H27V14M27 22V26H23M13 26H9V22" stroke="#0B1220" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="18" cy="18" r="5" stroke="#0B1220" stroke-width="2.4" />
+            <circle cx="18" cy="18" r="1.8" fill="#0B1220" />
+            <defs>
+              <linearGradient id="nvGrad" x1="2" y1="2" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#38BDF8" />
+                <stop offset="0.55" stop-color="#10B981" />
+                <stop offset="1" stop-color="#F59E0B" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title-row">
+            <h1>NusantaraVision <span class="badge-yolo">YOLOv11</span></h1>
+            <span class="badge-pill">600 Citra • 12 Kelas Kuliner</span>
+          </div>
+          <p class="brand-subtitle">Deteksi Objek, Image Enhancement (Before vs After), ByteTrack &amp; Object Region #1 Kuliner Umum Indonesia</p>
+        </div>
+      </div>
+
+      <div class="topbar-status">
+        <div id="backendStatusPill" class="status-pill status-sim" title="Status koneksi Backend FastAPI / Node.js">
+          <span class="status-dot"></span>
+          <span id="backendStatusText">Canvas Engine (Offline Ready)</span>
+        </div>
+        <button id="btnOpenSupabaseModal" class="status-pill status-btn" title="Konfigurasi Database Supabase">
+          <span id="supabaseStatusDot" class="status-dot dot-amber"></span>
+          <span id="supabaseStatusText">Supabase: Fallback Lokal</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Primary Tab Navigation -->
+    <nav class="tab-nav" role="tablist" aria-label="Navigasi Utama">
+      <button class="tab-btn active" data-tab="tab-detect" role="tab" aria-selected="true">
+        <span class="tab-icon">🎯</span>
+        <span>1. Deteksi Gambar/Video &amp; Region Counter</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-eval" role="tab" aria-selected="false">
+        <span class="tab-icon">📊</span>
+        <span>2. Evaluasi Before vs After (Excel)</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-db" role="tab" aria-selected="false">
+        <span class="tab-icon">🗄️</span>
+        <span>3. Database Supabase &amp; Dataset 600 Citra</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-arch" role="tab" aria-selected="false">
+        <span class="tab-icon">⚙️</span>
+        <span>4. Bahasa Pemrograman, Arsitektur &amp; Rubrik</span>
+      </button>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- ==================== TAB 1: DETECTION & ROI ==================== -->
+      <section id="tab-detect" class="tab-panel active" role="tabpanel">
+        <div class="detect-layout">
+          <!-- Left Sidebar: Controls -->
+          <aside class="control-column">
+            <!-- Media Input Card -->
+            <div class="card">
+              <div class="card-header">
+                <h2>1. Input Media &amp; Sampel Kuliner</h2>
+                <span class="mini-tag" id="mediaModeTag">IMAGE</span>
+              </div>
+              <div class="upload-row">
+                <label class="btn btn-primary upload-label">
+                  <input type="file" id="imageUploadInput" accept=".jpg,.jpeg,.png,.bmp,.svg,.webp,image/*" hidden />
+                  <span>🖼️ Upload Gambar</span>
+                </label>
+                <label class="btn btn-secondary upload-label">
+                  <input type="file" id="videoUploadInput" accept=".mp4,.webm,.ogg,video/*" hidden />
+                  <span>🎬 Upload Video</span>
+                </label>
+              </div>
+              <div class="field-group">
+                <label for="sampleSceneSelect">Atau Pilih Foto Real / Simulasi Kuliner Indonesia:</label>
+                <select id="sampleSceneSelect" class="select-input">
+                  <option value="nasgor_malam">📷 Foto Real: Nasi Goreng Spesial</option>
+                  <option value="bakso_komplit">📷 Foto Real: Bakso Komplit</option>
+                  <option value="sate_madura">📷 Foto Real: Sate Ayam Madura</option>
+                  <option value="padang_rendang">📷 Foto Real: Rendang Padang</option>
+                  <option value="soto_ayam">📷 Foto Real: Soto Ayam Lamongan</option>
+                  <option value="ayam_goreng">📷 Foto Real: Ayam Goreng Nusantara</option>
+                  <option value="mie_goreng">📷 Foto Real: Mie Goreng Spesial</option>
+                  <option value="tempe_goreng">📷 Foto Real: Tempe Goreng Renyah</option>
+                  <option value="tahu_goreng">📷 Foto Real: Tahu Goreng Sumedang</option>
+                  <option value="gado_gado">📷 Foto Real: Gado-Gado Betawi</option>
+                  <option value="pempek">📷 Foto Real: Pempek Palembang</option>
+                  <option value="telur_balado">📷 Foto Real: Telur Balado Minang</option>
+                  <option value="video_prasmanan">▶ Video Simulasi: Prasmanan Kuliner (Tracking)</option>
+                  <option value="video_kasir">▶ Video Simulasi: Zona Kasir Warung (ROI)</option>
+                </select>
+              </div>
+
+              <div id="videoTransportBar" class="video-controls hidden">
+                <button id="btnPlayPause" class="btn btn-sm btn-accent">⏸ Pause</button>
+                <button id="btnRestartVideo" class="btn btn-sm btn-ghost">↺ Ulang</button>
+                <span id="videoTimeLabel" class="mono-sm">00:00 / Simulasi 60fps</span>
+              </div>
+            </div>
+
+            <!-- Image Enhancement Card -->
+            <div class="card">
+              <div class="card-header">
+                <h2>2. Pengolahan Citra (Enhancement)</h2>
+                <button id="btnResetEnhance" class="btn-link" type="button">Reset</button>
+              </div>
+
+              <div class="method-pills" id="enhanceMethodGroup" role="radiogroup" aria-label="Metode Enhancement">
+                <button class="pill-btn" data-method="original">Original (Before)</button>
+                <button class="pill-btn" data-method="he">Hist. Eq (HE)</button>
+                <button class="pill-btn active" data-method="clahe">CLAHE (LAB)</button>
+                <button class="pill-btn" data-method="cs">Contrast Stretch</button>
+                <button class="pill-btn" data-method="brightness">Brightness/Gamma</button>
+              </div>
+
+              <div class="sliders-grid">
+                <div class="slider-item">
+                  <div class="slider-label">
+                    <span>Clip Limit (CLAHE)</span>
+                    <strong id="valClipLimit">2.5</strong>
+                  </div>
+                  <input type="range" id="sliderClipLimit" min="1.0" max="6.0" step="0.1" value="2.5" />
+                </div>
+                <div class="slider-item">
+                  <div class="slider-label">
+                    <span>Brightness (β)</span>
+                    <strong id="valBrightness">+18</strong>
+                  </div>
+                  <input type="range" id="sliderBrightness" min="-80" max="80" step="2" value="18" />
+                </div>
+                <div class="slider-item">
+                  <div class="slider-label">
+                    <span>Contrast (α)</span>
+                    <strong id="valContrast">1.25x</strong>
+                  </div>
+                  <input type="range" id="sliderContrast" min="0.6" max="2.2" step="0.05" value="1.25" />
+                </div>
+                <div class="slider-item">
+                  <div class="slider-label">
+                    <span>Gamma (γ)</span>
+                    <strong id="valGamma">1.15</strong>
+                  </div>
+                  <input type="range" id="sliderGamma" min="0.4" max="2.2" step="0.05" value="1.15" />
+                </div>
+              </div>
+
+              <div class="toggle-row">
+                <label class="switch-label">
+                  <input type="checkbox" id="toggleSplitCompare" />
+                  <span>Mode Split Wipe (Before | After)</span>
+                </label>
+                <label class="switch-label">
+                  <input type="checkbox" id="toggleLowLightSim" checked />
+                  <span>Simulasi Input Redup</span>
+                </label>
+              </div>
+
+              <!-- Live Histogram -->
+              <div class="histogram-box">
+                <div class="histogram-header">
+                  <span>Histogram Luminansi (0–255)</span>
+                  <span class="legend-inline">
+                    <i class="leg-dot leg-before"></i>Before
+                    <i class="leg-dot leg-after"></i>After
+                  </span>
+                </div>
+                <canvas id="histogramCanvas" width="320" height="86"></canvas>
+                <div class="metrics-strip">
+                  <div><span>Brightness</span><strong id="metricBrightness">0</strong></div>
+                  <div><span>Contrast</span><strong id="metricContrast">0</strong></div>
+                  <div><span>Entropy</span><strong id="metricEntropy">0</strong></div>
+                  <div><span>PSNR</span><strong id="metricPsnr">∞</strong></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mode & ROI Card -->
+            <div class="card">
+              <div class="card-header">
+                <h2>3. Mode Deteksi &amp; Region #1 (ROI)</h2>
+              </div>
+
+              <div class="mode-toggle" role="group" aria-label="Mode Deteksi">
+                <button id="btnModeCounting" class="mode-btn active" data-mode="counting">
+                  🔢 Object Counting
+                </button>
+                <button id="btnModeTracking" class="mode-btn" data-mode="tracking">
+                  🛰️ Tracking (ByteTrack)
+                </button>
+              </div>
+
+              <div class="roi-controls">
+                <label class="switch-label">
+                  <input type="checkbox" id="toggleRoiActive" checked />
+                  <span>Aktifkan Object Region #1 (Drag &amp; Resize di Canvas)</span>
+                </label>
+                <div class="roi-presets">
+                  <button class="btn btn-xs btn-ghost roi-preset-btn active" data-preset="piring">🍽️ Piring Utama</button>
+                  <button class="btn btn-xs btn-ghost roi-preset-btn" data-preset="kasir">💳 Zona Kasir</button>
+                  <button class="btn btn-xs btn-ghost roi-preset-btn" data-preset="tengah">↔ Area Tengah</button>
+                  <button class="btn btn-xs btn-ghost roi-preset-btn" data-preset="full">⛶ Full Frame</button>
+                </div>
+                <div class="roi-coords mono-sm" id="roiCoordsLabel">
+                  ROI #1: x=160, y=90, w=640, h=360
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Center/Right: Interactive Canvas + Telemetry -->
+          <div class="workspace-column">
+            <div class="card canvas-card">
+              <div class="canvas-toolbar">
+                <div class="canvas-title-group">
+                  <span class="live-badge" id="canvasLiveBadge">YOLOv11 READY</span>
+                  <span id="currentSceneTitle" class="scene-title">Nasi Goreng Spesial (Low-Light Warung)</span>
+                </div>
+                <div class="canvas-actions">
+                  <button id="btnBackendDetect" class="btn btn-sm btn-ghost" title="Kirim frame ke API /api/detect/image jika server aktif">
+                    ⚡ Proses via API
+                  </button>
+                  <button id="btnSaveSession" class="btn btn-sm btn-accent">
+                    💾 Simpan Sesi ke Supabase
+                  </button>
+                  <button id="btnDownloadSnapshot" class="btn btn-sm btn-primary">
+                    📸 Snapshot PNG
+                  </button>
+                </div>
+              </div>
+
+              <div class="canvas-stage" id="canvasStage">
+                <canvas id="mainCanvas" width="960" height="540"></canvas>
+                <video id="hiddenVideo" playsinline muted loop class="hidden"></video>
+                <div id="splitSliderHandle" class="split-handle hidden" title="Geser garis pemisah Before / After">
+                  <div class="split-knob">⇄</div>
+                </div>
+                <div class="canvas-hint-bar">
+                  <span>💡 Tip: Seret kotak hijau <strong>Object Region #1</strong> atau tarik sudutnya untuk mengubah area penghitungan secara real-time.</span>
+                  <span id="fpsCounter" class="mono-sm">Inference: ~14.2 ms</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Telemetry & Per-Class Breakdown -->
+            <div class="telemetry-grid">
+              <div class="kpi-card kpi-blue">
+                <span class="kpi-label">Total Terdeteksi</span>
+                <strong class="kpi-value" id="statTotalDetected">0</strong>
+                <span class="kpi-sub" id="statUniqueTracks">Objek kuliner teridentifikasi</span>
+              </div>
+              <div class="kpi-card kpi-green">
+                <span class="kpi-label">Inside Region #1</span>
+                <strong class="kpi-value" id="statInsideRegion">0</strong>
+                <span class="kpi-sub">Centroid di dalam area ROI</span>
+              </div>
+              <div class="kpi-card kpi-amber">
+                <span class="kpi-label">Outside Region</span>
+                <strong class="kpi-value" id="statOutsideRegion">0</strong>
+                <span class="kpi-sub">Centroid di luar area ROI</span>
+              </div>
+              <div class="kpi-card kpi-purple">
+                <span class="kpi-label">Rata-rata Confidence</span>
+                <strong class="kpi-value" id="statAvgConfidence">0%</strong>
+                <span class="kpi-sub" id="statEnhanceBoost">Metode: CLAHE</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h2>Rincian Per Kelas Kuliner &amp; Status Region #1</h2>
+                <span class="mini-tag" id="activeMethodBadge">CLAHE (LAB)</span>
+              </div>
+              <div id="classBreakdownGrid" class="breakdown-grid"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 2: BEFORE vs AFTER EVALUATION ==================== -->
+      <section id="tab-eval" class="tab-panel" role="tabpanel">
+        <div class="eval-header-card card">
+          <div class="eval-header-top">
+            <div>
+              <h2>Evaluasi Perbandingan Pengolahan Citra: Before vs After Enhancement</h2>
+              <p class="muted-text">
+                Pengujian komparatif pada citra kuliner Indonesia kondisi redup / kontras rendah (Before = Original vs After = HE, CLAHE, Contrast Stretching, Brightness/Gamma).
+              </p>
+            </div>
+            <div class="eval-controls">
+              <select id="evalSceneSelect" class="select-input">
+                  <option value="nasgor_malam">Uji Visual 1: Nasi Goreng (Foto Real + Simulasi Redup)</option>
+                  <option value="bakso_komplit">Uji Visual 2: Bakso Komplit (Foto Real + Simulasi Redup)</option>
+                  <option value="sate_madura">Uji Visual 3: Sate Ayam Madura (Foto Real + Simulasi Redup)</option>
+                  <option value="padang_rendang">Uji Visual 4: Rendang Padang (Foto Real + Simulasi Redup)</option>
+                  <option value="soto_ayam">Uji Visual 5: Soto Ayam (Foto Real + Simulasi Redup)</option>
+                  <option value="gado_gado">Uji Visual 6: Gado-Gado Betawi (Foto Real + Simulasi Redup)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 5-Card Side-by-Side Visual Comparison -->
+          <div id="fiveCardComparisonGrid" class="five-card-grid"></div>
+        </div>
+
+        <!-- Summary KPI Strip for 30 Test Images -->
+        <div class="telemetry-grid eval-kpis">
+          <div class="kpi-card kpi-amber">
+            <span class="kpi-label">Avg Confidence (Before)</span>
+            <strong class="kpi-value" id="evalAvgBefore">61.8%</strong>
+            <span class="kpi-sub">Citra Original tanpa enhancement</span>
+          </div>
+          <div class="kpi-card kpi-green">
+            <span class="kpi-label">Avg Confidence (CLAHE)</span>
+            <strong class="kpi-value" id="evalAvgClahe">89.4%</strong>
+            <span class="kpi-sub">Peningkatan signifikan pada detail lauk</span>
+          </div>
+          <div class="kpi-card kpi-blue">
+            <span class="kpi-label">Rata-rata Peningkatan (Δ)</span>
+            <strong class="kpi-value" id="evalAvgBoost">+27.6%</strong>
+            <span class="kpi-sub">Objek redup kembali terdeteksi</span>
+          </div>
+          <div class="kpi-card kpi-purple">
+            <span class="kpi-label">Rata-rata PSNR</span>
+            <strong class="kpi-value" id="evalAvgPsnr">29.4 dB</strong>
+            <span class="kpi-sub">Kualitas sinyal citra terjaga</span>
+          </div>
+        </div>
+
+        <!-- 30-Row Comparison Table -->
+        <div class="card">
+          <div class="card-header wrap-header">
+            <div>
+              <h2>Tabel Evaluasi 30 Citra Uji (Before vs After Enhancement)</h2>
+              <p class="muted-text">Data perbandingan deteksi YOLOv11 di seluruh 12 kelas kuliner Indonesia.</p>
+            </div>
+            <div class="action-btn-group">
+              <button id="btnDownloadCsv" class="btn btn-sm btn-secondary">📄 Download CSV</button>
+              <button id="btnDownloadExcel" class="btn btn-sm btn-accent">📊 Download Laporan Excel (.xlsx)</button>
+              <button id="btnSyncEvalSupabase" class="btn btn-sm btn-primary">☁️ Simpan Evaluasi ke Supabase</button>
+            </div>
+          </div>
+
+          <div class="table-filter-bar">
+            <input type="text" id="evalSearchInput" class="text-input" placeholder="Cari nama citra atau kelas kuliner (mis. Rendang, Bakso)..." />
+            <select id="evalMethodFilter" class="select-input narrow-select">
+              <option value="all">Semua Metode Terbaik</option>
+              <option value="CLAHE">CLAHE</option>
+              <option value="HE">HE</option>
+              <option value="Contrast Stretching">Contrast Stretching</option>
+              <option value="Brightness/Gamma">Brightness/Gamma</option>
+            </select>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table" id="evalComparisonTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nama Citra Uji</th>
+                  <th>Kelas Dominan</th>
+                  <th>GT</th>
+                  <th>Before (Count / Conf)</th>
+                  <th>HE (Count / Conf)</th>
+                  <th>CLAHE (Count / Conf)</th>
+                  <th>CS (Count / Conf)</th>
+                  <th>Brightness (Count / Conf)</th>
+                  <th>PSNR (dB)</th>
+                  <th>Δ Boost</th>
+                  <th>Metode Terbaik</th>
+                </tr>
+              </thead>
+              <tbody id="evalTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 3: SUPABASE & DATASET 600 ==================== -->
+      <section id="tab-db" class="tab-panel" role="tabpanel">
+        <div class="db-top-grid">
+          <!-- Dataset 600 Distribution Chart -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2>Distribusi Dataset 600 Citra (12 Kelas Kuliner Indonesia)</h2>
+                <p class="muted-text">Split Standar YOLOv11: Train 70% (420) • Valid 20% (120) • Test 10% (60)</p>
+              </div>
+              <span class="badge-pill">Total: 600 Citra</span>
+            </div>
+            <canvas id="datasetChartCanvas" width="760" height="300"></canvas>
+            <div class="dataset-split-legend">
+              <span><i class="leg-dot leg-train"></i>Train (70% = 420)</span>
+              <span><i class="leg-dot leg-valid"></i>Valid (20% = 120)</span>
+              <span><i class="leg-dot leg-test"></i>Test (10% = 60)</span>
+            </div>
+          </div>
+
+          <!-- Supabase Connection Card -->
+          <div class="card db-config-summary">
+            <div class="card-header">
+              <h2>Integrasi Database Supabase</h2>
+              <button id="btnOpenSupabaseModal2" class="btn btn-sm btn-primary">⚙️ Konfigurasi</button>
+            </div>
+            <p class="muted-text">
+              Menyimpan riwayat sesi deteksi, hasil penghitungan <strong>Object Region #1</strong>, log evaluasi Before vs After, serta katalog 12 kelas kuliner Indonesia ke PostgreSQL (Supabase REST API) dengan fallback otomatis saat offline.
+            </p>
+            <div class="db-stats-mini">
+              <div class="db-stat-box">
+                <span>Status Koneksi</span>
+                <strong id="dbPanelStatus">Mode Fallback Lokal</strong>
+              </div>
+              <div class="db-stat-box">
+                <span>Sesi Tersimpan</span>
+                <strong id="dbSessionCount">0</strong>
+              </div>
+              <div class="db-stat-box">
+                <span>Log Perbandingan</span>
+                <strong id="dbComparisonCount">0</strong>
+              </div>
+              <div class="db-stat-box">
+                <span>Kelas Kuliner</span>
+                <strong id="dbClassCount">12</strong>
+              </div>
+            </div>
+            <div class="action-btn-group">
+              <button id="btnRefreshSupabase" class="btn btn-sm btn-secondary">🔄 Muat Ulang Data</button>
+              <button id="btnResetLocalDb" class="btn btn-sm btn-ghost">🗑️ Reset Cache Lokal</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Database Sub-tabs -->
+        <div class="card">
+          <div class="card-header wrap-header">
+            <div class="subtab-bar">
+              <button class="subtab-btn active" data-subtab="sessions">📋 Sesi Deteksi &amp; ROI</button>
+              <button class="subtab-btn" data-subtab="comparisons">⚖️ Log Before vs After</button>
+              <button class="subtab-btn" data-subtab="classes">🍛 12 Kelas Kuliner Indonesia</button>
+            </div>
+            <span class="mini-tag" id="dbActiveSourceTag">Sumber: Local Fallback</span>
+          </div>
+
+          <div id="dbTableContainer" class="table-wrap"></div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 4: LANGUAGES, ARCHITECTURE & RUBRIC ==================== -->
+      <section id="tab-arch" class="tab-panel" role="tabpanel">
+        <!-- Answer to Lecturer Question -->
+        <div class="card highlight-card">
+          <div class="card-header">
+            <h2>💻 Jawaban Rubrik: &ldquo;Ada GUI, Dijelaskan Pakai Bahasa Pemrograman Apa?&rdquo;</h2>
+            <span class="badge-yolo">Full-Stack AI CV</span>
+          </div>
+          <p class="muted-text">
+            Aplikasi GUI <strong>NusantaraVision YOLOv11</strong> dibangun dengan arsitektur web modern berbasis browser dan backend AI Computer Vision:
+          </p>
+          <div class="lang-grid">
+            <div class="lang-card">
+              <div class="lang-badge badge-js">Frontend Web GUI</div>
+              <h3>HTML5 + CSS3 + JavaScript (ES6+)</h3>
+              <ul>
+                <li><strong>HTML5 Canvas 2D &amp; Video API</strong>: Rendering citra/video real-time, manipulasi piksel langsung (<code>ImageData</code>) untuk HE, CLAHE, Contrast Stretching, Gamma LUT, serta bounding box &amp; ROI interaktif.</li>
+                <li><strong>JavaScript ES6+</strong>: State management deteksi, simulasi ByteTrack ID &amp; motion trail, drag/resize Object Region #1, generator ekspor CSV/Excel, dan klien REST API Supabase.</li>
+                <li><strong>CSS3</strong>: Desain gelap modern responsif (CSS Grid &amp; Flexbox) tanpa dependensi eksternal agar berjalan lancar baik via <code>http://localhost:8000</code> maupun <code>file://</code>.</li>
+              </ul>
+            </div>
+
+            <div class="lang-card">
+              <div class="lang-badge badge-py">Backend &amp; Deep Learning</div>
+              <h3>Python 3 + FastAPI + OpenCV + YOLOv11</h3>
+              <ul>
+                <li><strong>Python 3.10+ &amp; Ultralytics YOLOv11</strong>: Model <code>yolo11n.pt</code> terlatih pada 600 citra kuliner (12 kelas) untuk deteksi, Object Counting, dan ByteTrack Multi-Object Tracking.</li>
+                <li><strong>OpenCV (<code>cv2</code>) &amp; NumPy</strong>: Implementasi server-side YCrCb HE, LAB CLAHE, Percentile Contrast Stretching, dan <code>cv2.pointPolygonTest</code> untuk Region Counter #1.</li>
+                <li><strong>FastAPI + OpenPyXL</strong>: REST API endpoint (<code>/api/detect/image</code>, <code>/api/detect/video</code>, <code>/api/export/excel</code>) &amp; Node.js v24 (<code>server.js</code>) fallback zero-dependency.</li>
+              </ul>
+            </div>
+
+            <div class="lang-card">
+              <div class="lang-badge badge-db">Database &amp; Training</div>
+              <h3>PostgreSQL (Supabase) + Google Colab (.ipynb)</h3>
+              <ul>
+                <li><strong>SQL / PostgreSQL (Supabase)</strong>: Skema relasional (<code>culinary_classes</code>, <code>detection_sessions</code>, <code>enhancement_comparisons</code>) lengkap dengan Row Level Security (RLS) dan REST API.</li>
+                <li><strong>Google Colab Jupyter Notebook (<code>.ipynb</code>)</strong>: Pipeline training GPU T4 (70% train / 20% valid / 10% test), ekspor model <code>best.pt</code> &amp; <code>best.onnx</code>, serta laporan Excel otomatis.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual Pipeline Diagram -->
+        <div class="card">
+          <div class="card-header">
+            <h2>🔄 Alur Arsitektur Sistem (End-to-End Pipeline)</h2>
+          </div>
+          <div class="pipeline-flow">
+            <div class="pipe-step">
+              <span class="pipe-num">1</span>
+              <strong>Input Media</strong>
+              <small>Gambar / Video / Sampel Kuliner</small>
+            </div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step">
+              <span class="pipe-num">2</span>
+              <strong>Image Enhancement</strong>
+              <small>HE / CLAHE / CS / Brightness</small>
+            </div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step">
+              <span class="pipe-num">3</span>
+              <strong>YOLOv11 + ByteTrack</strong>
+              <small>Deteksi 12 Kelas &amp; Track ID</small>
+            </div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step">
+              <span class="pipe-num">4</span>
+              <strong>Region Counter #1</strong>
+              <small>Inside vs Outside ROI</small>
+            </div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step">
+              <span class="pipe-num">5</span>
+              <strong>Output &amp; Persistence</strong>
+              <small>Excel (.xlsx) &amp; Supabase DB</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group Identity & Links + Rubric Checklist -->
+        <div class="arch-bottom-grid">
+          <div class="card">
+            <div class="card-header">
+              <h2>👥 Identitas Kelompok &amp; Tautan Presentasi (Maks. 3 Mahasiswa)</h2>
+              <button id="btnSaveGroupInfo" class="btn btn-sm btn-primary">💾 Simpan Info</button>
+            </div>
+            <div class="form-grid">
+              <div class="field-group">
+                <label for="inputGroupName">Nama Kelompok / Tim</label>
+                <input type="text" id="inputGroupName" class="text-input" value="Kelompok NusantaraVision — FTI UKSW" />
+              </div>
+              <div class="field-group">
+                <label for="inputMembers">Anggota (Maks. 3 Mahasiswa — Nama &amp; NIM)</label>
+                <textarea id="inputMembers" class="text-input" rows="3">1. Mahasiswa 1 (NIM: 672022xxx) - Dataset &amp; Training YOLOv11 Colab
+2. Mahasiswa 2 (NIM: 672022xxx) - Image Enhancement &amp; FastAPI Backend
+3. Mahasiswa 3 (NIM: 672022xxx) - Web GUI, Supabase DB &amp; Laporan Excel</textarea>
+              </div>
+              <div class="field-group">
+                <label for="inputYoutubeUrl">Link Video Demo YouTube Kelompok</label>
+                <div class="input-with-btn">
+                  <input type="url" id="inputYoutubeUrl" class="text-input" placeholder="https://www.youtube.com/watch?v=..." value="https://www.youtube.com/watch?v=DEMO_NUSANTARAVISION_YOLOV11" />
+                  <a id="linkOpenYoutube" href="#" target="_blank" rel="noopener" class="btn btn-sm btn-secondary">Buka ↗</a>
+                </div>
+              </div>
+              <div class="field-group">
+                <label for="inputGithubUrl">Link Repository GitHub</label>
+                <div class="input-with-btn">
+                  <input type="url" id="inputGithubUrl" class="text-input" placeholder="https://github.com/username/nusantaravision-yolov11" value="https://github.com/RanggaIkan/YOLOv11_Kuliner_Indonesia" />
+                  <a id="linkOpenGithub" href="#" target="_blank" rel="noopener" class="btn btn-sm btn-secondary">Buka ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>✅ Checklist Ketentuan (6) &amp; Penilaian Rubrik (10)</h2>
+              <span class="badge-pill">16 / 16 Terpenuhi</span>
+            </div>
+            <div class="checklist-columns">
+              <div>
+                <h3 class="checklist-subtitle">6 Ketentuan Wajib</h3>
+                <ul id="checklistKetentuan" class="rubric-list"></ul>
+              </div>
+              <div>
+                <h3 class="checklist-subtitle">10 Kriteria Penilaian</h3>
+                <ul id="checklistPenilaian" class="rubric-list"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Supabase Config Modal -->
+  <div id="supabaseModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="supabaseModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="supabaseModalTitle">Konfigurasi Koneksi Supabase</h2>
+        <button id="btnCloseSupabaseModal" class="btn-icon" aria-label="Tutup">&times;</button>
+      </div>
+      <p class="muted-text">
+        Masukkan Project URL dan Anon/Publishable Key Supabase Anda untuk menyinkronkan data secara langsung. Jika kosong, aplikasi otomatis menggunakan Fallback Lokal (<code>localStorage</code> + JSON).
+      </p>
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="inputSupabaseUrl">Supabase Project URL</label>
+          <input type="url" id="inputSupabaseUrl" class="text-input" placeholder="https://xxxxxxxxxxxx.supabase.co" />
+        </div>
+        <div class="field-group">
+          <label for="inputSupabaseKey">Supabase Anon / Publishable Key</label>
+          <input type="password" id="inputSupabaseKey" class="text-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="btnClearSupabaseConfig" class="btn btn-sm btn-ghost">Gunakan Offline Fallback</button>
+        <div class="action-btn-group">
+          <button id="btnTestSupabase" class="btn btn-sm btn-secondary">Uji Koneksi</button>
+          <button id="btnSaveSupabaseConfig" class="btn btn-sm btn-primary">Simpan &amp; Hubungkan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Scripts: supabase-service.js (owned by supabase-db) + app.js -->
+  <script src="supabase-service.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

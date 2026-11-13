@@ -1,0 +1,2488 @@
+{
+  "project": "Sistem Deteksi, Counting, Tracking & Image Enhancement Kuliner Indonesia (YOLOv11)",
+  "generated_at": "2026-11-13T11:01:52.374Z",
+  "generator": "scripts/prepare_samples.mjs",
+  "total_classes": 12,
+  "classes": [
+    {
+      "id": 0,
+      "name": "Nasi Goreng",
+      "slug": "nasi-goreng",
+      "color": "#E67E22",
+      "category": "Makanan Pokok",
+      "region_origin": "Nusantara"
+    },
+    {
+      "id": 1,
+      "name": "Bakso",
+      "slug": "bakso",
+      "color": "#7F8C8D",
+      "category": "Berkuah",
+      "region_origin": "Jawa Tengah / Jawa Timur"
+    },
+    {
+      "id": 2,
+      "name": "Sate Ayam",
+      "slug": "sate-ayam",
+      "color": "#D35400",
+      "category": "Panggang",
+      "region_origin": "Madura, Jawa Timur"
+    },
+    {
+      "id": 3,
+      "name": "Rendang",
+      "slug": "rendang",
+      "color": "#6E2C00",
+      "category": "Lauk Utama",
+      "region_origin": "Minangkabau, Sumatera Barat"
+    },
+    {
+      "id": 4,
+      "name": "Soto Ayam",
+      "slug": "soto-ayam",
+      "color": "#F1C40F",
+      "category": "Berkuah",
+      "region_origin": "Lamongan / Jawa"
+    },
+    {
+      "id": 5,
+      "name": "Ayam Goreng",
+      "slug": "ayam-goreng",
+      "color": "#CA6F1E",
+      "category": "Lauk Utama",
+      "region_origin": "Nusantara"
+    },
+    {
+      "id": 6,
+      "name": "Mie Goreng",
+      "slug": "mie-goreng",
+      "color": "#F39C12",
+      "category": "Makanan Pokok",
+      "region_origin": "Jawa / Nusantara"
+    },
+    {
+      "id": 7,
+      "name": "Tempe Goreng",
+      "slug": "tempe-goreng",
+      "color": "#B7950B",
+      "category": "Lauk Pendamping",
+      "region_origin": "Jawa"
+    },
+    {
+      "id": 8,
+      "name": "Tahu Goreng",
+      "slug": "tahu-goreng",
+      "color": "#F5B041",
+      "category": "Lauk Pendamping",
+      "region_origin": "Jawa"
+    },
+    {
+      "id": 9,
+      "name": "Gado-Gado",
+      "slug": "gado-gado",
+      "color": "#27AE60",
+      "category": "Sayuran",
+      "region_origin": "Betawi, DKI Jakarta"
+    },
+    {
+      "id": 10,
+      "name": "Pempek",
+      "slug": "pempek",
+      "color": "#D4AC0D",
+      "category": "Kudapan",
+      "region_origin": "Palembang, Sumatera Selatan"
+    },
+    {
+      "id": 11,
+      "name": "Telur Balado",
+      "slug": "telur-balado",
+      "color": "#C0392B",
+      "category": "Lauk Pendamping",
+      "region_origin": "Minangkabau, Sumatera Barat"
+    }
+  ],
+  "images": [
+    {
+      "id": "nasi_goreng_spesial",
+      "filename": "nasi_goreng_spesial.png",
+      "path": "samples/images/nasi_goreng_spesial.png",
+      "title": "Nasi Goreng Spesial Komplit",
+      "description": "Piring nasi goreng dengan telur balado, ayam goreng, dan tempe goreng dalam pencahayaan redup warung malam.",
+      "width": 640,
+      "height": 480,
+      "lighting_condition": "low_light",
+      "recommended_enhancement": "clahe",
+      "default_roi": [
+        [
+          110,
+          80
+        ],
+        [
+          530,
+          80
+        ],
+        [
+          530,
+          410
+        ],
+        [
+          110,
+          410
+        ]
+      ],
+      "default_roi_norm": [
+        [
+          0.1719,
+          0.1667
+        ],
+        [
+          0.8281,
+          0.1667
+        ],
+        [
+          0.8281,
+          0.8542
+        ],
+        [
+          0.1719,
+          0.8542
+        ]
+      ],
+      "ground_truth": [
+        {
+          "class_id": 0,
+          "class_name": "Nasi Goreng",
+          "bbox_xyxy": [
+            185,
+            179,
+            385,
+            331
+          ],
+          "bbox_yolo": [
+            0.445313,
+            0.53125,
+            0.3125,
+            0.316667
+          ],
+          "confidence_gt": 0.95,
+          "in_default_roi": true
+        },
+        {
+          "class_id": 11,
+          "class_name": "Telur Balado",
+          "bbox_xyxy": [
+            367,
+            168,
+            443,
+            227
+          ],
+          "bbox_yolo": [
+            0.632813,
+            0.411458,
+            0.11875,
+            0.122917
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": true
+        },
+        {
+          "class_id": 5,
+          "class_name": "Ayam Goreng",
+          "bbox_xyxy": [
+            367,
+            265,
+            461,
+            323
+          ],
+          "bbox_yolo": [
+            0.646875,
+            0.6125,
+            0.146875,
+            0.120833
+          ],
+          "confidence_gt": 0.93,
+          "in_default_roi": true
+        },
+        {
+          "class_id": 7,
+          "class_name": "Tempe Goreng",
+          "bbox_xyxy": [
+            153,
+            147,
+            237,
+            204
+          ],
+          "bbox_yolo": [
+            0.304688,
+            0.365625,
+            0.13125,
+            0.11875
+          ],
+          "confidence_gt": 0.89,
+          "in_default_roi": true
+        }
+      ]
+    },
+    {
+      "id": "bakso_komplit",
+      "filename": "bakso_komplit.png",
+      "path": "samples/images/bakso_komplit.png",
+      "title": "Bakso Komplit & Tahu Goreng",
+      "description": "Dua mangkuk bakso urat dengan pendamping tahu goreng dan mie goreng dalam pencahayaan bayangan tidak merata.",
+      "width": 640,
+      "height": 480,
+      "lighting_condition": "uneven_shadow",
+      "recommended_enhancement": "he",
+      "default_roi": [
+        [
+          70,
+          70
+        ],
+        [
+          390,
+          70
+        ],
+        [
+          390,
+          415
+        ],
+        [
+          70,
+          415
+        ]
+      ],
+      "default_roi_norm": [
+        [
+          0.1094,
+          0.1458
+        ],
+        [
+          0.6094,
+          0.1458
+        ],
+        [
+          0.6094,
+          0.8646
+        ],
+        [
+          0.1094,
+          0.8646
+        ]
+      ],
+      "ground_truth": [
+        {
+          "class_id": 1,
+          "class_name": "Bakso",
+          "bbox_xyxy": [
+            136,
+            164,
+            314,
+            326
+          ],
+          "bbox_yolo": [
+            0.351563,
+            0.510417,
+            0.278125,
+            0.3375
+          ],
+          "confidence_gt": 0.96,
+          "in_default_roi": true
+        },
+        {
+          "class_id": 8,
+          "class_name": "Tahu Goreng",
+          "bbox_xyxy": [
+            443,
+            134,
+            527,
+            197
+          ],
+          "bbox_yolo": [
+            0.757813,
+            0.344792,
+            0.13125,
+            0.13125
+          ],
+          "confidence_gt": 0.9,
+          "in_default_roi": false
+        },
+        {
+          "class_id": 6,
+          "class_name": "Mie Goreng",
+          "bbox_xyxy": [
+            414,
+            290,
+            556,
+            390
+          ],
+          "bbox_yolo": [
+            0.757813,
+            0.708333,
+            0.221875,
+            0.208333
+          ],
+          "confidence_gt": 0.92,
+          "in_default_roi": false
+        }
+      ]
+    },
+    {
+      "id": "sate_ayam_madura",
+      "filename": "sate_ayam_madura.png",
+      "path": "samples/images/sate_ayam_madura.png",
+      "title": "Sate Ayam Madura & Soto Ayam",
+      "description": "Seporsi sate ayam bumbu kacang bersama semangkuk soto ayam dan tahu goreng di meja kantin.",
+      "width": 640,
+      "height": 480,
+      "lighting_condition": "hazy_fluorescent",
+      "recommended_enhancement": "cs",
+      "default_roi": [
+        [
+          60,
+          110
+        ],
+        [
+          375,
+          110
+        ],
+        [
+          375,
+          390
+        ],
+        [
+          60,
+          390
+        ]
+      ],
+      "default_roi_norm": [
+        [
+          0.0938,
+          0.2292
+        ],
+        [
+          0.5859,
+          0.2292
+        ],
+        [
+          0.5859,
+          0.8125
+        ],
+        [
+          0.0938,
+          0.8125
+        ]
+      ],
+      "ground_truth": [
+        {
+          "class_id": 2,
+          "class_name": "Sate Ayam",
+          "bbox_xyxy": [
+            121,
+            180,
+            329,
+            320
+          ],
+          "bbox_yolo": [
+            0.351563,
+            0.520833,
+            0.325,
+            0.291667
+          ],
+          "confidence_gt": 0.96,
+          "in_default_roi": true
+        },
+        {
+          "class_id": 4,
+          "class_name": "Soto Ayam",
+          "bbox_xyxy": [
+            430,
+            128,
+            560,
+            242
+          ],
+          "bbox_yolo": [
+            0.773438,
+            0.385417,
+            0.203125,
+            0.2375
+          ],
+          "confidence_gt": 0.93,
+          "in_default_roi": false
+        },
+        {
+          "class_id": 8,
+          "class_name": "Tahu Goreng",
+          "bbox_xyxy": [
+            457,
+            327,
+            533,
+            384
+          ],
+          "bbox_yolo": [
+            0.773438,
+            0.740625,
+            0.11875,
+            0.11875
+          ],
+          "confidence_gt": 0.88,
+          "in_default_roi": false
+        }
+      ]
+    },
+    {
+      "id": "nasi_padang_rendang",
+      "filename": "nasi_padang_rendang.png",
+      "path": "samples/images/nasi_padang_rendang.png",
+      "title": "Nasi Padang Rendang & Lauk Komplit",
+      "description": "Sajian hidangan Padang berisi rendang daging, telur balado, ayam goreng, dan tempe goreng.",
+      "width": 640,
+      "height": 480,
+      "lighting_condition": "low_light",
+      "recommended_enhancement": "brightness",
+      "default_roi": [
+        [
+          120,
+          75
+        ],
+        [
+          520,
+          75
+        ],
+        [
+          520,
+          405
+        ],
+        [
+          120,
+          405
+        ]
+      ],
+      "default_roi_norm": [
+        [
+          0.1875,
+          0.1563
+        ],
+        [
+          0.8125,
+          0.1563
+        ],
+        [
+          0.8125,
+          0.8438
+        ],
+        [
+          0.1875,
+          0.8438
+        ]
+      ],
+      "ground_truth": [
+        {
+          "class_id": 3,
+          "class_name": "Rendang",
+          "bbox_xyxy": [
+            170,
+            149,
+            300,
+            243
+          ],
+          "bbox_yolo": [
+            0.367188,
+            0.408333,
+            0.203125,
+            0.195833
+          ],
+          "confidence_gt": 0.95,
+          "in_default_roi": true
+        },
+        {
+          "class_id": 11,
+          "class_name": "Telur Balado",
+          "bbox_xyxy": [
+            355,
+            156,
+            435,
+            218
+          ],
+          "bbox_yolo": [
+            0.617188,
+            0.389583,
+            0.125,
+            0.129167
+          ],
+          "confidence_gt": 0.94,
+          "in_default_roi": true
+        },
+        {
+          "class_id": 5,
+          "class_name": "Ayam Goreng",
+          "bbox_xyxy": [
+            202,
+            282,
+            306,
+            346
+          ],
+          "bbox_yolo": [
+            0.396875,
+            0.654167,
+            0.1625,
+            0.133333
+          ],
+          "confidence_gt": 0.92,
+          "in_default_roi": true
+        },
+        {
+          "class_id": 7,
+          "class_name": "Tempe Goreng",
+          "bbox_xyxy": [
+            366,
+            285,
+            454,
+            345
+          ],
+          "bbox_yolo": [
+            0.640625,
+            0.65625,
+            0.1375,
+            0.125
+          ],
+          "confidence_gt": 0.9,
+          "in_default_roi": true
+        }
+      ]
+    },
+    {
+      "id": "prasmanan_kuliner_nusantara",
+      "filename": "prasmanan_kuliner_nusantara.png",
+      "path": "samples/images/prasmanan_kuliner_nusantara.png",
+      "title": "Prasmanan Kuliner Nusantara (12 Kelas)",
+      "description": "Meja prasmanan besar menampilkan representasi seluruh 12 kelas kuliner Indonesia untuk pengujian counting dan Region ROI.",
+      "width": 640,
+      "height": 480,
+      "lighting_condition": "uneven_shadow",
+      "recommended_enhancement": "clahe",
+      "default_roi": [
+        [
+          140,
+          110
+        ],
+        [
+          500,
+          110
+        ],
+        [
+          500,
+          370
+        ],
+        [
+          140,
+          370
+        ]
+      ],
+      "default_roi_norm": [
+        [
+          0.2188,
+          0.2292
+        ],
+        [
+          0.7813,
+          0.2292
+        ],
+        [
+          0.7813,
+          0.7708
+        ],
+        [
+          0.2188,
+          0.7708
+        ]
+      ],
+      "ground_truth": [
+        {
+          "class_id": 0,
+          "class_name": "Nasi Goreng",
+          "bbox_xyxy": [
+            37,
+            48,
+            153,
+            136
+          ],
+          "bbox_yolo": [
+            0.148438,
+            0.191667,
+            0.18125,
+            0.183333
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": false
+        },
+        {
+          "class_id": 1,
+          "class_name": "Bakso",
+          "bbox_xyxy": [
+            197,
+            49,
+            293,
+            135
+          ],
+          "bbox_yolo": [
+            0.382813,
+            0.191667,
+            0.15,
+            0.179167
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": false
+        },
+        {
+          "class_id": 2,
+          "class_name": "Sate Ayam",
+          "bbox_xyxy": [
+            339,
+            55,
+            451,
+            129
+          ],
+          "bbox_yolo": [
+            0.617188,
+            0.191667,
+            0.175,
+            0.154167
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": false
+        },
+        {
+          "class_id": 3,
+          "class_name": "Rendang",
+          "bbox_xyxy": [
+            497,
+            59,
+            593,
+            127
+          ],
+          "bbox_yolo": [
+            0.851563,
+            0.19375,
+            0.15,
+            0.141667
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": false
+        },
+        {
+          "class_id": 4,
+          "class_name": "Soto Ayam",
+          "bbox_xyxy": [
+            50,
+            200,
+            140,
+            280
+          ],
+          "bbox_yolo": [
+            0.148438,
+            0.5,
+            0.140625,
+            0.166667
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": false
+        },
+        {
+          "class_id": 5,
+          "class_name": "Ayam Goreng",
+          "bbox_xyxy": [
+            203,
+            214,
+            285,
+            265
+          ],
+          "bbox_yolo": [
+            0.38125,
+            0.498958,
+            0.128125,
+            0.10625
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": true
+        },
+        {
+          "class_id": 6,
+          "class_name": "Mie Goreng",
+          "bbox_xyxy": [
+            342,
+            203,
+            448,
+            277
+          ],
+          "bbox_yolo": [
+            0.617188,
+            0.5,
+            0.165625,
+            0.154167
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": true
+        },
+        {
+          "class_id": 7,
+          "class_name": "Tempe Goreng",
+          "bbox_xyxy": [
+            506,
+            214,
+            584,
+            266
+          ],
+          "bbox_yolo": [
+            0.851563,
+            0.5,
+            0.121875,
+            0.108333
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": false
+        },
+        {
+          "class_id": 8,
+          "class_name": "Tahu Goreng",
+          "bbox_xyxy": [
+            58,
+            360,
+            132,
+            416
+          ],
+          "bbox_yolo": [
+            0.148438,
+            0.808333,
+            0.115625,
+            0.116667
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": false
+        },
+        {
+          "class_id": 9,
+          "class_name": "Gado-Gado",
+          "bbox_xyxy": [
+            189,
+            345,
+            301,
+            431
+          ],
+          "bbox_yolo": [
+            0.382813,
+            0.808333,
+            0.175,
+            0.179167
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": false
+        },
+        {
+          "class_id": 10,
+          "class_name": "Pempek",
+          "bbox_xyxy": [
+            353,
+            362,
+            443,
+            418
+          ],
+          "bbox_yolo": [
+            0.621875,
+            0.8125,
+            0.140625,
+            0.116667
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": false
+        },
+        {
+          "class_id": 11,
+          "class_name": "Telur Balado",
+          "bbox_xyxy": [
+            511,
+            363,
+            579,
+            417
+          ],
+          "bbox_yolo": [
+            0.851563,
+            0.8125,
+            0.10625,
+            0.1125
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": false
+        }
+      ]
+    },
+    {
+      "id": "gado_gado_tahu_tempe",
+      "filename": "gado_gado_tahu_tempe.png",
+      "path": "samples/images/gado_gado_tahu_tempe.png",
+      "title": "Gado-Gado, Pempek & Tahu Tempe",
+      "description": "Hidangan gado-gado Betawi lengkap dengan tempe goreng, tahu goreng, dan pempek kapal selam.",
+      "width": 640,
+      "height": 480,
+      "lighting_condition": "normal",
+      "recommended_enhancement": "clahe",
+      "default_roi": [
+        [
+          80,
+          90
+        ],
+        [
+          380,
+          90
+        ],
+        [
+          380,
+          400
+        ],
+        [
+          80,
+          400
+        ]
+      ],
+      "default_roi_norm": [
+        [
+          0.125,
+          0.1875
+        ],
+        [
+          0.5938,
+          0.1875
+        ],
+        [
+          0.5938,
+          0.8333
+        ],
+        [
+          0.125,
+          0.8333
+        ]
+      ],
+      "ground_truth": [
+        {
+          "class_id": 9,
+          "class_name": "Gado-Gado",
+          "bbox_xyxy": [
+            127,
+            171,
+            323,
+            319
+          ],
+          "bbox_yolo": [
+            0.351563,
+            0.510417,
+            0.30625,
+            0.308333
+          ],
+          "confidence_gt": 0.95,
+          "in_default_roi": true
+        },
+        {
+          "class_id": 7,
+          "class_name": "Tempe Goreng",
+          "bbox_xyxy": [
+            444,
+            100,
+            532,
+            160
+          ],
+          "bbox_yolo": [
+            0.7625,
+            0.270833,
+            0.1375,
+            0.125
+          ],
+          "confidence_gt": 0.91,
+          "in_default_roi": false
+        },
+        {
+          "class_id": 8,
+          "class_name": "Tahu Goreng",
+          "bbox_xyxy": [
+            449,
+            226,
+            527,
+            284
+          ],
+          "bbox_yolo": [
+            0.7625,
+            0.53125,
+            0.121875,
+            0.120833
+          ],
+          "confidence_gt": 0.9,
+          "in_default_roi": false
+        },
+        {
+          "class_id": 10,
+          "class_name": "Pempek",
+          "bbox_xyxy": [
+            439,
+            349,
+            543,
+            415
+          ],
+          "bbox_yolo": [
+            0.767188,
+            0.795833,
+            0.1625,
+            0.1375
+          ],
+          "confidence_gt": 0.92,
+          "in_default_roi": false
+        }
+      ]
+    }
+  ],
+  "videos": [
+    {
+      "id": "prasmanan_tracking_demo",
+      "filename": "prasmanan_tracking_demo.avi",
+      "path": "samples/videos/prasmanan_tracking_demo.avi",
+      "frames_dir": "samples/videos/frames/prasmanan_tracking_demo",
+      "format": "AVI (24-bit BGR DIB) + PNG Frame Sequence",
+      "title": "Demo Tracking Nampan Prasmanan (ByteTrack & Region Counter)",
+      "description": "Simulasi video 16 frame piring kuliner bergerak melintasi zona ROI meja kasir untuk pengujian ByteTrack dan Region Counter.",
+      "width": 320,
+      "height": 240,
+      "fps": 6,
+      "frame_count": 16,
+      "default_roi": [
+        [
+          105,
+          35
+        ],
+        [
+          225,
+          35
+        ],
+        [
+          225,
+          205
+        ],
+        [
+          105,
+          205
+        ]
+      ],
+      "expected_tracks": [
+        {
+          "track_id": 1,
+          "class_id": 0,
+          "class_name": "Nasi Goreng",
+          "enters_roi": true
+        },
+        {
+          "track_id": 2,
+          "class_id": 1,
+          "class_name": "Bakso",
+          "enters_roi": true
+        },
+        {
+          "track_id": 3,
+          "class_id": 3,
+          "class_name": "Rendang",
+          "enters_roi": true
+        }
+      ],
+      "frame_annotations": [
+        {
+          "frame_index": 0,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_001.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                1,
+                42,
+                83,
+                104
+              ],
+              "in_roi": false,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                235,
+                118,
+                305,
+                182
+              ],
+              "in_roi": false,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                172,
+                195,
+                215
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            }
+          ]
+        },
+        {
+          "frame_index": 1,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_002.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                17,
+                43,
+                99,
+                105
+              ],
+              "in_roi": false,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                220,
+                117,
+                290,
+                181
+              ],
+              "in_roi": false,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                169,
+                195,
+                212
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            }
+          ]
+        },
+        {
+          "frame_index": 2,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_003.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                32,
+                43,
+                114,
+                105
+              ],
+              "in_roi": false,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                205,
+                115,
+                275,
+                179
+              ],
+              "in_roi": false,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                167,
+                195,
+                210
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            }
+          ]
+        },
+        {
+          "frame_index": 3,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_004.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                48,
+                42,
+                130,
+                104
+              ],
+              "in_roi": false,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                190,
+                112,
+                260,
+                176
+              ],
+              "in_roi": false,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                166,
+                195,
+                209
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            }
+          ]
+        },
+        {
+          "frame_index": 4,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_005.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                64,
+                40,
+                146,
+                102
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                175,
+                110,
+                245,
+                174
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                165,
+                195,
+                208
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            }
+          ]
+        },
+        {
+          "frame_index": 5,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_006.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                80,
+                37,
+                162,
+                99
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                160,
+                108,
+                230,
+                172
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                165,
+                195,
+                208
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            }
+          ]
+        },
+        {
+          "frame_index": 6,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_007.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                95,
+                35,
+                177,
+                97
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                145,
+                107,
+                215,
+                171
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                167,
+                195,
+                210
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            }
+          ]
+        },
+        {
+          "frame_index": 7,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_008.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                111,
+                33,
+                193,
+                95
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                130,
+                107,
+                200,
+                171
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                169,
+                195,
+                212
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            }
+          ]
+        },
+        {
+          "frame_index": 8,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_009.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                127,
+                31,
+                209,
+                93
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                116,
+                108,
+                186,
+                172
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                171,
+                195,
+                214
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            }
+          ]
+        },
+        {
+          "frame_index": 9,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_010.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                143,
+                31,
+                225,
+                93
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                101,
+                110,
+                171,
+                174
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                174,
+                195,
+                217
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            }
+          ]
+        },
+        {
+          "frame_index": 10,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_011.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                158,
+                32,
+                240,
+                94
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                86,
+                112,
+                156,
+                176
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                176,
+                195,
+                219
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            }
+          ]
+        },
+        {
+          "frame_index": 11,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_012.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                174,
+                33,
+                256,
+                95
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                71,
+                115,
+                141,
+                179
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                177,
+                195,
+                220
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            }
+          ]
+        },
+        {
+          "frame_index": 12,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_013.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                190,
+                35,
+                272,
+                97
+              ],
+              "in_roi": false,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                56,
+                117,
+                126,
+                181
+              ],
+              "in_roi": false,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                177,
+                195,
+                220
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            }
+          ]
+        },
+        {
+          "frame_index": 13,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_014.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                206,
+                38,
+                288,
+                100
+              ],
+              "in_roi": false,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                41,
+                119,
+                111,
+                183
+              ],
+              "in_roi": false,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                176,
+                195,
+                219
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            }
+          ]
+        },
+        {
+          "frame_index": 14,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_015.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                221,
+                40,
+                303,
+                102
+              ],
+              "in_roi": false,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                26,
+                119,
+                96,
+                183
+              ],
+              "in_roi": false,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                174,
+                195,
+                217
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            }
+          ]
+        },
+        {
+          "frame_index": 15,
+          "frame_file": "samples/videos/frames/prasmanan_tracking_demo/frame_016.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 0,
+              "class_name": "Nasi Goreng",
+              "bbox_xyxy": [
+                237,
+                42,
+                319,
+                104
+              ],
+              "in_roi": false,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 2,
+              "class_id": 1,
+              "class_name": "Bakso",
+              "bbox_xyxy": [
+                11,
+                118,
+                81,
+                182
+              ],
+              "in_roi": false,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 3,
+              "class_id": 3,
+              "class_name": "Rendang",
+              "bbox_xyxy": [
+                135,
+                172,
+                195,
+                215
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "antrean_kantin_demo",
+      "filename": "antrean_kantin_demo.avi",
+      "path": "samples/videos/antrean_kantin_demo.avi",
+      "frames_dir": "samples/videos/frames/antrean_kantin_demo",
+      "format": "AVI (24-bit BGR DIB) + PNG Frame Sequence",
+      "title": "Demo Antrean Kasir Kantin Nusantara",
+      "description": "Simulasi video 16 frame menu Sate Ayam, Gado-Gado, dan Telur Balado bergerak masuk ke Region Counter kasir.",
+      "width": 320,
+      "height": 240,
+      "fps": 6,
+      "frame_count": 16,
+      "default_roi": [
+        [
+          135,
+          30
+        ],
+        [
+          295,
+          30
+        ],
+        [
+          295,
+          210
+        ],
+        [
+          135,
+          210
+        ]
+      ],
+      "expected_tracks": [
+        {
+          "track_id": 1,
+          "class_id": 2,
+          "class_name": "Sate Ayam",
+          "enters_roi": true
+        },
+        {
+          "track_id": 2,
+          "class_id": 9,
+          "class_name": "Gado-Gado",
+          "enters_roi": true
+        },
+        {
+          "track_id": 3,
+          "class_id": 11,
+          "class_name": "Telur Balado",
+          "enters_roi": true
+        }
+      ],
+      "frame_annotations": [
+        {
+          "frame_index": 0,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_001.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                0,
+                51,
+                75,
+                103
+              ],
+              "in_roi": false,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                8,
+                143,
+                88,
+                203
+              ],
+              "in_roi": false,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                103,
+                242,
+                138
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            }
+          ]
+        },
+        {
+          "frame_index": 1,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_002.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                12,
+                52,
+                90,
+                104
+              ],
+              "in_roi": false,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                21,
+                142,
+                101,
+                202
+              ],
+              "in_roi": false,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                100,
+                242,
+                135
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            }
+          ]
+        },
+        {
+          "frame_index": 2,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_003.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                26,
+                52,
+                104,
+                104
+              ],
+              "in_roi": false,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                34,
+                140,
+                114,
+                200
+              ],
+              "in_roi": false,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                98,
+                242,
+                133
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            }
+          ]
+        },
+        {
+          "frame_index": 3,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_004.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                41,
+                51,
+                119,
+                103
+              ],
+              "in_roi": false,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                47,
+                137,
+                127,
+                197
+              ],
+              "in_roi": false,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                97,
+                242,
+                132
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            }
+          ]
+        },
+        {
+          "frame_index": 4,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_005.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                55,
+                49,
+                133,
+                101
+              ],
+              "in_roi": false,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                61,
+                135,
+                141,
+                195
+              ],
+              "in_roi": false,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                96,
+                242,
+                131
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            }
+          ]
+        },
+        {
+          "frame_index": 5,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_006.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                70,
+                46,
+                148,
+                98
+              ],
+              "in_roi": false,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                74,
+                133,
+                154,
+                193
+              ],
+              "in_roi": false,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                96,
+                242,
+                131
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            }
+          ]
+        },
+        {
+          "frame_index": 6,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_007.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                85,
+                44,
+                163,
+                96
+              ],
+              "in_roi": false,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                87,
+                132,
+                167,
+                192
+              ],
+              "in_roi": false,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                98,
+                242,
+                133
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            }
+          ]
+        },
+        {
+          "frame_index": 7,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_008.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                99,
+                42,
+                177,
+                94
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                100,
+                132,
+                180,
+                192
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                100,
+                242,
+                135
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            }
+          ]
+        },
+        {
+          "frame_index": 8,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_009.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                114,
+                40,
+                192,
+                92
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                113,
+                133,
+                193,
+                193
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                102,
+                242,
+                137
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            }
+          ]
+        },
+        {
+          "frame_index": 9,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_010.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                128,
+                40,
+                206,
+                92
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                126,
+                135,
+                206,
+                195
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                105,
+                242,
+                140
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            }
+          ]
+        },
+        {
+          "frame_index": 10,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_011.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                143,
+                41,
+                221,
+                93
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                139,
+                137,
+                219,
+                197
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                107,
+                242,
+                142
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            }
+          ]
+        },
+        {
+          "frame_index": 11,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_012.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                158,
+                42,
+                236,
+                94
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                152,
+                140,
+                232,
+                200
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                108,
+                242,
+                143
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            }
+          ]
+        },
+        {
+          "frame_index": 12,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_013.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                172,
+                44,
+                250,
+                96
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                166,
+                142,
+                246,
+                202
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                108,
+                242,
+                143
+              ],
+              "in_roi": true,
+              "confidence": 0.88
+            }
+          ]
+        },
+        {
+          "frame_index": 13,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_014.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                187,
+                47,
+                265,
+                99
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                179,
+                144,
+                259,
+                204
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                107,
+                242,
+                142
+              ],
+              "in_roi": true,
+              "confidence": 0.9
+            }
+          ]
+        },
+        {
+          "frame_index": 14,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_015.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                201,
+                49,
+                279,
+                101
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                192,
+                144,
+                272,
+                204
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                105,
+                242,
+                140
+              ],
+              "in_roi": true,
+              "confidence": 0.92
+            }
+          ]
+        },
+        {
+          "frame_index": 15,
+          "frame_file": "samples/videos/frames/antrean_kantin_demo/frame_016.png",
+          "detections": [
+            {
+              "track_id": 1,
+              "class_id": 2,
+              "class_name": "Sate Ayam",
+              "bbox_xyxy": [
+                216,
+                51,
+                294,
+                103
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 2,
+              "class_id": 9,
+              "class_name": "Gado-Gado",
+              "bbox_xyxy": [
+                205,
+                143,
+                285,
+                203
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            },
+            {
+              "track_id": 3,
+              "class_id": 11,
+              "class_name": "Telur Balado",
+              "bbox_xyxy": [
+                198,
+                103,
+                242,
+                138
+              ],
+              "in_roi": true,
+              "confidence": 0.94
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

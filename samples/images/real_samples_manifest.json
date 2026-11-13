@@ -1,0 +1,109 @@
+{
+  "generated_at": "2026-11-13T11:36:44.245Z",
+  "stats": {
+    "total": 72,
+    "train": 48,
+    "valid": 12,
+    "test": 12,
+    "perClass": {
+      "Nasi Goreng": 6,
+      "Bakso": 6,
+      "Sate Ayam": 6,
+      "Rendang": 6,
+      "Soto Ayam": 6,
+      "Ayam Goreng": 6,
+      "Mie Goreng": 6,
+      "Tempe Goreng": 6,
+      "Tahu Goreng": 6,
+      "Gado-Gado": 6,
+      "Pempek": 6,
+      "Telur Balado": 6
+    }
+  },
+  "samples": [
+    {
+      "classId": 0,
+      "name": "Nasi Goreng",
+      "slug": "nasi_goreng",
+      "sampleFile": "nasi_goreng_real.jpg",
+      "bytes": 178801
+    },
+    {
+      "classId": 1,
+      "name": "Bakso",
+      "slug": "bakso",
+      "sampleFile": "bakso_real.jpg",
+      "bytes": 81434
+    },
+    {
+      "classId": 2,
+      "name": "Sate Ayam",
+      "slug": "sate_ayam",
+      "sampleFile": "sate_ayam_real.jpg",
+      "bytes": 156330
+    },
+    {
+      "classId": 3,
+      "name": "Rendang",
+      "slug": "rendang",
+      "sampleFile": "rendang_real.jpg",
+      "bytes": 157799
+    },
+    {
+      "classId": 4,
+      "name": "Soto Ayam",
+      "slug": "soto_ayam",
+      "sampleFile": "soto_ayam_real.jpg",
+      "bytes": 166824
+    },
+    {
+      "classId": 5,
+      "name": "Ayam Goreng",
+      "slug": "ayam_goreng",
+      "sampleFile": "ayam_goreng_real.jpg",
+      "bytes": 158392
+    },
+    {
+      "classId": 6,
+      "name": "Mie Goreng",
+      "slug": "mie_goreng",
+      "sampleFile": "mie_goreng_real.jpg",
+      "bytes": 156523
+    },
+    {
+      "classId": 7,
+      "name": "Tempe Goreng",
+      "slug": "tempe_goreng",
+      "sampleFile": "tempe_goreng_real.jpg",
+      "bytes": 160259
+    },
+    {
+      "classId": 8,
+      "name": "Tahu Goreng",
+      "slug": "tahu_goreng",
+      "sampleFile": "tahu_goreng_real.jpg",
+      "bytes": 197808
+    },
+    {
+      "classId": 9,
+      "name": "Gado-Gado",
+      "slug": "gado_gado",
+      "sampleFile": "gado_gado_real.jpg",
+      "bytes": 188404
+    },
+    {
+      "classId": 10,
+      "name": "Pempek",
+      "slug": "pempek",
+      "sampleFile": "pempek_real.jpg",
+      "bytes": 67441
+    },
+    {
+      "classId": 11,
+      "name": "Telur Balado",
+      "slug": "telur_balado",
+      "sampleFile": "telur_balado_real.jpg",
+      "bytes": 233919
+    }
+  ]
+}
