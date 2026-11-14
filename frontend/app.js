@@ -125,10 +125,13 @@
       }
     }
     const img = new Image();
-    const record = { img, loaded: false, failed: false, srcPath: targetFile };
+    let resolveLoad;
+    const promise = new Promise((resolve) => { resolveLoad = resolve; });
+    const record = { img, loaded: false, failed: false, srcPath: targetFile, promise };
     realImageCache.set(sceneKey, record);
     img.onload = () => {
       record.loaded = true;
+      resolveLoad(img);
       if (state.sampleKey === sceneKey && state.activeTab === "tab-detect") {
         renderDetectFrame();
       }
@@ -138,6 +141,10 @@
     };
     img.onerror = () => {
       record.failed = true;
+      resolveLoad(null);
+      if (state.sampleKey === sceneKey && state.activeTab === "tab-detect") {
+        renderDetectFrame();
+      }
     };
     img.src = resolveAssetUrl(targetFile);
     return null;
@@ -159,23 +166,49 @@
     const cache = videoFrameCache.get(sceneKey);
     if (cache.has(safeIdx)) {
       const rec = cache.get(safeIdx);
-      return { img: rec.loaded && !rec.failed ? rec.img : null, failed: rec.failed };
+      return { img: rec.loaded && !rec.failed ? rec.img : null, failed: rec.failed, promise: rec.promise };
     }
 
     const img = new Image();
-    const rec = { img, loaded: false, failed: false };
+    let resolveLoad;
+    const promise = new Promise((resolve) => { resolveLoad = resolve; });
+    const rec = { img, loaded: false, failed: false, promise };
     cache.set(safeIdx, rec);
     img.onload = () => {
       rec.loaded = true;
+      resolveLoad(img);
       if (state.sampleKey === sceneKey && state.activeTab === "tab-detect") {
         renderDetectFrame();
       }
     };
     img.onerror = () => {
       rec.failed = true;
+      resolveLoad(null);
     };
     img.src = resolveAssetUrl(frameFile);
-    return { img: null, failed: false };
+    return { img: null, failed: false, promise };
+  }
+
+  async function ensureActiveSceneReady() {
+    if (state.uploadedImage || state.uploadedVideoReady) return;
+    if (state.mediaType === "sim_video") {
+      const rec = getOrLoadVideoFrame(state.sampleKey, state.simFrame);
+      if (!rec.img && rec.promise && !rec.failed) {
+        await rec.promise;
+        renderDetectFrame();
+      }
+      return;
+    }
+    if (REAL_SAMPLE_MAP[state.sampleKey]) {
+      const img = getOrLoadRealSampleImage(state.sampleKey);
+      if (!img) {
+        const cached = realImageCache.get(state.sampleKey);
+        if (cached && cached.promise && !cached.failed) {
+          await cached.promise;
+          renderDetectFrame();
+        }
+      }
+    }
   }
 
   function preloadVideoFrames(sceneKey) {
@@ -342,6 +375,8 @@
         norm = [minX / w, minY / h, (maxX - minX) / w, (maxY - minY) / h];
       }
       if (norm) {
+        document.querySelectorAll(".roi-preset-btn").forEach((b) => b.classList.remove("active"));
+        state.roiPreset = "custom";
         state.roi = {
           x: Math.round(place.dx + norm[0] * place.dw),
           y: Math.round(place.dy + norm[1] * place.dh),
@@ -367,6 +402,8 @@
         norm = [minX / iw, minY / ih, (maxX - minX) / iw, (maxY - minY) / ih];
       }
       if (norm && norm.length === 4) {
+        document.querySelectorAll(".roi-preset-btn").forEach((b) => b.classList.remove("active"));
+        state.roiPreset = "custom";
         state.roi = {
           x: Math.round(place.dx + norm[0] * place.dw),
           y: Math.round(place.dy + norm[1] * place.dh),
@@ -446,6 +483,9 @@
   }
 
   function showToast(message, type = "success") {
+    while (dom.toastContainer.children.length >= 2) {
+      dom.toastContainer.removeChild(dom.toastContainer.firstChild);
+    }
     const el = document.createElement("div");
     el.className = `toast ${type === "warn" ? "toast-warn" : type === "info" ? "toast-info" : ""}`;
     el.textContent = message;
@@ -594,12 +634,15 @@
       syncDefaultRoiForCurrentScene();
       updateVideoTimeLabel();
       if (state.detectMode !== "tracking") {
-        setDetectMode("tracking");
+        setDetectMode("tracking", false);
       }
     } else {
       state.mediaType = "image";
       dom.mediaModeTag.textContent = "SAMPLE IMAGE";
       dom.videoTransportBar.classList.add("hidden");
+      if (state.detectMode !== "counting") {
+        setDetectMode("counting", false);
+      }
       applyRoiPreset("piring", false);
       syncDefaultRoiForCurrentScene();
     }
@@ -1330,209 +1373,45 @@
       return { boxes: objects, placement: place };
     }
 
-    // 3. Procedural wooden tabletop fallback while real asset loads or if offline/missing
+    // 3. Crisp studio loading/offline placeholder (no synthetic cartoon illustrations)
     const fullPlace = { dx: 0, dy: 0, dw: CANVAS_W, dh: CANVAS_H };
-    const woodGrad = ctx.createLinearGradient(0, 0, CANVAS_W, CANVAS_H);
-    woodGrad.addColorStop(0, "#462A18");
-    woodGrad.addColorStop(0.5, "#593620");
-    woodGrad.addColorStop(1, "#321D10");
-    ctx.fillStyle = woodGrad;
+    const failed = realMeta
+      ? Boolean(realImageCache.get(sceneKey)?.failed)
+      : Boolean(sceneKey === "video_prasmanan" || sceneKey === "video_kasir");
+
+    ctx.fillStyle = "#EFEBE2";
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
 
-    ctx.strokeStyle = "rgba(28, 25, 23, 0.28)";
+    ctx.save();
+    ctx.strokeStyle = "#CCC5B7";
     ctx.lineWidth = 2;
-    for (let y = 60; y < CANVAS_H; y += 72) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(CANVAS_W, y);
-      ctx.stroke();
-    }
+    ctx.setLineDash([8, 6]);
+    ctx.strokeRect(24, 24, CANVAS_W - 48, CANVAS_H - 48);
+    ctx.setLineDash([]);
 
-    let objects = [];
+    ctx.fillStyle = "#1C1917";
+    ctx.font = "600 18px 'Segoe UI', system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(
+      failed ? "Citra sampel belum tersedia — gunakan Upload Gambar / Video" : "Memuat foto kuliner nyata beresolusi tinggi...",
+      CANVAS_W / 2,
+      CANVAS_H / 2 - 8
+    );
 
-    if (sceneKey === "nasgor_malam") {
-      // Main white ceramic plate
-      drawPlate(ctx, 430, 275, 195);
-      // Nasi Goreng mound
-      drawRiceMound(ctx, 415, 285, 118, "#c27d38", "#9a541a");
-      // Telur Balado
-      drawTelurBalado(ctx, 525, 235, 36);
-      // Ayam Goreng piece
-      drawAyamGoreng(ctx, 355, 195, 58);
-      // Side plate: Tempe & Tahu
-      drawPlate(ctx, 760, 225, 105, "#e2e8f0");
-      drawTempe(ctx, 725, 200);
-      drawTahu(ctx, 775, 240);
-      // Kerupuk on top-left
-      drawKerupuk(ctx, 185, 185);
+    ctx.fillStyle = "#57534E";
+    ctx.font = "14px 'Segoe UI', system-ui, sans-serif";
+    ctx.fillText(
+      (realMeta && realMeta.file) || sceneKey,
+      CANVAS_W / 2,
+      CANVAS_H / 2 + 20
+    );
+    ctx.restore();
 
-      objects = [
-        { trackId: 1, label: "Nasi Goreng", x: 270, y: 175, w: 255, h: 215, baseConf: 0.91 },
-        { trackId: 2, label: "Telur Balado", x: 482, y: 192, w: 86, h: 86, baseConf: 0.87 },
-        { trackId: 3, label: "Ayam Goreng", x: 295, y: 142, w: 120, h: 98, baseConf: 0.89 },
-        { trackId: 4, label: "Tempe Goreng", x: 682, y: 158, w: 88, h: 78, baseConf: 0.82 },
-        { trackId: 5, label: "Tahu Goreng", x: 742, y: 205, w: 84, h: 76, baseConf: 0.84 }
-      ];
-    } else if (sceneKey === "bakso_komplit") {
-      // Bowl of Bakso
-      drawBowl(ctx, 430, 270, 175, "#e2e8f0", "#8d6336");
-      drawBaksoBalls(ctx, 430, 265);
-      // Tahu Goreng inside bowl
-      drawTahu(ctx, 495, 225);
-      // Side bowl of Mie Goreng / noodles
-      drawPlate(ctx, 765, 300, 115);
-      drawNoodles(ctx, 765, 300, 75);
-      // Side Pempek / Gorengan
-      drawPlate(ctx, 175, 315, 95);
-      drawTempe(ctx, 170, 310);
-
-      objects = [
-        { trackId: 1, label: "Bakso", x: 275, y: 125, w: 310, h: 290, baseConf: 0.94 },
-        { trackId: 2, label: "Tahu Goreng", x: 462, y: 190, w: 74, h: 72, baseConf: 0.85 },
-        { trackId: 3, label: "Mie Goreng", x: 675, y: 215, w: 180, h: 170, baseConf: 0.88 },
-        { trackId: 4, label: "Tempe Goreng", x: 125, y: 265, w: 96, h: 92, baseConf: 0.81 }
-      ];
-    } else if (sceneKey === "sate_madura") {
-      // Rectangular platter for Sate Ayam
-      ctx.fillStyle = "#f1f5f9";
-      roundRect(ctx, 210, 120, 440, 300, 28);
-      ctx.fill();
-      drawSateSkewers(ctx, 265, 170, 6);
-      // Peanut sauce bowl
-      drawBowl(ctx, 560, 270, 68, "#cbd5e1", "#6b3e1b");
-      // Gado-Gado / Lontong side plate
-      drawPlate(ctx, 780, 265, 115);
-      drawGadoGado(ctx, 780, 265);
-      // Telur Balado
-      drawTelurBalado(ctx, 145, 260, 38);
-
-      objects = [
-        { trackId: 1, label: "Sate Ayam", x: 235, y: 145, w: 280, h: 245, baseConf: 0.93 },
-        { trackId: 2, label: "Gado-Gado", x: 682, y: 165, w: 195, h: 195, baseConf: 0.88 },
-        { trackId: 3, label: "Telur Balado", x: 102, y: 215, w: 88, h: 88, baseConf: 0.86 }
-      ];
-    } else if (sceneKey === "padang_rendang") {
-      // Banana leaf platter
-      ctx.fillStyle = "#1f5e34";
-      roundRect(ctx, 150, 85, 660, 370, 34);
-      ctx.fill();
-      ctx.strokeStyle = "#2d7d47";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-
-      drawRiceMound(ctx, 320, 280, 105, "#f8fafc", "#e2e8f0");
-      drawRendang(ctx, 485, 225);
-      drawTelurBalado(ctx, 485, 345, 38);
-      drawAyamGoreng(ctx, 645, 235, 58);
-      drawTempe(ctx, 650, 345);
-      drawTahu(ctx, 210, 175);
-
-      objects = [
-        { trackId: 1, label: "Rendang", x: 420, y: 160, w: 135, h: 120, baseConf: 0.86 },
-        { trackId: 2, label: "Telur Balado", x: 440, y: 300, w: 92, h: 90, baseConf: 0.90 },
-        { trackId: 3, label: "Ayam Goreng", x: 585, y: 175, w: 125, h: 112, baseConf: 0.89 },
-        { trackId: 4, label: "Tempe Goreng", x: 605, y: 305, w: 92, h: 82, baseConf: 0.83 },
-        { trackId: 5, label: "Tahu Goreng", x: 168, y: 138, w: 88, h: 78, baseConf: 0.84 }
-      ];
-    } else if (sceneKey === "prasmanan_kuliner") {
-      // Procedural Prasmanan Kuliner buffet platter fallback
-      ctx.fillStyle = "#1f5e34";
-      roundRect(ctx, 110, 70, 740, 400, 32);
-      ctx.fill();
-      drawPlate(ctx, 275, 210, 110);
-      drawRiceMound(ctx, 275, 210, 72, "#c27d38", "#9a541a");
-      drawPlate(ctx, 495, 195, 105);
-      drawRendang(ctx, 495, 195);
-      drawPlate(ctx, 705, 220, 100);
-      drawAyamGoreng(ctx, 705, 220, 46);
-      drawPlate(ctx, 360, 365, 95);
-      drawGadoGado(ctx, 360, 365);
-      drawTelurBalado(ctx, 600, 365, 36);
-
-      objects = [
-        { trackId: 1, label: "Nasi Goreng", x: 185, y: 120, w: 180, h: 180, baseConf: 0.91 },
-        { trackId: 2, label: "Rendang", x: 405, y: 105, w: 180, h: 170, baseConf: 0.89 },
-        { trackId: 3, label: "Ayam Goreng", x: 615, y: 130, w: 170, h: 165, baseConf: 0.88 },
-        { trackId: 4, label: "Gado-Gado", x: 270, y: 275, w: 180, h: 165, baseConf: 0.86 },
-        { trackId: 5, label: "Telur Balado", x: 550, y: 315, w: 100, h: 95, baseConf: 0.87 }
-      ];
-    } else if (realMeta) {
-      drawPlate(ctx, 480, 270, 195);
-      drawRiceMound(ctx, 480, 270, 122, "#d97706", "#92400e");
-      objects = [
-        { trackId: 1, label: realMeta.primaryClass, x: 285, y: 115, w: 390, h: 310, baseConf: 0.92 },
-        { trackId: 2, label: realMeta.secondaryClass, x: 585, y: 205, w: 130, h: 120, baseConf: 0.85 }
-      ];
-    } else if (sceneKey === "video_prasmanan") {
-      // Animated Buffet Conveyor belt moving left-to-right
-      ctx.fillStyle = "#1e293b";
-      ctx.fillRect(0, 120, CANVAS_W, 300);
-      ctx.strokeStyle = "#334155";
-      ctx.lineWidth = 2;
-      const beltOffset = (frame * 3.2) % 60;
-      for (let bx = -60 + beltOffset; bx < CANVAS_W + 60; bx += 60) {
-        ctx.beginPath();
-        ctx.moveTo(bx, 120);
-        ctx.lineTo(bx, 420);
-        ctx.stroke();
-      }
-
-      const items = [
-        { trackId: 101, label: "Nasi Goreng", baseX: 80, y: 205, draw: (x, y) => { drawPlate(ctx, x, y, 76); drawRiceMound(ctx, x, y, 48, "#c27d38", "#9a541a"); } },
-        { trackId: 102, label: "Bakso", baseX: 280, y: 330, draw: (x, y) => { drawBowl(ctx, x, y, 72, "#e2e8f0", "#8d6336"); drawBaksoBalls(ctx, x, y, 0.45); } },
-        { trackId: 103, label: "Rendang", baseX: 480, y: 215, draw: (x, y) => { drawPlate(ctx, x, y, 74); drawRendang(ctx, x, y, 0.72); } },
-        { trackId: 104, label: "Sate Ayam", baseX: 680, y: 325, draw: (x, y) => { drawPlate(ctx, x, y, 76); drawSateSkewers(ctx, x - 48, y - 35, 3, 0.52); } },
-        { trackId: 105, label: "Soto Ayam", baseX: 880, y: 220, draw: (x, y) => { drawBowl(ctx, x, y, 72, "#f1f5f9", "#eab308"); } }
-      ];
-
-      items.forEach((it) => {
-        const x = ((it.baseX + frame * 3.2) % (CANVAS_W + 160)) - 80;
-        const y = it.y + Math.sin(frame * 0.06 + it.trackId) * 14;
-        it.draw(x, y);
-        objects.push({
-          trackId: it.trackId,
-          label: it.label,
-          x: Math.round(x - 68),
-          y: Math.round(y - 68),
-          w: 136,
-          h: 136,
-          baseConf: 0.90
-        });
-      });
-    } else if (sceneKey === "video_kasir") {
-      // Cashier desk counter on the right side
-      ctx.fillStyle = "#172554";
-      ctx.fillRect(520, 40, 400, 460);
-      ctx.strokeStyle = "#38bdf8";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(520, 40, 400, 460);
-
-      // Moving food trays sliding into the cashier zone
-      const cycle = (frame * 2.8) % 620;
-      const trayX = 140 + cycle;
-      drawTray(ctx, trayX, 270);
-      drawRiceMound(ctx, trayX - 45, 255, 52, "#c27d38", "#9a541a");
-      drawAyamGoreng(ctx, trayX + 55, 235, 38);
-      drawTelurBalado(ctx, trayX + 55, 315, 26);
-
-      // Static dish waiting at cashier
-      drawPlate(ctx, 780, 160, 74);
-      drawPempek(ctx, 780, 160);
-
-      objects = [
-        { trackId: 201, label: "Nasi Goreng", x: Math.round(trayX - 100), y: 198, w: 112, h: 112, baseConf: 0.91 },
-        { trackId: 202, label: "Ayam Goreng", x: Math.round(trayX + 12), y: 192, w: 86, h: 86, baseConf: 0.88 },
-        { trackId: 203, label: "Telur Balado", x: Math.round(trayX + 20), y: 282, w: 70, h: 68, baseConf: 0.86 },
-        { trackId: 204, label: "Pempek", x: 710, y: 90, w: 140, h: 140, baseConf: 0.89 }
-      ];
-    }
-
-    // Apply realistic low-light (-35%) simulation to procedural source when enabled
     if (lowLight) {
       applyLowLightDim(ctx, fullPlace);
     }
 
-    return { boxes: objects, placement: fullPlace };
+    return { boxes: [], placement: fullPlace };
   }
 
   /**
@@ -1697,12 +1576,12 @@
     });
   }
 
-  function setDetectMode(mode) {
+  function setDetectMode(mode, rerender = true) {
     state.detectMode = mode;
     dom.btnModeCounting.classList.toggle("active", mode === "counting");
     dom.btnModeTracking.classList.toggle("active", mode === "tracking");
     dom.canvasLiveBadge.textContent = mode === "tracking" ? "YOLOv11 + BYTETRACK" : "YOLOv11 COUNTING";
-    renderDetectFrame();
+    if (rerender) renderDetectFrame();
   }
 
   function applyRoiPreset(preset, rerender = true) {
@@ -2772,13 +2651,28 @@
       return;
     }
     try {
+      await ensureActiveSceneReady();
+      if (!state.uploadedImage) {
+        renderDetectFrame();
+      }
+      const catMeta = state.mediaType === "sim_video"
+        ? catalogState.videosByKey[state.sampleKey]
+        : catalogState.imagesByKey[state.sampleKey];
+      const place = state.lastPlacement || { dx: 0, dy: 0, dw: CANVAS_W, dh: CANVAS_H };
       const r = state.roi;
-      const regionPoints = [
+      let regionPoints = [
         [r.x, r.y],
         [r.x + r.w, r.y],
         [r.x + r.w, r.y + r.h],
         [r.x, r.y + r.h]
       ];
+      if (!state.uploadedImage && catMeta && catMeta.width && catMeta.height) {
+        const nativeW = catMeta.width;
+        const nativeH = catMeta.height;
+        const toNativeX = (cx) => Math.max(0, Math.min(nativeW, Math.round(((cx - place.dx) / (place.dw || CANVAS_W)) * nativeW)));
+        const toNativeY = (cy) => Math.max(0, Math.min(nativeH, Math.round(((cy - place.dy) / (place.dh || CANVAS_H)) * nativeH)));
+        regionPoints = regionPoints.map(([cx, cy]) => [toNativeX(cx), toNativeY(cy)]);
+      }
       const payload = {
         sample_id: state.sampleKey,
         filename: state.mediaName,
@@ -2876,221 +2770,6 @@
     ctx.arcTo(x, y + h, x, y, r);
     ctx.arcTo(x, y, x + w, y, r);
     ctx.closePath();
-  }
-
-  function drawPlate(ctx, cx, cy, r, rim = "#f8fafc") {
-    ctx.save();
-    ctx.fillStyle = "rgba(0,0,0,0.38)";
-    ctx.beginPath();
-    ctx.ellipse(cx + 6, cy + 10, r, r * 0.92, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = rim;
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.strokeStyle = "#cbd5e1";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.arc(cx, cy, r * 0.76, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  function drawBowl(ctx, cx, cy, r, rim, soupColor) {
-    drawPlate(ctx, cx, cy, r, rim);
-    ctx.fillStyle = soupColor;
-    ctx.beginPath();
-    ctx.arc(cx, cy, r * 0.82, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  function drawRiceMound(ctx, cx, cy, r, c1, c2) {
-    const g = ctx.createRadialGradient(cx - r * 0.2, cy - r * 0.2, r * 0.1, cx, cy, r);
-    g.addColorStop(0, c1);
-    g.addColorStop(1, c2);
-    ctx.fillStyle = g;
-    ctx.beginPath();
-    ctx.ellipse(cx, cy, r, r * 0.82, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Rice grain texture & chili/scallion bits
-    for (let i = 0; i < 42; i++) {
-      const ang = i * 2.39996;
-      const rad = Math.sqrt(i / 42) * r * 0.78;
-      const gx = cx + Math.cos(ang) * rad;
-      const gy = cy + Math.sin(ang) * rad * 0.8;
-      ctx.fillStyle = i % 7 === 0 ? "#16a34a" : i % 5 === 0 ? "#dc2626" : "rgba(255,237,213,0.45)";
-      ctx.fillRect(gx, gy, 5, 3);
-    }
-  }
-
-  function drawTelurBalado(ctx, cx, cy, r) {
-    ctx.fillStyle = "#b91c1c";
-    ctx.beginPath();
-    ctx.ellipse(cx, cy, r * 1.15, r * 0.92, 0.2, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = "#fef3c7";
-    ctx.beginPath();
-    ctx.ellipse(cx - 2, cy - 2, r * 0.78, r * 0.6, 0.2, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = "#f59e0b";
-    ctx.beginPath();
-    ctx.arc(cx, cy, r * 0.34, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  function drawAyamGoreng(ctx, cx, cy, r) {
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(-0.35);
-    ctx.fillStyle = "#b45309";
-    ctx.beginPath();
-    ctx.ellipse(0, 0, r * 0.95, r * 0.62, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = "#d97706";
-    ctx.beginPath();
-    ctx.ellipse(-6, -4, r * 0.7, r * 0.44, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = "#fef3c7";
-    roundRect(ctx, r * 0.55, -7, 22, 14, 6);
-    ctx.fill();
-    ctx.restore();
-  }
-
-  function drawTempe(ctx, cx, cy) {
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(0.15);
-    ctx.fillStyle = "#a16207";
-    roundRect(ctx, -34, -22, 68, 44, 6);
-    ctx.fill();
-    ctx.fillStyle = "#fde68a";
-    for (let x = -22; x < 24; x += 14) {
-      ctx.fillRect(x, -12, 6, 6);
-      ctx.fillRect(x + 4, 4, 6, 6);
-    }
-    ctx.restore();
-  }
-
-  function drawTahu(ctx, cx, cy) {
-    ctx.fillStyle = "#d97706";
-    roundRect(ctx, cx - 28, cy - 26, 56, 52, 7);
-    ctx.fill();
-    ctx.fillStyle = "#fef9c3";
-    roundRect(ctx, cx - 20, cy - 18, 40, 36, 4);
-    ctx.fill();
-  }
-
-  function drawKerupuk(ctx, cx, cy) {
-    ctx.fillStyle = "#fef3c7";
-    ctx.beginPath();
-    ctx.arc(cx, cy, 48, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = "#f59e0b";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.arc(cx, cy, 32, 0, Math.PI * 1.5);
-    ctx.stroke();
-  }
-
-  function drawBaksoBalls(ctx, cx, cy, scale = 1) {
-    const offsets = [[-45, -25], [35, -35], [-10, 28], [55, 25], [-60, 35]];
-    offsets.forEach(([ox, oy], i) => {
-      const r = (i === 2 ? 32 : 24) * scale;
-      const x = cx + ox * scale;
-      const y = cy + oy * scale;
-      const g = ctx.createRadialGradient(x - 6 * scale, y - 6 * scale, 2, x, y, r);
-      g.addColorStop(0, "#a8a29e");
-      g.addColorStop(1, "#57534e");
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.fill();
-    });
-    // Green scallion garnish
-    ctx.fillStyle = "#22c55e";
-    for (let i = 0; i < 8; i++) {
-      ctx.beginPath();
-      ctx.arc(cx + ((i - 4) * 18) * scale, cy + ((i % 3) - 1) * 24 * scale, 5 * scale, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  function drawNoodles(ctx, cx, cy, r) {
-    ctx.strokeStyle = "#eab308";
-    ctx.lineWidth = 6;
-    for (let i = -3; i <= 3; i++) {
-      ctx.beginPath();
-      ctx.moveTo(cx - r * 0.7, cy + i * 11);
-      ctx.bezierCurveTo(cx - 20, cy + i * 11 - 14, cx + 20, cy + i * 11 + 14, cx + r * 0.7, cy + i * 11);
-      ctx.stroke();
-    }
-  }
-
-  function drawSateSkewers(ctx, x0, y0, count, scale = 1) {
-    for (let i = 0; i < count; i++) {
-      const y = y0 + i * 32 * scale;
-      ctx.strokeStyle = "#fde68a";
-      ctx.lineWidth = 3 * scale;
-      ctx.beginPath();
-      ctx.moveTo(x0, y);
-      ctx.lineTo(x0 + 210 * scale, y);
-      ctx.stroke();
-
-      for (let m = 0; m < 4; m++) {
-        ctx.fillStyle = m % 2 === 0 ? "#92400e" : "#78350f";
-        roundRect(ctx, x0 + (35 + m * 36) * scale, y - 10 * scale, 28 * scale, 20 * scale, 5 * scale);
-        ctx.fill();
-      }
-    }
-  }
-
-  function drawGadoGado(ctx, cx, cy) {
-    ctx.fillStyle = "#16a34a";
-    ctx.beginPath();
-    ctx.arc(cx - 22, cy - 10, 34, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = "#9a541a";
-    ctx.beginPath();
-    ctx.ellipse(cx + 10, cy + 12, 48, 36, 0, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  function drawRendang(ctx, cx, cy, scale = 1) {
-    const pts = [[-22, -14], [18, -16], [0, 14], [26, 18]];
-    pts.forEach(([ox, oy]) => {
-      ctx.fillStyle = "#451a03";
-      roundRect(ctx, cx + (ox - 24) * scale, cy + (oy - 18) * scale, 48 * scale, 36 * scale, 10 * scale);
-      ctx.fill();
-      ctx.fillStyle = "#78350f";
-      roundRect(ctx, cx + (ox - 16) * scale, cy + (oy - 10) * scale, 28 * scale, 18 * scale, 6 * scale);
-      ctx.fill();
-    });
-  }
-
-  function drawPempek(ctx, cx, cy) {
-    ctx.fillStyle = "#e2e8f0";
-    ctx.beginPath();
-    ctx.ellipse(cx - 18, cy, 34, 16, 0.3, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(cx + 20, cy + 8, 28, 18, -0.2, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = "#29180b";
-    ctx.beginPath();
-    ctx.arc(cx, cy + 18, 22, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  function drawTray(ctx, cx, cy) {
-    ctx.fillStyle = "#475569";
-    roundRect(ctx, cx - 120, cy - 95, 240, 190, 16);
-    ctx.fill();
-    ctx.strokeStyle = "#94a3b8";
-    ctx.lineWidth = 3;
-    ctx.stroke();
   }
 
   function buildEval30Rows() {
